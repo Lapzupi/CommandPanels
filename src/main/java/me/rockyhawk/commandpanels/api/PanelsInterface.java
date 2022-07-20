@@ -9,7 +9,7 @@ public class PanelsInterface {
     public String playerName;
     private Panel top;
     private Panel middle;
-    private Path bottom = null;
+    private Panel bottom = null;
 
     public PanelsInterface(String player){
         playerName = player;
@@ -50,6 +50,7 @@ public class PanelsInterface {
             case Top -> {
                 return top;
             }
+
             case Middle -> {
                 return middle;
             }
