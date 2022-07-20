@@ -68,7 +68,7 @@ import java.io.Reader;
 import java.util.*;
 import java.util.concurrent.Callable;
 
-public class CommandPanels extends JavaPlugin{
+public class CommandPanels extends JavaPlugin {
     public YamlConfiguration config;
     public Economy econ = null;
     public boolean openWithItem = false; //this will be true if there is a panel with open-with-item
@@ -131,7 +131,7 @@ public class CommandPanels extends JavaPlugin{
             } catch (IOException var11) {
                 Bukkit.getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " WARNING: Could not save the config file!");
             }
-        }else{
+        } else {
             //check if the config file has any missing elements
             try {
                 YamlConfiguration configFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("config.yml")));
@@ -190,29 +190,29 @@ public class CommandPanels extends JavaPlugin{
         commandTags.registerBuiltInTags();
 
         //if refresh-panels set to false, don't load this
-        if(Objects.requireNonNull(config.getString("config.refresh-panels")).equalsIgnoreCase("true")){
+        if (Objects.requireNonNull(config.getString("config.refresh-panels")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new Commandpanelrefresher(this), this);
         }
 
         //if custom-commands set to false, don't load this
-        if(Objects.requireNonNull(config.getString("config.custom-commands")).equalsIgnoreCase("true")){
+        if (Objects.requireNonNull(config.getString("config.custom-commands")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new Commandpanelcustom(this), this);
         }
 
         //if hotbar-items set to false, don't load this
-        if(Objects.requireNonNull(config.getString("config.hotbar-items")).equalsIgnoreCase("true")){
+        if (Objects.requireNonNull(config.getString("config.hotbar-items")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new UtilsOpenWithItem(this), this);
         }
 
         //if ingame-editor set to false, don't load this
-        if(Objects.requireNonNull(config.getString("config.ingame-editor")).equalsIgnoreCase("true")){
+        if (Objects.requireNonNull(config.getString("config.ingame-editor")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new CPEventHandler(this), this);
             Objects.requireNonNull(this.getCommand("commandpaneledit")).setTabCompleter(new CommandPanelsEditorTabComplete(this));
             Objects.requireNonNull(this.getCommand("commandpaneledit")).setExecutor(new CommandPanelsEditorCommand(this));
         }
 
         //if panel-blocks set to false, don't load this
-        if(Objects.requireNonNull(config.getString("config.panel-blocks")).equalsIgnoreCase("true")){
+        if (Objects.requireNonNull(config.getString("config.panel-blocks")).equalsIgnoreCase("true")) {
             Objects.requireNonNull(this.getCommand("commandpanelblock")).setExecutor(new Commandpanelblocks(this));
             Objects.requireNonNull(this.getCommand("commandpanelblock")).setTabCompleter(new BlocksTabComplete(this));
             this.getServer().getPluginManager().registerEvents(new PanelBlockOnClick(this), this);
@@ -224,17 +224,17 @@ public class CommandPanels extends JavaPlugin{
         }
 
         //if plugin ChestSort is enabled
-        if(getServer().getPluginManager().isPluginEnabled("ChestSort")){
+        if (getServer().getPluginManager().isPluginEnabled("ChestSort")) {
             this.getServer().getPluginManager().registerEvents(new UtilsChestSortEvent(this), this);
         }
 
         //save the example_top.yml file and the template.yml file
         if (!this.panelsf.exists()) {
             try {
-                if(legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)){
+                if (legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
                     FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("exampleLegacy.yml")));
                     exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example.yml"));
-                }else {
+                } else {
                     //top
                     FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("example_top.yml")));
                     exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example_top.yml"));
@@ -281,13 +281,15 @@ public class CommandPanels extends JavaPlugin{
         Bukkit.getLogger().info("[CommandPanels] RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loaded!");
     }
 
+    @Override
     public void onDisable() {
         //close all the panels
-        for(String name : openPanels.openPanels.keySet()){
+        for (String name : openPanels.openPanels.keySet()) {
             openPanels.closePanelForLoader(name, PanelPosition.Top);
             try {
                 Bukkit.getPlayer(name).closeInventory();
-            }catch (Exception ignore){}
+            } catch (Exception ignore) {
+            }
         }
 
         //save files
@@ -297,7 +299,7 @@ public class CommandPanels extends JavaPlugin{
         Bukkit.getLogger().info("RockyHawk's CommandPanels Plugin Disabled, aww man.");
     }
 
-    public static CommandPanelsAPI getAPI(){
+    public static CommandPanelsAPI getAPI() {
         return new CommandPanelsAPI(JavaPlugin.getPlugin(CommandPanels.class));
     }
 
@@ -305,21 +307,21 @@ public class CommandPanels extends JavaPlugin{
         try {
             ItemMeta renamedMeta = renamed.getItemMeta();
             //set cp placeholders
-            if(usePlaceholders){
-                customName = tex.placeholdersNoColour(panel,PanelPosition.Top,p,customName);
+            if (usePlaceholders) {
+                customName = tex.placeholdersNoColour(panel, PanelPosition.Top, p, customName);
             }
-            if(useColours){
+            if (useColours) {
                 customName = tex.colour(customName);
             }
 
             assert renamedMeta != null;
             //hiding attributes will add an NBT tag
-            if(hideAttributes) {
+            if (hideAttributes) {
                 renamedMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 renamedMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                 renamedMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                 //HIDE_DYE was added into 1.17 api
-                if(legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_17)){
+                if (legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_17)) {
                     renamedMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 }
             }
@@ -329,31 +331,34 @@ public class CommandPanels extends JavaPlugin{
 
             List<String> re_lore;
             if (lore != null) {
-                if(usePlaceholders && useColours){
-                    re_lore = tex.placeholdersList(panel,PanelPosition.Top, p, lore, true);
-                }else if(usePlaceholders){
-                    re_lore = tex.placeholdersNoColour(panel,PanelPosition.Top,p, lore);
-                }else if(useColours){
-                    re_lore = tex.placeholdersList(panel,PanelPosition.Top, p, lore, false);
-                }else{
+                if (usePlaceholders && useColours) {
+                    re_lore = tex.placeholdersList(panel, PanelPosition.Top, p, lore, true);
+                } else if (usePlaceholders) {
+                    re_lore = tex.placeholdersNoColour(panel, PanelPosition.Top, p, lore);
+                } else if (useColours) {
+                    re_lore = tex.placeholdersList(panel, PanelPosition.Top, p, lore, false);
+                } else {
                     re_lore = lore;
                 }
                 renamedMeta.setLore(splitListWithEscape(re_lore));
             }
             renamed.setItemMeta(renamedMeta);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return renamed;
     }
 
     private void setupEconomy() {
         if (this.getServer().getPluginManager().getPlugin("Vault") == null) {
-        } else {
-            RegisteredServiceProvider<Economy> rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
-            if (rsp == null) {
-            } else {
-                this.econ = (Economy) rsp.getProvider();
-            }
+            return;
         }
+
+        RegisteredServiceProvider<Economy> rsp = this.getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return;
+        }
+
+        this.econ = rsp.getProvider();
     }
 
     public boolean checkPanels(YamlConfiguration temp) {
@@ -365,9 +370,9 @@ public class CommandPanels extends JavaPlugin{
     }
 
     //check for duplicate panel names
-    public boolean checkDuplicatePanel(CommandSender sender){
+    public boolean checkDuplicatePanel(CommandSender sender) {
         List<String> apanels = new ArrayList<>();
-        for(Panel panel : panelList){
+        for (Panel panel : panelList) {
             apanels.add(panel.getName());
         }
 
@@ -376,8 +381,8 @@ public class CommandPanels extends JavaPlugin{
         if (oset.size() < apanels.size()) {
             //there are duplicate panel names
             ArrayList<String> opanelsTemp = new ArrayList<String>();
-            for(String tempName : apanels){
-                if(opanelsTemp.contains(tempName)){
+            for (String tempName : apanels) {
+                if (opanelsTemp.contains(tempName)) {
                     sender.sendMessage(tex.colour(tag) + ChatColor.RED + " Error duplicate panel name: " + tempName);
                     return false;
                 }
@@ -391,7 +396,7 @@ public class CommandPanels extends JavaPlugin{
     //look through all files in all folders
     public void fileNamesFromDirectory(File directory) {
         for (String fileName : Objects.requireNonNull(directory.list())) {
-            if(new File(directory + File.separator + fileName).isDirectory()){
+            if (new File(directory + File.separator + fileName).isDirectory()) {
                 fileNamesFromDirectory(new File(directory + File.separator + fileName));
                 continue;
             }
@@ -401,18 +406,18 @@ public class CommandPanels extends JavaPlugin{
                 if (!fileName.substring(ind).equalsIgnoreCase(".yml") && !fileName.substring(ind).equalsIgnoreCase(".yaml")) {
                     continue;
                 }
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 continue;
             }
 
             //check before adding the file to commandpanels
-            if(!checkPanels(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)))){
+            if (!checkPanels(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)))) {
                 this.getServer().getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " Error in: " + fileName);
                 continue;
             }
             for (String tempName : Objects.requireNonNull(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)).getConfigurationSection("panels")).getKeys(false)) {
-                panelList.add(new Panel(new File((directory + File.separator + fileName)),tempName));
-                if(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)).contains("panels." + tempName + ".open-with-item")) {
+                panelList.add(new Panel(new File((directory + File.separator + fileName)), tempName));
+                if (YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)).contains("panels." + tempName + ".open-with-item")) {
                     openWithItem = true;
                 }
             }
@@ -428,12 +433,12 @@ public class CommandPanels extends JavaPlugin{
 
     public void debug(Exception e, Player p) {
         if (p == null) {
-            if(debug.consoleDebug){
+            if (debug.consoleDebug) {
                 getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[CommandPanels] The plugin has generated a debug error, find the error below");
                 e.printStackTrace();
             }
-        }else{
-            if(debug.isEnabled(p)){
+        } else {
+            if (debug.isEnabled(p)) {
                 p.sendMessage(tag + ChatColor.DARK_RED + "Check the console for a detailed error.");
                 getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[CommandPanels] The plugin has generated a debug error, find the error below");
                 e.printStackTrace();
@@ -442,7 +447,7 @@ public class CommandPanels extends JavaPlugin{
     }
 
     public void helpMessage(CommandSender p) {
-        p.sendMessage(tex.colour( tag + ChatColor.GREEN + "Commands:"));
+        p.sendMessage(tex.colour(tag + ChatColor.GREEN + "Commands:"));
         p.sendMessage(ChatColor.GOLD + "/cp <panel> [player:item] [player] " + ChatColor.WHITE + "Open a command panel.");
         if (p.hasPermission("commandpanel.reload")) {
             p.sendMessage(ChatColor.GOLD + "/cpr " + ChatColor.WHITE + "Reloads plugin config.");
@@ -505,17 +510,17 @@ public class CommandPanels extends JavaPlugin{
 
     public Reader getReaderFromStream(InputStream initialStream) throws IOException {
         //this reads the encrypted resource files in the jar file
-        if(legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_13) || legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_18)){
+        if (legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_13) || legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_18)) {
             return new Sequence_1_13(this).getReaderFromStream(initialStream);
-        }else{
+        } else {
             return new Sequence_1_14(this).getReaderFromStream(initialStream);
         }
     }
 
     //split lists using \n escape character
-    public List<String> splitListWithEscape(List<String> list){
+    public List<String> splitListWithEscape(List<String> list) {
         List<String> output = new ArrayList<>();
-        for(String str : list){
+        for (String str : list) {
             output.addAll(Arrays.asList(str.split("\\\\n")));
         }
         return output;
@@ -532,17 +537,17 @@ public class CommandPanels extends JavaPlugin{
     }
 
     //returns true if the item is the MMO Item
-    public boolean isMMOItem(ItemStack itm, String type, String id){
+    public boolean isMMOItem(ItemStack itm, String type, String id) {
         try {
             if (getServer().getPluginManager().isPluginEnabled("MMOItems")) {
                 NBTItem nbt = NBTItem.get(itm);
-                if (nbt.getType().equalsIgnoreCase(type) && nbt.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(id)){
+                if (nbt.getType().equalsIgnoreCase(type) && nbt.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(id)) {
                     return true;
                 }
                 itm.getType();
             }
-        }catch (Exception ex){
-            debug(ex,null);
+        } catch (Exception ex) {
+            debug(ex, null);
         }
         return false;
     }
