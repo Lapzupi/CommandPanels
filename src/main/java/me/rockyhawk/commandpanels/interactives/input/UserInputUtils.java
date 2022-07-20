@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class UserInputUtils implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public UserInputUtils(CommandPanels pl) {
         this.plugin = pl;
     }
 
-    public HashMap<Player, PlayerInput> playerInput = new HashMap<>();
+    public final HashMap<Player, PlayerInput> playerInput = new HashMap<>();
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {
@@ -48,11 +48,9 @@ public class UserInputUtils implements Listener {
                 c++;
             }
 
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                public void run() {
-                    plugin.commandTags.runCommands(playerInput.get(e.getPlayer()).panel, PanelPosition.Top,e.getPlayer(), playerInput.get(e.getPlayer()).commands,playerInput.get(e.getPlayer()).click); //I have to do this to run regular Bukkit voids in an ASYNC Event
-                    playerInput.remove(e.getPlayer());
-                }
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                plugin.commandTags.runCommands(playerInput.get(e.getPlayer()).panel, PanelPosition.Top,e.getPlayer(), playerInput.get(e.getPlayer()).commands,playerInput.get(e.getPlayer()).click); //I have to do this to run regular Bukkit voids in an ASYNC Event
+                playerInput.remove(e.getPlayer());
             });
         }
     }

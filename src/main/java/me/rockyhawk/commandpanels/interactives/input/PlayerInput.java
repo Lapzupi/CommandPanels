@@ -6,9 +6,9 @@ import org.bukkit.event.inventory.ClickType;
 import java.util.List;
 
 public class PlayerInput {
-    public Panel panel;
-    public ClickType click;
-    public List<String> commands;
+    public final Panel panel;
+    public final ClickType click;
+    public final List<String> commands;
 
     public PlayerInput(Panel panel1, List<String> commands1, ClickType click1){
         panel = panel1;

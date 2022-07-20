@@ -20,7 +20,7 @@ public class Updater implements Listener {
     public String downloadVersionManually = null;
     public String catchedLatestVersion = "null";
 
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Updater(CommandPanels pl) {
         this.plugin = pl;
     }

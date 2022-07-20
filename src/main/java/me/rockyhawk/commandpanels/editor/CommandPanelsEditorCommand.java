@@ -9,15 +9,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-public class CommandPanelsEditorCommand implements CommandExecutor {
-    CommandPanels plugin;
+public class CommandPanelsEditorCommand implements CommandExecutor{
+    final CommandPanels plugin;
 
     public CommandPanelsEditorCommand(CommandPanels pl) {
         this.plugin = pl;
     }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!sender.hasPermission("commandpanel.edit")){
             sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));

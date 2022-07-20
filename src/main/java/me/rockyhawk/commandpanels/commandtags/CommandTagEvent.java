@@ -12,10 +12,10 @@ public class CommandTagEvent extends Event {
 
     public final Player p;
     public final Panel panel;
-    public String[] raw;
+    public final String[] raw;
     public String[] args;
-    public String name;
-    public PanelPosition pos;
+    public final String name;
+    public final PanelPosition pos;
     public boolean commandTagUsed = false;
 
     public CommandTagEvent(CommandPanels plugin, Panel panel1, PanelPosition position, Player player, String rawCommand1) {

@@ -27,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  *
  * Github: https://github.com/BananaPuncher714/NBTEditor
  * Spigot: https://www.spigotmc.org/threads/269621/
+ * TODO USE NBT API
  *
  * @version 7.17.0
  * @author BananaPuncher714
@@ -46,7 +47,7 @@ public final class NBT_1_13 {
         VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
         LOCAL_VERSION = MinecraftVersion.get( VERSION );
 
-        classCache = new HashMap< String, Class<?> >();
+        classCache = new HashMap<>();
         try {
             if ( LOCAL_VERSION.lessThanOrEqualTo( MinecraftVersion.v1_16 ) ) {
                 classCache.put( "NBTBase", Class.forName( "net.minecraft.server." + VERSION + "." + "NBTBase" ) );
@@ -99,7 +100,7 @@ public final class NBT_1_13 {
         } catch ( ClassNotFoundException ignore ) {
         }
 
-        NBTClasses = new HashMap< Class< ? >, Class< ? > >();
+        NBTClasses = new HashMap<>();
         try {
             if ( LOCAL_VERSION.lessThanOrEqualTo( MinecraftVersion.v1_16 ) ) {
                 NBTClasses.put( Byte.class, Class.forName( "net.minecraft.server." + VERSION + "." + "NBTTagByte" ) );
@@ -127,7 +128,7 @@ public final class NBT_1_13 {
         } catch ( ClassNotFoundException e ) {
         }
 
-        methodCache = new HashMap< String, Method >();
+        methodCache = new HashMap<>();
         try {
             methodCache.put( "get", getNMSClass( "NBTTagCompound" ).getMethod( "get", String.class ) );
             methodCache.put( "set", getNMSClass( "NBTTagCompound" ).getMethod( "set", String.class, getNMSClass( "NBTBase" ) ) );
@@ -217,7 +218,7 @@ public final class NBT_1_13 {
             // The method doesn't exist, so it's before 1.15.2
         }
 
-        constructorCache = new HashMap< Class< ? >, Constructor< ? > >();
+        constructorCache = new HashMap<>();
         try {
             constructorCache.put( getNBTTag( Byte.class ), getNBTTag( Byte.class ).getDeclaredConstructor( byte.class ) );
             constructorCache.put( getNBTTag( Boolean.class ), getNBTTag( Boolean.class ).getDeclaredConstructor( byte.class ) );
@@ -246,7 +247,7 @@ public final class NBT_1_13 {
         } catch( Exception ignore ) {
         }
 
-        NBTTagFieldCache = new HashMap< Class< ? >, Field >();
+        NBTTagFieldCache = new HashMap<>();
         try {
             if ( LOCAL_VERSION.lessThanOrEqualTo( MinecraftVersion.v1_16 ) ) {
                 for ( Class< ? > clazz : NBTClasses.values() ) {
@@ -308,11 +309,11 @@ public final class NBT_1_13 {
     }
 
     private Method getMethod( String name ) {
-        return methodCache.containsKey( name ) ? methodCache.get( name ) : null;
+        return methodCache.getOrDefault(name, null);
     }
 
     private Constructor< ? > getConstructor( Class< ? > clazz ) {
-        return constructorCache.containsKey( clazz ) ? constructorCache.get( clazz ) : null;
+        return constructorCache.getOrDefault(clazz, null);
     }
 
     private Class<?> getNMSClass(String name) {
@@ -327,8 +328,8 @@ public final class NBT_1_13 {
         }
     }
 
-    private String getMatch( String string, String regex ) {
-        Pattern pattern = Pattern.compile( regex );
+    private String getMatch( String string ) {
+        Pattern pattern = Pattern.compile("\\{\"url\":\"(.*?)\"\\}");
         Matcher matcher = pattern.matcher( string );
         if ( matcher.find() ) {
             return matcher.group( 1 );
@@ -434,7 +435,7 @@ public final class NBT_1_13 {
             for ( Object prop : properties ) {
                 if ( "textures".equals( getMethod( "getName" ).invoke( prop ) ) ) {
                     String texture = new String( Base64.getDecoder().decode( ( String ) getMethod( "getValue" ).invoke( prop ) ) );
-                    return getMatch( texture, "\\{\"url\":\"(.*?)\"\\}" );
+                    return getMatch( texture);
                 }
             }
             return null;
@@ -1190,7 +1191,7 @@ public final class NBT_1_13 {
                 notCompound = value;
             } else {
                 if ( value instanceof Boolean ) {
-                    value = ( byte ) ( ( Boolean ) value == true ? 1 : 0 );
+                    value = ( byte ) ( (Boolean) value ? 1 : 0 );
                 }
                 notCompound = getConstructor( getNBTTag( value.getClass() ) ).newInstance( value );
             }
@@ -1308,7 +1309,7 @@ public final class NBT_1_13 {
 
     @SuppressWarnings( "unchecked" )
     private Object getTags( Object tag ) {
-        Map< Object, Object > tags = new HashMap< Object, Object >();
+        Map< Object, Object > tags = new HashMap<>();
         try {
             if ( getNMSClass( "NBTTagCompound" ).isInstance( tag ) ) {
                 Map< String, Object > tagCompound = ( Map< String, Object > ) NBTCompoundMap.get( tag );
@@ -1392,11 +1393,8 @@ public final class NBT_1_13 {
                 return false;
             NBTCompound other = (NBTCompound) obj;
             if (tag == null) {
-                if (other.tag != null)
-                    return false;
-            } else if (!tag.equals(other.tag))
-                return false;
-            return true;
+                return other.tag == null;
+            } else return tag.equals(other.tag);
         }
     }
 
@@ -1419,8 +1417,8 @@ public final class NBT_1_13 {
         v1_18( "1_18", 10 ),
         v1_19( "1_19", 11 );
 
-        private int order;
-        private String key;
+        private final int order;
+        private final String key;
 
         MinecraftVersion( String key, int v ) {
             this.key = key;

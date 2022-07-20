@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class BlocksTabComplete implements TabCompleter {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public BlocksTabComplete(CommandPanels pl) { this.plugin = pl; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
@@ -20,7 +20,7 @@ public class BlocksTabComplete implements TabCompleter {
             Player p = ((Player) sender).getPlayer();
                 if(args.length == 2) {
                     if(args[0].equals("add") && p.hasPermission("commandpanel.block.add")) {
-                        ArrayList<String> apanels = new ArrayList<String>(); //all panels
+                        ArrayList<String> apanels = new ArrayList<>(); //all panels
                         try {
                             for (Panel panel : plugin.panelList) { //will loop through all the files in folder
                                 if (!panel.getName().startsWith(args[1])) {
@@ -41,7 +41,7 @@ public class BlocksTabComplete implements TabCompleter {
                     }
                 }
                 if(args.length == 1){
-                    ArrayList<String> output = new ArrayList<String>();
+                    ArrayList<String> output = new ArrayList<>();
                     if (sender.hasPermission("commandpanel.block.add")){
                         output.add("add");
                     }

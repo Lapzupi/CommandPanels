@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class OpenGUI {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public OpenGUI(CommandPanels pl) {
         this.plugin = pl;
     }

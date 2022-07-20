@@ -19,7 +19,7 @@ import java.util.List;
 public class InventorySaver implements Listener {
     public YamlConfiguration inventoryConfig;
 
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public InventorySaver(CommandPanels pl) {
         this.plugin = pl;
     }

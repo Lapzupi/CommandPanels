@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class ItemFallManager implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public ItemFallManager(CommandPanels pl) {
         this.plugin = pl;
     }

@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 import java.util.HashSet;
 
 public class DebugManager {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public DebugManager(CommandPanels pl) { this.plugin = pl; }
 
-    public HashSet<Player> debugSet = new HashSet<>();
+    public final HashSet<Player> debugSet = new HashSet<>();
     public boolean consoleDebug = false;
 
     public boolean isEnabled(Player p){

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 //get contents legacy
 public class GetStorageContents_Legacy {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public GetStorageContents_Legacy(CommandPanels pl) {
         this.plugin = pl;
     }

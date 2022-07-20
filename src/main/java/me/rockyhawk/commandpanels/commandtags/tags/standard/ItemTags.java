@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public ItemTags(CommandPanels pl) {
         this.plugin = pl;
     }

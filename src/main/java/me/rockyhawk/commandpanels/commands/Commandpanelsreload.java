@@ -10,6 +10,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Commandpanelsreload implements CommandExecutor {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Commandpanelsreload(CommandPanels pl) { this.plugin = pl; }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("cpr") || label.equalsIgnoreCase("commandpanelreload") || label.equalsIgnoreCase("cpanelr")) {
             if (sender.hasPermission("commandpanel.reload")) {

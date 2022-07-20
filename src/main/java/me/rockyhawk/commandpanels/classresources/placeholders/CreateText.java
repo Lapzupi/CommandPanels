@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class CreateText {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CreateText(CommandPanels pl) {
         this.plugin = pl;
     }
