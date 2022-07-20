@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class DataTabComplete implements TabCompleter {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public DataTabComplete(CommandPanels pl) { this.plugin = pl; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {

@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class SwapItemEvent implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public SwapItemEvent(CommandPanels pl) {
         this.plugin = pl;
     }

@@ -9,15 +9,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 public class Commandpanel implements CommandExecutor {
-    CommandPanels plugin;
+    final CommandPanels plugin;
 
     public Commandpanel(CommandPanels pl) {
         this.plugin = pl;
     }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         //below is going to go through the files and find the right one
         Panel panel = null;

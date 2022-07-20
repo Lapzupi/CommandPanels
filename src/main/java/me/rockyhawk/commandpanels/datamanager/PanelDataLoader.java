@@ -11,7 +11,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class PanelDataLoader {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public PanelDataLoader(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -106,7 +106,6 @@ public class PanelDataLoader {
         dataConfig.set("playerData." + playerUUID + "." + dataPoint, output.toPlainString());
     }
 
-    @SuppressWarnings("deprecation")
     public UUID getOffline(String playerName){
         //making this a separate function as it is long and deprecated
         return Bukkit.getOfflinePlayer(playerName).getUniqueId();

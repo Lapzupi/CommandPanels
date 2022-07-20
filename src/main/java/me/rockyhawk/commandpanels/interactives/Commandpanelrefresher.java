@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Objects;
 
 public class Commandpanelrefresher implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Commandpanelrefresher(CommandPanels pl) {
         this.plugin = pl;
     }

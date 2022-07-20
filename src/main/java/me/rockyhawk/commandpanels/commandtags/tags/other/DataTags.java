@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class DataTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public DataTags(CommandPanels pl) {
         this.plugin = pl;
     }

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 //get contents
 public class GetStorageContents {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public GetStorageContents(CommandPanels pl) {
         this.plugin = pl;
     }

@@ -11,16 +11,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Commandpanelblocks implements CommandExecutor {
-    CommandPanels plugin;
+public class Commandpanelblocks implements CommandExecutor{
+    final CommandPanels plugin;
     public Commandpanelblocks(CommandPanels pl) { this.plugin = pl; }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("cpb") || label.equalsIgnoreCase("commandpanelsblock") || label.equalsIgnoreCase("cpanelb")) {
             if(args.length >= 2) {

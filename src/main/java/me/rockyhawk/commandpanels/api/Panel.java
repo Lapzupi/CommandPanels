@@ -14,13 +14,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 
 public class Panel{
-    CommandPanels plugin = JavaPlugin.getPlugin(CommandPanels.class);
+    final CommandPanels plugin = JavaPlugin.getPlugin(CommandPanels.class);
     /*This is the PanelConfig object*/
 
     private ConfigurationSection panelConfig;
     private String panelName;
     private File panelFile = null;
-    public PanelPlaceholders placeholders = new PanelPlaceholders();
+    public final PanelPlaceholders placeholders = new PanelPlaceholders();
     public boolean isOpen = false;
 
     //make the object, using a file is recommended

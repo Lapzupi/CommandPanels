@@ -5,7 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 public class PanelPermissions {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public PanelPermissions(CommandPanels pl) {
         this.plugin = pl;
     }

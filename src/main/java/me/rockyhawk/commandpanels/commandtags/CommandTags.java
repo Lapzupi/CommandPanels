@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class CommandTags {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CommandTags(CommandPanels pl) {
         this.plugin = pl;
     }

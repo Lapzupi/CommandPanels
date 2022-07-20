@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SpecialTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public SpecialTags(CommandPanels pl) {
         this.plugin = pl;
     }

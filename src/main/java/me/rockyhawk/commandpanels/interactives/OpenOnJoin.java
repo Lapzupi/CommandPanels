@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class OpenOnJoin implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public OpenOnJoin(CommandPanels pl) {
         this.plugin = pl;
     }

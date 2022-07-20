@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class UtilsOpenWithItem implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public UtilsOpenWithItem(CommandPanels pl) {
         this.plugin = pl;
     }

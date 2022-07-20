@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CPEventHandler implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CPEventHandler(CommandPanels pl) { this.plugin = pl; }
 
     @EventHandler

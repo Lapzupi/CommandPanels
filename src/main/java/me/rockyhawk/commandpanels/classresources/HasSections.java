@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.HashSet;
 
 public class HasSections {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public HasSections(CommandPanels pl) {
         plugin = pl;
     }

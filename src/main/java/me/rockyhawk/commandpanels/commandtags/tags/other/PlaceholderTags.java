@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class PlaceholderTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public PlaceholderTags(CommandPanels pl) {
         this.plugin = pl;
     }

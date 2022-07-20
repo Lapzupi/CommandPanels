@@ -12,14 +12,14 @@ import java.util.List;
 
 
 public class CpTabComplete implements TabCompleter {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CpTabComplete(CommandPanels pl) { this.plugin = pl; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player && args.length == 1){
             Player p = ((Player) sender).getPlayer();
             if(label.equalsIgnoreCase("cp") || label.equalsIgnoreCase("cpanel") || label.equalsIgnoreCase("commandpanel")){
-                ArrayList<String> apanels = new ArrayList<String>(); //all panels
+                ArrayList<String> apanels = new ArrayList<>(); //all panels
                 for(Panel panel : plugin.panelList) { //will loop through all the files in folder
                     try {
                         if (!panel.getName().startsWith(args[0])) {

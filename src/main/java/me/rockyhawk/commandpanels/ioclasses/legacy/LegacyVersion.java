@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class LegacyVersion {
-    CommandPanels plugin;
-    public MinecraftVersions LOCAL_VERSION;
+    final CommandPanels plugin;
+    public final MinecraftVersions LOCAL_VERSION;
     public LegacyVersion(CommandPanels pl) {
         this.plugin = pl;
         String VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];

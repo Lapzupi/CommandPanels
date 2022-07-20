@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class UtilsPanelsLoader implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public UtilsPanelsLoader(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -50,11 +50,7 @@ public class UtilsPanelsLoader implements Listener {
         //check for panelType unclosable (unclosable is Top only)
         if(plugin.openPanels.getOpenPanel(playerName,PanelPosition.Top).getConfig().contains("panelType")){
             if(plugin.openPanels.getOpenPanel(playerName,PanelPosition.Top).getConfig().getStringList("panelType").contains("unclosable")){
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-                    public void run() {
-                        plugin.openPanels.getOpenPanel(playerName,PanelPosition.Top).open(Bukkit.getPlayer(playerName), PanelPosition.Top);
-                    }
-                });
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> plugin.openPanels.getOpenPanel(playerName,PanelPosition.Top).open(Bukkit.getPlayer(playerName), PanelPosition.Top));
                 return;
             }
         }

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Placeholders {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Placeholders(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -324,7 +324,7 @@ public class Placeholders {
         if(identifier.startsWith("player-online-")) {
             try {
                 String playerLocation = identifier.replace("player-online-", "");
-                Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]);
+                Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
                 if (Double.parseDouble(playerLocation) > playerFind.length) {
                     return plugin.tex.colour(Objects.requireNonNull(plugin.config.getString("config.format.offline")));
                 } else {

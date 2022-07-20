@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedInputStream;
@@ -15,11 +16,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-public class CommandPanelImport implements CommandExecutor {
-    CommandPanels plugin;
+public class CommandPanelImport implements CommandExecutor{
+    final CommandPanels plugin;
     public CommandPanelImport(CommandPanels pl) { this.plugin = pl; }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender.hasPermission("commandpanel.import")) {
             if (args.length == 2) {

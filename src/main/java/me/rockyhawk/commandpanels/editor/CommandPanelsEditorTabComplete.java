@@ -12,13 +12,13 @@ import java.util.List;
 
 
 public class CommandPanelsEditorTabComplete implements TabCompleter {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CommandPanelsEditorTabComplete(CommandPanels pl) { this.plugin = pl; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player && args.length == 1){
             Player p = ((Player) sender).getPlayer();
-            ArrayList<String> apanels = new ArrayList<String>(); //all panels
+            ArrayList<String> apanels = new ArrayList<>(); //all panels
             try {
                 for(Panel panel : plugin.panelList) { //will loop through all the files in folder
                     if(!panel.getName().startsWith(args[0])){

@@ -5,7 +5,7 @@ import me.rockyhawk.commandpanels.api.Panel;
 import java.util.HashMap;
 
 public class HotbarPlayerManager {
-    public HashMap<Integer,Panel> list = new HashMap<>();
+    public final HashMap<Integer,Panel> list = new HashMap<>();
 
     public HotbarPlayerManager(){
     }

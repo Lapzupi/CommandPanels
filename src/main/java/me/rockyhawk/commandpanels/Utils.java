@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Utils implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Utils(CommandPanels pl) {
         this.plugin = pl;
     }

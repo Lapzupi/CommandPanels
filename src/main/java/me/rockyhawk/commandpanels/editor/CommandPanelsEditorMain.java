@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CommandPanelsEditorMain {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public CommandPanelsEditorMain(CommandPanels pl) {
         this.plugin = pl;
     }
-    public Map<UUID, EditorSettings> settings = new HashMap<>();
+    public final Map<UUID, EditorSettings> settings = new HashMap<>();
 
     public void openGuiPage(String fileName, Player p, PanelPosition position){
         try {

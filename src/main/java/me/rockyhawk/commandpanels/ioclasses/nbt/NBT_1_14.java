@@ -7,7 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 public class NBT_1_14 {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public NBT_1_14(CommandPanels pl) {
         this.plugin = pl;
     }

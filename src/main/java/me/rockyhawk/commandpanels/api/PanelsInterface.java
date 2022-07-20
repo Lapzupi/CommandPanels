@@ -2,11 +2,9 @@ package me.rockyhawk.commandpanels.api;
 
 import me.rockyhawk.commandpanels.openpanelsmanager.PanelPosition;
 
-import java.nio.file.Path;
-
 public class PanelsInterface {
 
-    public String playerName;
+    public final String playerName;
     private Panel top;
     private Panel middle;
     private Panel bottom = null;

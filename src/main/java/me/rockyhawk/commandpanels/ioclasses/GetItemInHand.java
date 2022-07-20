@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GetItemInHand {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public GetItemInHand(CommandPanels pl) {
         this.plugin = pl;
     }

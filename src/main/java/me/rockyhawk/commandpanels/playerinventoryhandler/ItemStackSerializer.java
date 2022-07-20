@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class ItemStackSerializer {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public ItemStackSerializer(CommandPanels pl) {
         this.plugin = pl;
     }

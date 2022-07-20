@@ -70,7 +70,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.*;
-import java.util.concurrent.Callable;
 
 public class CommandPanels extends JavaPlugin {
     public YamlConfiguration config;
@@ -80,39 +79,39 @@ public class CommandPanels extends JavaPlugin {
     //initialise the tag
     public String tag = "[CommandPanels]";
 
-    public List<Player> generateMode = new ArrayList<>(); //players that are currently in generate mode
+    public final List<Player> generateMode = new ArrayList<>(); //players that are currently in generate mode
     public List<String[]> editorInputStrings = new ArrayList<>();
-    public List<Panel> panelList = new ArrayList<>(); //contains all the panels that are included in the panels folder
+    public final List<Panel> panelList = new ArrayList<>(); //contains all the panels that are included in the panels folder
 
     //get alternate classes
-    public CommandPanelsEditorMain editorMain = new CommandPanelsEditorMain(this);
+    public final CommandPanelsEditorMain editorMain = new CommandPanelsEditorMain(this);
 
-    public CommandTags commandTags = new CommandTags(this);
-    public PanelDataLoader panelData = new PanelDataLoader(this);
-    public Placeholders placeholders = new Placeholders(this);
-    public DebugManager debug = new DebugManager(this);
-    public CreateText tex = new CreateText(this);
-    public HexColours hex = new HexColours(this);
+    public final CommandTags commandTags = new CommandTags(this);
+    public final PanelDataLoader panelData = new PanelDataLoader(this);
+    public final Placeholders placeholders = new Placeholders(this);
+    public final DebugManager debug = new DebugManager(this);
+    public final CreateText tex = new CreateText(this);
+    public final HexColours hex = new HexColours(this);
 
-    public ExecuteOpenVoids openVoids = new ExecuteOpenVoids(this);
-    public ItemCreation itemCreate = new ItemCreation(this);
-    public HasSections has = new HasSections(this);
-    public GetCustomHeads customHeads = new GetCustomHeads(this);
-    public Updater updater = new Updater(this);
-    public PlayerHeads getHeads = new PlayerHeads(this);
-    public LegacyVersion legacy = new LegacyVersion(this);
+    public final ExecuteOpenVoids openVoids = new ExecuteOpenVoids(this);
+    public final ItemCreation itemCreate = new ItemCreation(this);
+    public final HasSections has = new HasSections(this);
+    public final GetCustomHeads customHeads = new GetCustomHeads(this);
+    public final Updater updater = new Updater(this);
+    public final PlayerHeads getHeads = new PlayerHeads(this);
+    public final LegacyVersion legacy = new LegacyVersion(this);
 
-    public OpenPanelsLoader openPanels = new OpenPanelsLoader(this);
-    public OpenGUI createGUI = new OpenGUI(this);
-    public PanelPermissions panelPerms = new PanelPermissions(this);
-    public HotbarItemLoader hotbar = new HotbarItemLoader(this);
-    public NBTManager nbt = new NBTManager(this);
+    public final OpenPanelsLoader openPanels = new OpenPanelsLoader(this);
+    public final OpenGUI createGUI = new OpenGUI(this);
+    public final PanelPermissions panelPerms = new PanelPermissions(this);
+    public final HotbarItemLoader hotbar = new HotbarItemLoader(this);
+    public final NBTManager nbt = new NBTManager(this);
 
-    public InventorySaver inventorySaver = new InventorySaver(this);
-    public ItemStackSerializer itemSerializer = new ItemStackSerializer(this);
-    public UserInputUtils inputUtils = new UserInputUtils(this);
+    public final InventorySaver inventorySaver = new InventorySaver(this);
+    public final ItemStackSerializer itemSerializer = new ItemStackSerializer(this);
+    public final UserInputUtils inputUtils = new UserInputUtils(this);
 
-    public File panelsf = new File(this.getDataFolder() + File.separator + "panels");
+    public final File panelsf = new File(this.getDataFolder() + File.separator + "panels");
     public YamlConfiguration blockConfig; //where panel block locations are stored
 
     @Override

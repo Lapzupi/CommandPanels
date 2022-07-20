@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 
 public class UtilsChestSortEvent implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public UtilsChestSortEvent(CommandPanels pl) {
         this.plugin = pl;
     }

@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.Objects;
 
 public class PanelBlockOnClick implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public PanelBlockOnClick(CommandPanels pl) {
         this.plugin = pl;
     }

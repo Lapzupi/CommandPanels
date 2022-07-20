@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Objects;
 
 public class BuyItemTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public BuyItemTags(CommandPanels pl) {
         this.plugin = pl;
     }

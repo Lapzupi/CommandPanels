@@ -8,14 +8,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
 
 public class Commandpanelsgenerate implements CommandExecutor {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Commandpanelsgenerate(CommandPanels pl) { this.plugin = pl; }
 
-    @EventHandler
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)) {
             sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Please execute command as a Player!"));

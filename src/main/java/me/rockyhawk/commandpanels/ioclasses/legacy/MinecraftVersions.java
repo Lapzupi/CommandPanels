@@ -16,8 +16,8 @@ public enum MinecraftVersions {
     v1_20( "1_20", 12 ),
     v1_21( "1_21", 13 );
 
-    private int order;
-    private String key;
+    private final int order;
+    private final String key;
 
     MinecraftVersions( String key, int v ) {
         this.key = key;

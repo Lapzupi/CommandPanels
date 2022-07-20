@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class HotbarItemLoader {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public HotbarItemLoader(CommandPanels pl) {
         this.plugin = pl;
     }
 
     //stationary slots 0-8 are the hotbar, using 9-35 for inside the inventory
-    HashMap<UUID,HotbarPlayerManager> stationaryItems = new HashMap<>();
+    final HashMap<UUID,HotbarPlayerManager> stationaryItems = new HashMap<>();
 
     //will compile the ArrayList {slot 0-4, index of panelNames}
     public void reloadHotbarSlots() {

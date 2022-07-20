@@ -35,7 +35,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class ItemCreation {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public ItemCreation(CommandPanels pl) {
         plugin = pl;
     }
@@ -62,7 +62,7 @@ public class ItemCreation {
             int start = material.indexOf("%cp-player-online-");
             int end = material.lastIndexOf("-find%");
             String playerLocation = material.substring(start, end).replace("%cp-player-online-", "");
-            Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]);
+            Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
             if (Integer.parseInt(playerLocation) > playerFind.length) {
                 material = material.replace(material.substring(start, end) + "-find%", "cps= " + plugin.config.getString("config.format.offlineHeadValue"));
             } else {
@@ -540,9 +540,7 @@ public class ItemCreation {
         }catch(Exception ignore){}
         //check for enchantments
         if(one.getEnchantments() == two.getEnchantments()){
-            if(!one.getEnchantments().isEmpty()) {
-                return false;
-            }
+            return one.getEnchantments().isEmpty();
         }
         return true;
     }

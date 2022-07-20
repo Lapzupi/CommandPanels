@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Commandpanelcustom implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Commandpanelcustom(CommandPanels pl) {
         this.plugin = pl;
     }

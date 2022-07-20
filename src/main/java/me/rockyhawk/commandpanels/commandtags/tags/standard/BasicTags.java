@@ -16,7 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class BasicTags implements Listener {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public BasicTags(CommandPanels pl) {
         this.plugin = pl;
     }

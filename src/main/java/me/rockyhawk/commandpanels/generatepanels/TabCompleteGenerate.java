@@ -11,14 +11,14 @@ import java.util.List;
 
 
 public class TabCompleteGenerate implements TabCompleter {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public TabCompleteGenerate(CommandPanels pl) { this.plugin = pl; }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player && args.length == 1){
             if(label.equalsIgnoreCase("cpg") || label.equalsIgnoreCase("cpanelg") || label.equalsIgnoreCase("commandpanelgenerate")){
                 if(sender.hasPermission("commandpanel.generate")) {
-                    ArrayList<String> apanels = new ArrayList<String>(); //all panels
+                    ArrayList<String> apanels = new ArrayList<>(); //all panels
                     apanels.add("1");
                     apanels.add("2");
                     apanels.add("3");

@@ -3,7 +3,7 @@ package me.rockyhawk.commandpanels.ioclasses.legacy;
 import me.rockyhawk.commandpanels.CommandPanels;
 
 public class PlayerHeads {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public PlayerHeads(CommandPanels pl) {
         this.plugin = pl;
     }

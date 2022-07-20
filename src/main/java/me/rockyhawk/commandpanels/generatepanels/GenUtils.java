@@ -23,8 +23,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class GenUtils implements Listener {
-    public YamlConfiguration tempEdit;
-    CommandPanels plugin;
+    public final YamlConfiguration tempEdit;
+    final CommandPanels plugin;
     public GenUtils(CommandPanels pl) {
         this.plugin = pl;
         this.tempEdit = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "temp.yml"));
@@ -57,7 +57,7 @@ public class GenUtils implements Listener {
     }
 
     void generatePanel(Player p, Inventory inv){
-        ArrayList<String> apanels = new ArrayList();
+        ArrayList<String> apanels = new ArrayList<>();
         for(Panel panel : plugin.panelList){
             //create list of names that aren't a String list
             apanels.add(panel.getName());

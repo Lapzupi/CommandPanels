@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class OpenPanelsLoader {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public OpenPanelsLoader(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -20,8 +20,8 @@ public class OpenPanelsLoader {
     The configuration section is opened directly
     into the correct panel, so there is no need for the panel name
     */
-    public HashMap<String, PanelsInterface> openPanels = new HashMap<>(); //player name and panel interface
-    public HashSet<String> skipPanelClose = new HashSet<>(); //don't remove the player if they are in this list
+    public final HashMap<String, PanelsInterface> openPanels = new HashMap<>(); //player name and panel interface
+    public final HashSet<String> skipPanelClose = new HashSet<>(); //don't remove the player if they are in this list
 
     //this will return the panel CF based on the player, if it isn't there it returns null
     public Panel getOpenPanel(String playerName, PanelPosition position){

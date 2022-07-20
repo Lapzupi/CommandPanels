@@ -16,7 +16,7 @@ import org.bukkit.event.inventory.InventoryType;
 import java.util.Objects;
 
 public class ExecuteOpenVoids {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public ExecuteOpenVoids(CommandPanels pl) {
         this.plugin = pl;
     }

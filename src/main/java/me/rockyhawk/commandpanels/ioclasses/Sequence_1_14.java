@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.Reader;
 
 public class Sequence_1_14 {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public Sequence_1_14(CommandPanels pl) {
         this.plugin = pl;
     }

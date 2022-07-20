@@ -5,7 +5,7 @@ import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
 import org.bukkit.inventory.ItemStack;
 
 public class NBTManager {
-    CommandPanels plugin;
+    final CommandPanels plugin;
     public NBTManager(CommandPanels pl) {
         this.plugin = pl;
     }
