@@ -48,6 +48,8 @@ import me.rockyhawk.commandpanels.playerinventoryhandler.InventorySaver;
 import me.rockyhawk.commandpanels.playerinventoryhandler.ItemStackSerializer;
 import me.rockyhawk.commandpanels.updater.Updater;
 import net.milkbowl.vault.economy.Economy;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -60,6 +62,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,8 +115,9 @@ public class CommandPanels extends JavaPlugin {
     public File panelsf = new File(this.getDataFolder() + File.separator + "panels");
     public YamlConfiguration blockConfig; //where panel block locations are stored
 
+    @Override
     public void onEnable() {
-        Bukkit.getLogger().info("[CommandPanels] RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loading...");
+        getLogger().info("RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loading...");
 
         //register config files
         this.blockConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "blocks.yml"));
@@ -129,7 +134,7 @@ public class CommandPanels extends JavaPlugin {
                 configFileConfiguration.save(configFile);
                 this.config = YamlConfiguration.loadConfiguration(new File(this.getDataFolder() + File.separator + "config.yml"));
             } catch (IOException var11) {
-                Bukkit.getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " WARNING: Could not save the config file!");
+                getLogger().warning("WARNING: Could not save the config file!");
             }
         } else {
             //check if the config file has any missing elements
@@ -139,7 +144,7 @@ public class CommandPanels extends JavaPlugin {
                 this.config.options().copyDefaults(true);
                 this.config.save(new File(this.getDataFolder() + File.separator + "config.yml"));
             } catch (IOException var10) {
-                Bukkit.getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " WARNING: Could not save the config file!");
+                getLogger().warning("WARNING: Could not save the config file!");
             }
         }
 
@@ -151,7 +156,7 @@ public class CommandPanels extends JavaPlugin {
         //setup class files
         this.setupEconomy();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        new Metrics(this);
+        Metrics metrics = new Metrics(this,5097);
         Objects.requireNonNull(this.getCommand("commandpanel")).setExecutor(new Commandpanel(this));
         Objects.requireNonNull(this.getCommand("commandpanel")).setTabCompleter(new CpTabComplete(this));
 
@@ -251,7 +256,7 @@ public class CommandPanels extends JavaPlugin {
                 FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/template.yml")));
                 templateFileConfiguration.save(new File(this.panelsf + File.separator + "panels/template.yml"));
             } catch (IOException var11) {
-                Bukkit.getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " WARNING: Could not save the example file!");
+                getLogger().warning("WARNING: Could not save the example file!");
             }
         }
 
@@ -266,19 +271,15 @@ public class CommandPanels extends JavaPlugin {
         hotbar.reloadHotbarSlots();
 
         //add custom charts bStats
-        Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SingleLineChart("panels_amount", new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                //this is the total panels loaded
-                return panelList.size();
-            }
+        metrics.addCustomChart(new SingleLineChart("panels_amount", () -> {
+            //this is the total panels loaded
+            return panelList.size();
         }));
 
         //get tag
         tag = tex.colour(config.getString("config.format.tag"));
 
-        Bukkit.getLogger().info("[CommandPanels] RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loaded!");
+        getLogger().info("RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loaded!");
     }
 
     @Override
@@ -289,6 +290,7 @@ public class CommandPanels extends JavaPlugin {
             try {
                 Bukkit.getPlayer(name).closeInventory();
             } catch (Exception ignore) {
+                //ignored
             }
         }
 
@@ -299,7 +301,8 @@ public class CommandPanels extends JavaPlugin {
         Bukkit.getLogger().info("RockyHawk's CommandPanels Plugin Disabled, aww man.");
     }
 
-    public static CommandPanelsAPI getAPI() {
+    @Contract(" -> new")
+    public static @NotNull CommandPanelsAPI getAPI() {
         return new CommandPanelsAPI(JavaPlugin.getPlugin(CommandPanels.class));
     }
 
@@ -344,6 +347,7 @@ public class CommandPanels extends JavaPlugin {
             }
             renamed.setItemMeta(renamedMeta);
         } catch (Exception ignored) {
+            //ignore
         }
         return renamed;
     }
@@ -377,10 +381,10 @@ public class CommandPanels extends JavaPlugin {
         }
 
         //names is a list of the titles for the Panels
-        Set<String> oset = new HashSet<String>(apanels);
+        Set<String> oset = new HashSet<>(apanels);
         if (oset.size() < apanels.size()) {
             //there are duplicate panel names
-            ArrayList<String> opanelsTemp = new ArrayList<String>();
+            ArrayList<String> opanelsTemp = new ArrayList<>();
             for (String tempName : apanels) {
                 if (opanelsTemp.contains(tempName)) {
                     sender.sendMessage(tex.colour(tag) + ChatColor.RED + " Error duplicate panel name: " + tempName);
@@ -488,7 +492,7 @@ public class CommandPanels extends JavaPlugin {
         }
     }
 
-    public final Map<String, Color> colourCodes = new HashMap<String, Color>() {{
+    public final Map<String, Color> colourCodes = new HashMap<>() {{
         put("AQUA", Color.AQUA);
         put("BLUE", Color.BLUE);
         put("GRAY", Color.GRAY);
@@ -506,7 +510,7 @@ public class CommandPanels extends JavaPlugin {
         put("SILVER", Color.SILVER);
         put("TEAL", Color.TEAL);
         put("YELLOW", Color.YELLOW);
-    }};
+    }}; //todo
 
     public Reader getReaderFromStream(InputStream initialStream) throws IOException {
         //this reads the encrypted resource files in the jar file
@@ -532,7 +536,7 @@ public class CommandPanels extends JavaPlugin {
             throw new IllegalArgumentException("max must be greater than min");
         }
 
-        Random r = new Random();
+        Random r = new Random(); //todo
         return r.nextInt((max - min) + 1) + min;
     }
 
