@@ -132,7 +132,7 @@ public class Utils implements Listener {
 
         if(panel.getConfig().contains("item." + clickedSlot + section + ".commands")) {
             List<String> commands = panel.getConfig().getStringList("item." + clickedSlot + section + ".commands");
-            if (commands.size() != 0) {
+            if (!commands.isEmpty()) {
                 //this will replace a sequence tag command with the commands from the sequence
                 List<String> commandsAfterSequence = commands;
                 for (int i = 0; commands.size() - 1 >= i; i++) {
@@ -147,9 +147,9 @@ public class Utils implements Listener {
 
                 for (int i = 0; commands.size() > i; i++) {
                     try {
-                        commands.set(i, commands.get(i).replaceAll("%cp-clicked%", e.getCurrentItem().getType().toString()));
+                        commands.set(i, commands.get(i).replace("%cp-clicked%", e.getCurrentItem().getType().toString()));
                     } catch (Exception mate) {
-                        commands.set(i, commands.get(i).replaceAll("%cp-clicked%", "AIR"));
+                        commands.set(i, commands.get(i).replace("%cp-clicked%", "AIR"));
                     }
                 }
 
