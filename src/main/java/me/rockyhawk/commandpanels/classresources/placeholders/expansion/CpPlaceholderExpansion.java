@@ -16,17 +16,17 @@ public class CpPlaceholderExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public String getAuthor() {
+    public @NotNull String getAuthor() {
         return "RockyHawk";
     }
 
     @Override
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return "commandpanels";
     }
 
     @Override
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return "1.0.0";
     }
 

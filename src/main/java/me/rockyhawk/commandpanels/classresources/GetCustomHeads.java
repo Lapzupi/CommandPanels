@@ -2,7 +2,7 @@ package me.rockyhawk.commandpanels.classresources;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap; //nbtapi - todo
+import com.mojang.authlib.properties.PropertyMap;
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
 import org.bukkit.Material;
@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.UUID;
-
+//nbtapi - todo
 public class GetCustomHeads {
     final CommandPanels plugin;
     public GetCustomHeads(CommandPanels pl) {

@@ -2,7 +2,7 @@ package me.rockyhawk.commandpanels.commandtags.tags.other;
 
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.commandtags.CommandTagEvent;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

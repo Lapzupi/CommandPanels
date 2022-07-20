@@ -1,11 +1,8 @@
 package me.rockyhawk.commandpanels.commandtags.tags.economy;
 
-import de.NeonnBukkit.CoinsAPI.API.CoinsAPI;
-import me.realized.tokenmanager.api.TokenManager;
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.commandtags.CommandTagEvent;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -41,49 +38,6 @@ public class SellItemTags implements Listener {
                     }
                 } else {
                     plugin.tex.sendMessage(e.p, ChatColor.RED + "Selling Requires Vault and an Economy to work!");
-                }
-            } catch (Exception sell) {
-                plugin.debug(sell,e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
-            }
-            return;
-        }
-        if(e.name.equalsIgnoreCase("tokensell=")) {
-            e.commandTagUsed();
-            //if player uses tokensell= it will be eg. tokensell= <cashback> <item> <amount of item> [enchanted:KNOCKBACK:1] [potion:JUMP]
-            try {
-                if (plugin.getServer().getPluginManager().isPluginEnabled("TokenManager")) {
-                    TokenManager api = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
-                    boolean sold = removeItem(e.p, e.args);
-                    if (!sold) {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.item.failure"));
-                    } else {
-                        assert api != null;
-                        api.addTokens(e.p, Long.parseLong(e.args[0]));
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.item.success").replaceAll("%cp-args%", e.args[1]));
-                    }
-                } else {
-                    plugin.tex.sendMessage(e.p, ChatColor.RED + "Selling Requires TokenManager to work!");
-                }
-            } catch (Exception sell) {
-                plugin.debug(sell,e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
-            }
-        }
-        if(e.name.equalsIgnoreCase("coinsell=")) {
-            e.commandTagUsed();
-            //if player uses coinsell= it will be eg. coinsell= <cashback> <item> <amount of item> [enchanted:KNOCKBACK:1] [potion:JUMP]
-            try {
-                if (plugin.getServer().getPluginManager().isPluginEnabled("CoinsAPINB")) {
-                    boolean sold = removeItem(e.p, e.args);
-                    if (!sold) {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.item.failure"));
-                    } else {
-                        CoinsAPI.addCoins(e.p.getUniqueId().toString(), (int) Long.parseLong(e.args[0]));
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.item.success").replaceAll("%cp-args%", e.args[1]));
-                    }
-                } else {
-                    plugin.tex.sendMessage(e.p, ChatColor.RED + "Selling Requires CoinsAPINB to work!");
                 }
             } catch (Exception sell) {
                 plugin.debug(sell,e.p);

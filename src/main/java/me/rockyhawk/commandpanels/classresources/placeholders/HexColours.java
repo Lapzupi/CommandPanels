@@ -20,10 +20,9 @@ public class HexColours {
 
     //used to translate hex colours into ChatColors
     private String doTranslation(String message, String startTag, String endTag) {
-        ChatColor.
         final Pattern hexPattern = Pattern.compile(startTag + "([A-Fa-f0-9]{6})" + endTag);
         Matcher matcher = hexPattern.matcher(message);
-        StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);
+        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
         while (matcher.find()) {
             String group = matcher.group(1);
             matcher.appendReplacement(buffer, ChatColor.COLOR_CHAR + "x"

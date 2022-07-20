@@ -2,13 +2,14 @@ package me.rockyhawk.commandpanels.ioclasses;
 
 //1.14-1.17 Imports
 import me.rockyhawk.commandpanels.CommandPanels;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.IOUtils;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.input.CharSequenceReader;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.CharSequenceReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+//todo not needed probably
 public class Sequence_1_14 {
     final CommandPanels plugin;
     public Sequence_1_14(CommandPanels pl) {
