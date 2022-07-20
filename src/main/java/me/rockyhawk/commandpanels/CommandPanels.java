@@ -232,24 +232,24 @@ public class CommandPanels extends JavaPlugin {
         if (!this.panelsf.exists()) {
             try {
                 if (legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
-                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("exampleLegacy.yml")));
+                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/exampleLegacy.yml")));
                     exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example.yml"));
                 } else {
                     //top
-                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("example_top.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example_top.yml"));
+                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_top.yml")));
+                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_top.yml"));
                     //middle one
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("example_middle_one.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example_middle_one.yml"));
+                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_one.yml")));
+                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_middle_one.yml"));
                     //middle two
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("example_middle_two.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example_middle_two.yml"));
+                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_two.yml")));
+                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_middle_two.yml"));
                     //bottom
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("example_bottom.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example_bottom.yml"));
+                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_bottom.yml")));
+                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_bottom.yml"));
                 }
-                FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("template.yml")));
-                templateFileConfiguration.save(new File(this.panelsf + File.separator + "template.yml"));
+                FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/template.yml")));
+                templateFileConfiguration.save(new File(this.panelsf + File.separator + "panels/template.yml"));
             } catch (IOException var11) {
                 Bukkit.getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " WARNING: Could not save the example file!");
             }
