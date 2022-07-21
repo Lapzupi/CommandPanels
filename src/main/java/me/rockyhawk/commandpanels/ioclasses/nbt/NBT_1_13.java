@@ -1206,7 +1206,7 @@ public final class NBT_1_13 {
             if ( key instanceof Integer ) {
                 compound = ( ( List< ? > ) NBTListData.get( compound ) ).get( ( int ) key );
             } else if ( key != null ) {
-                compound = getMethod( "get" ).invoke( compound, ( String ) key );
+                compound = getMethod( "get" ).invoke( compound, key);
             }
             if ( compound == null || key == null ) {
                 if ( keys[ index + 1 ] == null || keys[ index + 1 ] instanceof Integer ) {
@@ -1221,7 +1221,7 @@ public final class NBT_1_13 {
                         getMethod( "add" ).invoke( oldCompound, compound );
                     }
                 } else {
-                    getMethod( "set" ).invoke( oldCompound, ( String ) key, compound );
+                    getMethod( "set" ).invoke( oldCompound, key, compound );
                 }
             }
         }
@@ -1235,15 +1235,15 @@ public final class NBT_1_13 {
                 }
             } else if ( lastKey instanceof Integer ) {
                 if ( notCompound == null ) {
-                    getMethod( "listRemove" ).invoke( compound, ( int ) lastKey );
+                    getMethod( "listRemove" ).invoke( compound, lastKey);
                 } else {
-                    getMethod( "setIndex" ).invoke( compound, ( int ) lastKey, notCompound );
+                    getMethod( "setIndex" ).invoke( compound, lastKey, notCompound );
                 }
             } else {
                 if ( notCompound == null ) {
-                    getMethod( "remove" ).invoke( compound, ( String ) lastKey );
+                    getMethod( "remove" ).invoke( compound, lastKey);
                 } else {
-                    getMethod( "set" ).invoke( compound, ( String ) lastKey, notCompound );
+                    getMethod( "set" ).invoke( compound, lastKey, notCompound );
                 }
             }
         } else {
@@ -1270,7 +1270,7 @@ public final class NBT_1_13 {
             if ( compound == null ) {
                 return null;
             } else if ( getNMSClass( "NBTTagCompound" ).isInstance( compound ) ) {
-                compound = getMethod( "get" ).invoke( compound, ( String ) key );
+                compound = getMethod( "get" ).invoke( compound, key);
             } else if ( getNMSClass( "NBTTagList" ).isInstance( compound ) ) {
                 compound = ( ( List< ? > ) NBTListData.get( compound ) ).get( ( int ) key );
             }
@@ -1289,7 +1289,7 @@ public final class NBT_1_13 {
             if ( notCompound == null ) {
                 return null;
             } else if ( getNMSClass( "NBTTagCompound" ).isInstance( notCompound ) ) {
-                notCompound = getMethod( "get" ).invoke( notCompound, ( String ) key );
+                notCompound = getMethod( "get" ).invoke( notCompound, key);
             } else if ( getNMSClass( "NBTTagList" ).isInstance( notCompound ) ) {
                 notCompound = ( ( List< ? > ) NBTListData.get( notCompound ) ).get( ( int ) key );
             } else {

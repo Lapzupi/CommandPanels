@@ -118,7 +118,7 @@ public class BasicTags implements Listener {
         if(e.name.equalsIgnoreCase("minimessage=")){
             e.commandTagUsed();
             if(plugin.legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_18) && Bukkit.getServer().getVersion().contains("Paper")){
-                Audience player = (Audience) e.p; // Needed because the basic Player from the Event can't send Paper's Components
+                Audience player = e.p; // Needed because the basic Player from the Event can't send Paper's Components
                 Component parsedText = SerializerUtils.serializeText(String.join(" ",e.args));
                 player.sendMessage(parsedText);
             }else{
