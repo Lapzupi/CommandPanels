@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 
 import java.util.Arrays;
 
+@Deprecated
 public class Commandpanelsdata implements CommandExecutor {
     final CommandPanels plugin;
     public Commandpanelsdata(CommandPanels pl) { this.plugin = pl; }

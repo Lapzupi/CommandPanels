@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@Deprecated
 public class Commandpanelsdebug implements CommandExecutor {
     final CommandPanels plugin;
     public Commandpanelsdebug(CommandPanels pl) { this.plugin = pl; }

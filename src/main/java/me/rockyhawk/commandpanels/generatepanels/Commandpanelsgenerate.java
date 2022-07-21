@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 
-
+//todo
 public class Commandpanelsgenerate implements CommandExecutor {
     final CommandPanels plugin;
     public Commandpanelsgenerate(CommandPanels pl) { this.plugin = pl; }

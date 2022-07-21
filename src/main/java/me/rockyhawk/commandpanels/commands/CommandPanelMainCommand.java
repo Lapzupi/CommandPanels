@@ -1,9 +1,6 @@
 package me.rockyhawk.commandpanels.commands;
 
-import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Subcommand;
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.api.Panel;
 import me.rockyhawk.commandpanels.openpanelsmanager.PanelPosition;
@@ -12,11 +9,22 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 
 @CommandAlias(Alias.BASE_COMMAND_ALIAS)
 //https://rockyhawk99.gitbook.io/rockyhawk-wiki/commandpanels/wiki/commands-and-permissions
-public class CommandPanelMainCommand extends BaseCommand implements CommandExecutor {
+// panel - done todo
+// version - done
+// list -
+// reload - done
+// generate - done
+// import -
+// data - done
+// editor -
+// add -
+// remove -
+// block list -
+
+public class CommandPanelMainCommand implements CommandExecutor {
     final CommandPanels plugin;
 
     public CommandPanelMainCommand(final CommandPanels plugin) {

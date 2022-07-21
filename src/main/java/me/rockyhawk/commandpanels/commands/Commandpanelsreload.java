@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class Commandpanelsreload implements CommandExecutor {
     final CommandPanels plugin;
     public Commandpanelsreload(CommandPanels pl) { this.plugin = pl; }

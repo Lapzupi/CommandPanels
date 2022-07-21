@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+@Deprecated
 public class Commandpanelversion implements CommandExecutor {
     final CommandPanels plugin;
     public Commandpanelversion(CommandPanels pl) { this.plugin = pl; }
