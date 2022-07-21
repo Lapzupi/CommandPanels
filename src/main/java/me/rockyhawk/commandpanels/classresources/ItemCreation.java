@@ -82,20 +82,14 @@ public class ItemCreation {
             if(itemSection.contains("ID")){
                 id = Short.parseShort(itemSection.getString("ID"));
             }
-            if (matraw.split("\\s")[0].equalsIgnoreCase("cps=") || matraw.split("\\s")[0].toLowerCase().equals("cpo=")) {
+            if (matraw.split("\\s")[0].equalsIgnoreCase("cps=") || matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
                 skullname = p.getUniqueId().toString();
-                mat = plugin.getHeads.playerHeadString();
-                if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)){
-                    id = 3;
-                }
+                mat = String.valueOf(Material.PLAYER_HEAD);
             }
 
             if (matraw.split("\\s")[0].equalsIgnoreCase("hdb=")) {
                 skullname = "hdb";
-                mat = plugin.getHeads.playerHeadString();
-                if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)){
-                    id = 3;
-                }
+                mat = String.valueOf(Material.PLAYER_HEAD);
             }
 
             //creates custom MMOItems items
@@ -210,7 +204,6 @@ public class ItemCreation {
                 The images should be 128x128
                  */
                 try{
-                    @SuppressWarnings("deprecation")
                     MapView map = Bukkit.getServer().getMap(0);
                     try {
                         map.getRenderers().clear();
@@ -403,7 +396,6 @@ public class ItemCreation {
         return plugin.itemCreate.makeItemFromConfig(panel,position,itemSection, p, placeholders, colours, addNBT);
     }
 
-    @SuppressWarnings("deprecation")
     public YamlConfiguration generatePanelFile(String panelName, Inventory inv, YamlConfiguration file){
         ItemStack cont;
         for(int i = 0; inv.getSize() > i; i++){
