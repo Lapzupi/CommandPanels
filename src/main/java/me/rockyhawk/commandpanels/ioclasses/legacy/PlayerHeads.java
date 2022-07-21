@@ -2,6 +2,7 @@ package me.rockyhawk.commandpanels.ioclasses.legacy;
 
 import me.rockyhawk.commandpanels.CommandPanels;
 
+@Deprecated
 public class PlayerHeads {
     final CommandPanels plugin;
     public PlayerHeads(CommandPanels pl) {

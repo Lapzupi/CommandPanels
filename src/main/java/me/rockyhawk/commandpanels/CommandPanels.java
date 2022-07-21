@@ -32,7 +32,7 @@ import me.rockyhawk.commandpanels.interactives.Commandpanelrefresher;
 import me.rockyhawk.commandpanels.interactives.OpenOnJoin;
 import me.rockyhawk.commandpanels.ioclasses.Sequence_1_13;
 import me.rockyhawk.commandpanels.ioclasses.Sequence_1_14;
-import me.rockyhawk.commandpanels.ioclasses.nbt.NBTManager;
+import me.rockyhawk.commandpanels.ioclasses.NBTManager;
 import me.rockyhawk.commandpanels.ioclasses.legacy.LegacyVersion;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
 import me.rockyhawk.commandpanels.ioclasses.legacy.PlayerHeads;

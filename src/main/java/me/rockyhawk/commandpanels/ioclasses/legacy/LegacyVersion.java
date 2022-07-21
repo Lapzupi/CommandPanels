@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+@Deprecated
 public class LegacyVersion {
     final CommandPanels plugin;
     public final MinecraftVersions LOCAL_VERSION;
