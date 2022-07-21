@@ -39,7 +39,6 @@ public class ItemCreation {
         plugin = pl;
     }
 
-    @SuppressWarnings("deprecation")
     public ItemStack makeItemFromConfig(Panel panel, PanelPosition position, ConfigurationSection itemSection, Player p, boolean placeholders, boolean colours, boolean addNBT){
         String material = plugin.tex.placeholdersNoColour(panel,position,p,itemSection.getString("material"));
         try {
@@ -470,7 +469,6 @@ public class ItemCreation {
     The isIdentical() function will check for the following
     Material, Name, Lore, Enchanted, Potion
      */
-    @SuppressWarnings("deprecation")
     public boolean isIdentical(ItemStack one, ItemStack two){
         //check material
         if (one.getType() != two.getType()) {
