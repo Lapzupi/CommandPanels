@@ -1,7 +1,6 @@
 package me.rockyhawk.commandpanels.commandtags.tags.economy;
 
-import de.NeonnBukkit.CoinsAPI.API.CoinsAPI;
-import me.realized.tokenmanager.api.TokenManager;
+
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.commandtags.CommandTagEvent;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
@@ -42,55 +41,9 @@ public class BuyItemTags implements Listener {
                 plugin.debug(buy,e.p);
                 plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
             }
-            return;
-        }
-        if(e.name.equalsIgnoreCase("tokenbuy=")) {
-            e.commandTagUsed();
-            //if player uses tokenbuy= it will be eg. tokenbuy= <price> <item> <amount of item> <ID>
-            try {
-                if (plugin.getServer().getPluginManager().isPluginEnabled("TokenManager")) {
-                    TokenManager api = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
-                    assert api != null;
-                    int balance = Integer.parseInt(Long.toString(api.getTokens(e.p).orElse(0)));
-                    if (balance >= Double.parseDouble(e.args[0])) {
-                        api.removeTokens(e.p, Long.parseLong(e.args[0]));
-                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.config.getString("purchase.tokens.success")).replaceAll("%cp-args%", e.args[0]));
-                        giveItem(e.p,e.args);
-                    } else {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.tokens.failure"));
-                    }
-                } else {
-                    plugin.tex.sendMessage(e.p, ChatColor.RED + "Buying Requires TokenManager to work!");
-                }
-            } catch (Exception buy) {
-                plugin.debug(buy, e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
-            }
-        }
-        if(e.name.equalsIgnoreCase("coinbuy=")) {
-            e.commandTagUsed();
-            //if player uses coinbuy= it will be eg. coinbuy= <price> <item> <amount of item> <ID>
-            try {
-                if (plugin.getServer().getPluginManager().isPluginEnabled("CoinsAPINB")) {
-                    int balance = CoinsAPI.getCoins(e.p.getUniqueId().toString());
-                    if (balance >= Double.parseDouble(e.args[0])) {
-                        CoinsAPI.removeCoins(e.p.getUniqueId().toString(), (int) Long.parseLong(e.args[0]));
-                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.config.getString("purchase.coins.success")).replaceAll("%cp-args%", e.args[0]));
-                        giveItem(e.p,e.args);
-                    } else {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.coins.failure"));
-                    }
-                } else {
-                    plugin.tex.sendMessage(e.p, ChatColor.RED + "Buying Requires CoinsAPINB to work!");
-                }
-            } catch (Exception buy) {
-                plugin.debug(buy, e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
-            }
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void giveItem(Player p, String[] args){
         //legacy ID
         byte id = 0;

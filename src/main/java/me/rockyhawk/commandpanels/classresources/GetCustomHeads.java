@@ -1,20 +1,15 @@
 package me.rockyhawk.commandpanels.classresources;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-import com.mojang.authlib.properties.PropertyMap;
+
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTListCompound;
 import me.rockyhawk.commandpanels.CommandPanels;
-import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Iterator;
 import java.util.UUID;
-//nbtapi - todo
 public class GetCustomHeads {
     final CommandPanels plugin;
     public GetCustomHeads(CommandPanels pl) {
@@ -22,82 +17,36 @@ public class GetCustomHeads {
     }
 
     public String getHeadBase64(ItemStack head) {
-        if (plugin.getHeads.ifSkullOrHead(head.getType().toString()) && head.hasItemMeta()) {
-            try {
-                SkullMeta meta = (SkullMeta) head.getItemMeta();
-                assert meta != null;
-                if (!meta.hasOwner()) {
-                    Field fld = meta.getClass().getDeclaredField("profile");
-                    fld.setAccessible(true);
-                    GameProfile prof = (GameProfile) fld.get(meta);
-                    Iterator itr = prof.getProperties().get("textures").iterator();
-                    if (itr.hasNext()) {
-                        Property var5 = (Property) itr.next();
-                        return var5.getValue();
-                    }
-                }
-            }catch(Exception exc){/*skip return null*/}
+        if(head.getType() == Material.PLAYER_HEAD) {
+            NBTItem nbtItem = new NBTItem(head);
+            NBTCompound skull = nbtItem.addCompound("SkullOwner");
+            return skull.getCompound("Properties").getCompound("textures").getString("Value");
         }
         return null;
     }
 
     //getting the head from a Player
-    @SuppressWarnings("deprecation")
     public ItemStack getPlayerHead(String name) {
-        byte id = 0;
-        if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)){
-            id = 3;
-        }
-        ItemStack itemStack = new ItemStack(Material.matchMaterial(plugin.getHeads.playerHeadString()), 1,id);
+        ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
         meta.setOwner(name);
         itemStack.setItemMeta(meta);
         return itemStack;
     }
 
-    @SuppressWarnings("deprecation")
     public ItemStack getCustomHead(String b64stringtexture) {
         //get head from base64
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        PropertyMap propertyMap = profile.getProperties();
-        if (propertyMap == null) {
-            throw new IllegalStateException("Profile doesn't contain a property map");
-        } else {
-            propertyMap.put("textures", new Property("textures", b64stringtexture));
-            byte id = 0;
-            if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)){
-                id = 3;
-            }
-            ItemStack head = new ItemStack(Material.matchMaterial(plugin.getHeads.playerHeadString()), 1,id);
-            ItemMeta headMeta = head.getItemMeta();
-            assert headMeta != null;
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD, 1); // Creating the ItemStack, your input may vary.
+        NBTItem nbti = new NBTItem(head); // Creating the wrapper.
 
-            Field profileField;
-            Method setProfileMethod = null;
-            try {
-                profileField = headMeta.getClass().getDeclaredField("profile");
-                profileField.setAccessible(true);
-                profileField.set(headMeta, profile);
-            } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-                try {
-                    setProfileMethod = headMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
-                } catch (NoSuchMethodException ignore) {}
-            } catch (SecurityException ignored) {}
-            try {
-                if (setProfileMethod == null) {
-                    profileField = headMeta.getClass().getDeclaredField("profile");
-                    profileField.setAccessible(true);
-                    profileField.set(headMeta, profile);
-                } else {
-                    setProfileMethod.setAccessible(true);
-                    setProfileMethod.invoke(headMeta, profile);
-                }
-            } catch (Exception e1) {
-                plugin.debug(e1,null);
-            }
+        NBTCompound skull = nbti.addCompound("SkullOwner"); // Getting the compound, that way we can set the skin information
+        skull.setString("Id", UUID.randomUUID().toString());
+        // The UUID, note that skulls with the same UUID but different textures will misbehave and only one texture will load
+        // (They'll share it), if skulls have different UUIDs and same textures they won't stack. See UUID.randomUUID();
 
-            head.setItemMeta(headMeta);
-            return head;
-        }
+        NBTListCompound texture = skull.addCompound("Properties").getCompoundList("textures").addCompound();
+        texture.setString("Value",  b64stringtexture);
+
+        return nbti.getItem();
     }
 }
