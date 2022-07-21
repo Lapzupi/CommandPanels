@@ -149,7 +149,7 @@ public class CommandPanels extends JavaPlugin {
         this.setupEconomy();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Metrics metrics = new Metrics(this,5097);
-        Objects.requireNonNull(this.getCommand("commandpanel")).setExecutor(new Commandpanel(this));
+        Objects.requireNonNull(this.getCommand("commandpanel")).setExecutor(new CommandPanelMainCommand(this));
         Objects.requireNonNull(this.getCommand("commandpanel")).setTabCompleter(new CpTabComplete(this));
 
         Objects.requireNonNull(this.getCommand("commandpanelgenerate")).setTabCompleter(new TabCompleteGenerate(this));
