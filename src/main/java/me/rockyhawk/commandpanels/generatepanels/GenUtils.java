@@ -78,7 +78,7 @@ public class GenUtils implements Listener {
         YamlConfiguration file;
         //String date: is what the panel and file name will be called
         String date = "panel-1";
-        for(int count = 1; (Arrays.asList(Objects.requireNonNull(plugin.panelsf.list())).contains("panel-" + count + ".yml")) || (apanels.contains("panel-" + count)); count++){
+        for(int count = 1; (Arrays.asList(Objects.requireNonNull(plugin.panelsFolder.list())).contains("panel-" + count + ".yml")) || (apanels.contains("panel-" + count)); count++){
             date = "panel-" + (count+1);
         }
         File folder = new File(plugin.getDataFolder() + File.separator + "panels");
@@ -103,7 +103,7 @@ public class GenUtils implements Listener {
         file = plugin.itemCreate.generatePanelFile(date,inv,file);
 
         try {
-            file.save(new File(plugin.panelsf + File.separator + date + ".yml"));
+            file.save(new File(plugin.panelsFolder + File.separator + date + ".yml"));
             p.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.GREEN + "Saved Generated File To: " + date + ".yml"));
         } catch (IOException var16) {
             p.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.RED + "Could Not Save Generated Panel!"));

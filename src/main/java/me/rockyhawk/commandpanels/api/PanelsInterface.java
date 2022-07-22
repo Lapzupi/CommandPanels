@@ -48,7 +48,6 @@ public class PanelsInterface {
             case Top -> {
                 return top;
             }
-
             case Middle -> {
                 return middle;
             }

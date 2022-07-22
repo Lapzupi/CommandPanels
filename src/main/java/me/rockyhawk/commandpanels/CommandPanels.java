@@ -1,5 +1,6 @@
 package me.rockyhawk.commandpanels;
 
+import co.aikar.commands.PaperCommandManager;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import me.rockyhawk.commandpanels.api.CommandPanelsAPI;
 import me.rockyhawk.commandpanels.api.Panel;
@@ -20,9 +21,7 @@ import me.rockyhawk.commandpanels.completetabs.CpTabComplete;
 import me.rockyhawk.commandpanels.customcommands.Commandpanelcustom;
 import me.rockyhawk.commandpanels.datamanager.DebugManager;
 import me.rockyhawk.commandpanels.datamanager.PanelDataLoader;
-import me.rockyhawk.commandpanels.generatepanels.Commandpanelsgenerate;
 import me.rockyhawk.commandpanels.generatepanels.GenUtils;
-import me.rockyhawk.commandpanels.generatepanels.TabCompleteGenerate;
 import me.rockyhawk.commandpanels.editor.CPEventHandler;
 import me.rockyhawk.commandpanels.editor.CommandPanelsEditorCommand;
 import me.rockyhawk.commandpanels.editor.CommandPanelsEditorMain;
@@ -109,7 +108,7 @@ public class CommandPanels extends JavaPlugin {
     public final ItemStackSerializer itemSerializer = new ItemStackSerializer(this);
     public final UserInputUtils inputUtils = new UserInputUtils(this);
 
-    public final File panelsf = new File(this.getDataFolder() + File.separator + "panels");
+    public final File panelsFolder = new File(this.getDataFolder() + File.separator + "panels");
     public YamlConfiguration blockConfig; //where panel block locations are stored
 
     @Override
@@ -149,22 +148,13 @@ public class CommandPanels extends JavaPlugin {
         this.setupEconomy();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         Metrics metrics = new Metrics(this,5097);
-        Objects.requireNonNull(this.getCommand("commandpanel")).setExecutor(new CommandPanelMainCommand(this));
-        Objects.requireNonNull(this.getCommand("commandpanel")).setTabCompleter(new CpTabComplete(this));
+        PaperCommandManager paperCommandManager = new PaperCommandManager(this);
+        paperCommandManager.registerCommand(new MainCommand(this));
+        paperCommandManager.registerCommand(new DataSubCommand(this));
+        paperCommandManager.registerCommand(new ImportSubCommand(this));
+        paperCommandManager.registerCommand(new PanelSubCommand(this));
 
-        Objects.requireNonNull(this.getCommand("commandpanelgenerate")).setTabCompleter(new TabCompleteGenerate(this));
-        Objects.requireNonNull(this.getCommand("commandpanelgenerate")).setExecutor(new Commandpanelsgenerate(this));
 
-        Objects.requireNonNull(this.getCommand("commandpaneldata")).setTabCompleter(new DataTabComplete(this));
-        Objects.requireNonNull(this.getCommand("commandpaneldata")).setExecutor(new Commandpanelsdata(this));
-
-        Objects.requireNonNull(this.getCommand("commandpanelimport")).setExecutor(new CommandPanelImport(this));
-        Objects.requireNonNull(this.getCommand("commandpanelimport")).setTabCompleter(new ImportTabComplete(this));
-
-        Objects.requireNonNull(this.getCommand("commandpanelreload")).setExecutor(new Commandpanelsreload(this));
-        Objects.requireNonNull(this.getCommand("commandpaneldebug")).setExecutor(new Commandpanelsdebug(this));
-        Objects.requireNonNull(this.getCommand("commandpanelversion")).setExecutor(new Commandpanelversion(this));
-        Objects.requireNonNull(this.getCommand("commandpanellist")).setExecutor(new Commandpanelslist(this));
         this.getServer().getPluginManager().registerEvents(new Utils(this), this);
         this.getServer().getPluginManager().registerEvents(inventorySaver, this);
         this.getServer().getPluginManager().registerEvents(inputUtils, this);
@@ -221,27 +211,27 @@ public class CommandPanels extends JavaPlugin {
         }
 
         //save the example_top.yml file and the template.yml file
-        if (!this.panelsf.exists()) {
+        if (!this.panelsFolder.exists()) {
             try {
                 if (legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
                     FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/exampleLegacy.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "example.yml"));
+                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "example.yml"));
                 } else {
                     //top
                     FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_top.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_top.yml"));
+                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_top.yml"));
                     //middle one
                     exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_one.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_middle_one.yml"));
+                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_one.yml"));
                     //middle two
                     exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_two.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_middle_two.yml"));
+                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_two.yml"));
                     //bottom
                     exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_bottom.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsf + File.separator + "panels/example_bottom.yml"));
+                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_bottom.yml"));
                 }
                 FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/template.yml")));
-                templateFileConfiguration.save(new File(this.panelsf + File.separator + "panels/template.yml"));
+                templateFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/template.yml"));
             } catch (IOException var11) {
                 getLogger().warning("WARNING: Could not save the example file!");
             }
@@ -414,7 +404,7 @@ public class CommandPanels extends JavaPlugin {
         panelList.clear();
         openWithItem = false;
         //load panel files
-        fileNamesFromDirectory(panelsf);
+        fileNamesFromDirectory(panelsFolder);
     }
 
     public void debug(Exception e, Player p) {

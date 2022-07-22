@@ -15,6 +15,13 @@ public class Commandpanelcustom implements Listener {
     public Commandpanelcustom(CommandPanels pl) {
         this.plugin = pl;
     }
+    /*todo
+    Creates a custom command alias.
+      commands:
+      - example_panel
+
+      Will create /example_panel
+    */
     @EventHandler
     public void PlayerCommand(PlayerCommandPreprocessEvent e) {
         try {

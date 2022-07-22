@@ -15,28 +15,28 @@ public class BuyCommandTags implements Listener {
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("buycommand=")){
-            e.commandTagUsed();
+    public void commandTag(CommandTagEvent event){
+        if(event.name.equalsIgnoreCase("buycommand=")){
+            event.commandTagUsed();
             //if player uses buycommand [price] [command]
             try {
                 if (plugin.econ != null) {
-                    if (plugin.econ.getBalance(e.p) >= Double.parseDouble(e.args[0])) {
-                        plugin.econ.withdrawPlayer(e.p, Double.parseDouble(e.args[0]));
+                    if (plugin.econ.getBalance(event.p) >= Double.parseDouble(event.args[0])) {
+                        plugin.econ.withdrawPlayer(event.p, Double.parseDouble(event.args[0]));
                         //execute command under here
-                        String price = e.args[0];
-                        String command = String.join(" ",Arrays.copyOfRange(e.raw, 1, e.raw.length));
-                        plugin.commandTags.runCommand(e.panel,e.pos,e.p,command);
-                        plugin.tex.sendMessage(e.p,plugin.config.getString("purchase.currency.success").replaceAll("%cp-args%", price));
+                        String price = event.args[0];
+                        String command = String.join(" ",Arrays.copyOfRange(event.raw, 1, event.raw.length));
+                        plugin.commandTags.runCommand(event.panel,event.pos,event.p,command);
+                        plugin.tex.sendMessage(event.p,plugin.config.getString("purchase.currency.success").replaceAll("%cp-args%", price));
                     } else {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.currency.failure"));
+                        plugin.tex.sendMessage(event.p, plugin.config.getString("purchase.currency.failure"));
                     }
                 } else {
-                    plugin.tex.sendMessage(e.p, ChatColor.RED + "Buying Requires Vault and an Economy to work!");
+                    plugin.tex.sendMessage(event.p, ChatColor.RED + "Buying Requires Vault and an Economy to work!");
                 }
             } catch (Exception buyc) {
-                plugin.debug(buyc,e.p);
-                plugin.tex.sendMessage(e.p,plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
+                plugin.debug(buyc,event.p);
+                plugin.tex.sendMessage(event.p,plugin.config.getString("config.format.error") + " " + "commands: " + event.name);
             }
             return;
         }

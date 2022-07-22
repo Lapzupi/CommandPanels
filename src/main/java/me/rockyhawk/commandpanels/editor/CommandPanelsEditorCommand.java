@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+//todo
 public class CommandPanelsEditorCommand implements CommandExecutor{
     final CommandPanels plugin;
 
