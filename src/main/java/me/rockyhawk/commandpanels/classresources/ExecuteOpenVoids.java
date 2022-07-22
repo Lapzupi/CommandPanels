@@ -56,13 +56,13 @@ public class ExecuteOpenVoids {
                 return;
             }
 
-            if (position != PanelPosition.Top && !plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.Top)) {
+            if (position != PanelPosition.TOP && !plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP)) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Cannot open a panel without a panel at the top already."));
                 return;
             }
 
             //close any foreign GUIs for CommandPanels
-            if (!plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.Top) && p.getOpenInventory().getType() != InventoryType.CRAFTING) {
+            if (!plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP) && p.getOpenInventory().getType() != InventoryType.CRAFTING) {
                 p.closeInventory();
             }
 
@@ -78,7 +78,7 @@ public class ExecuteOpenVoids {
 
             try {
                 //create and open the GUI
-                plugin.createGUI.openGui(panel, p, position, PanelOpenType.Normal, 0);
+                plugin.createGUI.openGui(panel, p, position, PanelOpenType.NORMAL, 0);
 
                 //execute commands once the panel opens
                 if (panel.getConfig().contains("commands-on-open")) {

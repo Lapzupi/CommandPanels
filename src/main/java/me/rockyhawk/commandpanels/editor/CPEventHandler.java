@@ -28,12 +28,12 @@ public class CPEventHandler implements Listener {
             return;
         }
         if (e.getMessage().equals("CommandPanels_OpenPanelSettings")) {
-            plugin.editorMain.openGuiPage("PanelEditMenu", e.getPlayer(), PanelPosition.Middle);
+            plugin.editorMain.openGuiPage("PanelEditMenu", e.getPlayer(), PanelPosition.MIDDLE);
             plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).setMenuOpen("PanelEditMenu");
             return;
         }
         if (e.getMessage().equals("CommandPanels_OpenItemSettings")) {
-            plugin.editorMain.openGuiPage("ItemEditMenu", e.getPlayer(), PanelPosition.Middle);
+            plugin.editorMain.openGuiPage("ItemEditMenu", e.getPlayer(), PanelPosition.MIDDLE);
             plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).setMenuOpen("ItemEditMenu");
             return;
         }
@@ -273,9 +273,9 @@ public class CPEventHandler implements Listener {
         savePanelFile(panel);
 
         //This will open the editor back up
-        panel.open(e.getPlayer(), PanelPosition.Top);
-        plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).menuOpen, e.getPlayer(), PanelPosition.Middle);
-        plugin.editorMain.openGuiPage("BottomSettings", e.getPlayer(), PanelPosition.Bottom);
+        panel.open(e.getPlayer(), PanelPosition.TOP);
+        plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).menuOpen, e.getPlayer(), PanelPosition.MIDDLE);
+        plugin.editorMain.openGuiPage("BottomSettings", e.getPlayer(), PanelPosition.BOTTOM);
     }
 
     /*

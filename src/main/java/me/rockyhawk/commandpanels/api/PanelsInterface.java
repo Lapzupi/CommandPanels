@@ -21,19 +21,19 @@ public class PanelsInterface {
     //get the panels based on position
     public void setPanel(Panel panel, PanelPosition position) {
         switch (position) {
-            case Top -> {
+            case TOP -> {
                 if (panel == null && top != null) {
                     top.isOpen = false;
                 }
                 top = panel;
             }
-            case Middle -> {
+            case MIDDLE -> {
                 if (panel == null && middle != null) {
                     middle.isOpen = false;
                 }
                 middle = panel;
             }
-            case Bottom -> {
+            case BOTTOM -> {
                 if (panel == null && bottom != null) {
                     bottom.isOpen = false;
                 }
@@ -45,13 +45,13 @@ public class PanelsInterface {
     //get the panels based on position
     public Panel getPanel(PanelPosition position) {
         switch (position) {
-            case Top -> {
+            case TOP -> {
                 return top;
             }
-            case Middle -> {
+            case MIDDLE -> {
                 return middle;
             }
-            case Bottom -> {
+            case BOTTOM -> {
                 return bottom;
             }
         }

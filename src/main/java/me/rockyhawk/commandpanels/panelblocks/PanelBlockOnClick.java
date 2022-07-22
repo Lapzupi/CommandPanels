@@ -49,7 +49,7 @@ public class PanelBlockOnClick implements Listener {
         if(!plugin.blockConfig.contains("blocks")){
             return false;
         }
-        if(plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.Top)) {
+        if(plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP)) {
             //some blocks run this event twice, skip if panel already open
             //as blocks cannot be clicked obviously if a panel is open
             return false;
@@ -61,7 +61,7 @@ public class PanelBlockOnClick implements Listener {
                 if(plugin.blockConfig.contains("blocks." + configLocation + ".commands")){
                     if(!isVoid) {
                         for (String command : plugin.blockConfig.getStringList("blocks." + configLocation + ".commands")) {
-                            plugin.commandTags.runCommand(null, PanelPosition.Top, p, command);
+                            plugin.commandTags.runCommand(null, PanelPosition.TOP, p, command);
                         }
                     }
                     return true;
@@ -69,7 +69,7 @@ public class PanelBlockOnClick implements Listener {
                 //uses the open= tag because it will open a panel with panel names, but also works with open= features like placeholders
                 if(!isVoid) {
                     String command = "open= " + plugin.blockConfig.getString("blocks." + configLocation + ".panel");
-                    plugin.commandTags.runCommand(null, PanelPosition.Top, p, command);
+                    plugin.commandTags.runCommand(null, PanelPosition.TOP, p, command);
                 }
                 return true;
             }

@@ -92,7 +92,7 @@ public class Commandpanelrefresher implements Listener {
                                 //reload the panel is debug is enabled (only personal debug)
                                 pn.setConfig(YamlConfiguration.loadConfiguration(pn.getFile()));
                             }
-                            plugin.createGUI.openGui(pn, p, e.getPosition(), PanelOpenType.Refresh, animatecount);
+                            plugin.createGUI.openGui(pn, p, e.getPosition(), PanelOpenType.REFRESH, animatecount);
                         } catch (Exception ex) {
                             //error opening gui
                             p.closeInventory();

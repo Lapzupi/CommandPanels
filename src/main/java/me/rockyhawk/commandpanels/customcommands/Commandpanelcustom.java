@@ -31,7 +31,7 @@ public class Commandpanelcustom implements Listener {
                     for(String cmd : panelCommands){
                         if(cmd.equalsIgnoreCase(e.getMessage().replace("/", ""))){
                             e.setCancelled(true);
-                            panel.copy().open(e.getPlayer(), PanelPosition.Top);
+                            panel.copy().open(e.getPlayer(), PanelPosition.TOP);
                             return;
                         }
 
@@ -59,7 +59,7 @@ public class Commandpanelcustom implements Listener {
                             for(String[] placeholder : placeholders){
                                 openPanel.placeholders.addPlaceholder(placeholder[0],placeholder[1]);
                             }
-                            openPanel.open(e.getPlayer(),PanelPosition.Top);
+                            openPanel.open(e.getPlayer(),PanelPosition.TOP);
                             return;
                         }
                     }

@@ -21,7 +21,7 @@ public class CommandPanelsAPI {
 
     //returns true if the player has a panel open
     public boolean isPanelOpen(Player p) {
-        return plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.Top);
+        return plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP);
     }
 
     //get the name of a panel currently open, will return null if panel is not open
@@ -75,6 +75,6 @@ public class CommandPanelsAPI {
 
     //make custom item using items section
     public ItemStack makeItem(Player p, ConfigurationSection itemSection) {
-        return plugin.itemCreate.makeCustomItemFromConfig(null, PanelPosition.Top, itemSection, p, true, true, false);
+        return plugin.itemCreate.makeCustomItemFromConfig(null, PanelPosition.TOP, itemSection, p, true, true, false);
     }
 }

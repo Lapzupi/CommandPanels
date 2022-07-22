@@ -137,7 +137,7 @@ public class CommandTags {
     public PaywallOutput commandPayWall(Panel panel, Player p, String rawCommand) { //return 0 means no funds, 1 is they passed and 2 means paywall is not this command
 
         //create new instance of command but with placeholders parsed
-        String command = plugin.tex.placeholders(panel,PanelPosition.Top,p,rawCommand);
+        String command = plugin.tex.placeholders(panel,PanelPosition.TOP,p,rawCommand);
         switch (command.split("\\s")[0]) {
             case "paywall=" -> {
                 //if player uses paywall= [price]
@@ -178,7 +178,7 @@ public class CommandTags {
                     //create the item to be removed
                     ItemStack sellItem;
                     if (command.split("\\s").length == 2) {
-                        sellItem = plugin.itemCreate.makeCustomItemFromConfig(panel, PanelPosition.Top, panel.getConfig().getConfigurationSection("custom-item." + command.split("\\s")[1]), p, true, true, false);
+                        sellItem = plugin.itemCreate.makeCustomItemFromConfig(panel, PanelPosition.TOP, panel.getConfig().getConfigurationSection("custom-item." + command.split("\\s")[1]), p, true, true, false);
                     } else {
                         sellItem = new ItemStack(Objects.requireNonNull(Material.matchMaterial(command.split("\\s")[1])), Integer.parseInt(command.split("\\s")[2]), id);
                     }
@@ -303,7 +303,7 @@ public class CommandTags {
                 //if player uses data-paywall= <data> <amount>
                 try {
                     if (Double.parseDouble(plugin.panelData.getUserData(p.getUniqueId(), command.split("\\s")[1])) >= Double.parseDouble(command.split("\\s")[2])) {
-                        plugin.panelData.doDataMath(p.getUniqueId(), command.split("\\s")[1], "-" + plugin.tex.placeholdersNoColour(panel, PanelPosition.Top, p, command.split("\\s")[2]));
+                        plugin.panelData.doDataMath(p.getUniqueId(), command.split("\\s")[1], "-" + plugin.tex.placeholdersNoColour(panel, PanelPosition.TOP, p, command.split("\\s")[2]));
                         //if the message is empty don't send
                         if (plugin.config.getBoolean("purchase.data.enable")) {
                             plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));

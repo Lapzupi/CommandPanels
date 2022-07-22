@@ -35,26 +35,26 @@ public class InventorySaver implements Listener {
 
     @EventHandler
     public void onOpen(PanelOpenedEvent e){
-        if(e.getPosition() != PanelPosition.Top) {
+        if(e.getPosition() != PanelPosition.TOP) {
             addInventory(e.getPlayer());
         }
     }
 
     @EventHandler
     public void playerJoined(PlayerJoinEvent e){
-        restoreInventory(e.getPlayer(), PanelPosition.Top);
+        restoreInventory(e.getPlayer(), PanelPosition.TOP);
     }
 
     public void restoreInventory(Player p, PanelPosition position){
         if(p == null){
             return;
         }
-        if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Middle) || plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Bottom)){
-            if(position == PanelPosition.Bottom){
+        if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.MIDDLE) || plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.BOTTOM)){
+            if(position == PanelPosition.BOTTOM){
                 for(int s = 0; s < 9; s++){
                     p.getInventory().setItem(s,null);
                 }
-            }else if(position == PanelPosition.Middle){
+            }else if(position == PanelPosition.MIDDLE){
                 for(int s = 9; s < 36; s++){
                     p.getInventory().setItem(s,null);
                 }

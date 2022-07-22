@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class ItemStackSerializer {
     final CommandPanels plugin;
+
     public ItemStackSerializer(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -33,26 +34,26 @@ public class ItemStackSerializer {
             dataOutput.close();
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Exception e) {
-            plugin.debug(e,null);
+            plugin.debug(e, null);
         }
         return null;
     }
 
     public ItemStack[] itemStackArrayFromBase64(String data) {
         try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-            ItemStack[] items = new ItemStack[dataInput.readInt()];
+            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data))) {
+                BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+                ItemStack[] items = new ItemStack[dataInput.readInt()];
 
-            // Read the serialized inventory
-            for (int i = 0; i < items.length; i++) {
-                items[i] = (ItemStack) dataInput.readObject();
+                // Read the serialized inventory
+                for (int i = 0; i < items.length; i++) {
+                    items[i] = (ItemStack) dataInput.readObject();
+                }
+
+                return items;
             }
-
-            dataInput.close();
-            return items;
         } catch (ClassNotFoundException | IOException e) {
-            plugin.debug(e,null);
+            plugin.debug(e, null);
         }
         return null;
     }

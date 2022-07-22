@@ -20,7 +20,7 @@ public class UtilsChestSortEvent implements Listener {
             return;
         }
         //cancel if a panel is opened at all
-        if(plugin.openPanels.hasPanelOpen(e.getPlayer().getName(), PanelPosition.Top)){
+        if(plugin.openPanels.hasPanelOpen(e.getPlayer().getName(), PanelPosition.TOP)){
             e.setCancelled(true);
             return;
         }

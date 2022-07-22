@@ -61,11 +61,11 @@ public class SpecialTags implements Listener {
             event.commandTagUsed();
             //closes specific panel positions
             PanelPosition position = PanelPosition.valueOf(event.args[0]);
-            if (position == PanelPosition.Middle && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
-                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Middle);
-            } else if (position == PanelPosition.Bottom && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
-                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Bottom);
-            } else if (position == PanelPosition.Top && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
+            if (position == PanelPosition.MIDDLE && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
+                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.MIDDLE);
+            } else if (position == PanelPosition.BOTTOM && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
+                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.BOTTOM);
+            } else if (position == PanelPosition.TOP && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
                 //closing top closes all
                 plugin.commandTags.runCommand(event.panel, event.pos, event.p, "cpc");
             }

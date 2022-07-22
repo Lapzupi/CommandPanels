@@ -74,12 +74,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 
 public class CommandPanels extends JavaPlugin {
@@ -271,7 +269,7 @@ public class CommandPanels extends JavaPlugin {
     public void onDisable() {
         //close all the panels
         for (String name : openPanels.openPanels.keySet()) {
-            openPanels.closePanelForLoader(name, PanelPosition.Top);
+            openPanels.closePanelForLoader(name, PanelPosition.TOP);
             try {
                 Bukkit.getPlayer(name).closeInventory();
             } catch (Exception ignore) {
@@ -295,7 +293,7 @@ public class CommandPanels extends JavaPlugin {
             ItemMeta renamedMeta = renamed.getItemMeta();
             //set cp placeholders
             if (usePlaceholders) {
-                customName = tex.placeholdersNoColour(panel, PanelPosition.Top, p, customName);
+                customName = tex.placeholdersNoColour(panel, PanelPosition.TOP, p, customName);
             }
             if (useColours) {
                 customName = tex.colour(customName);
@@ -319,11 +317,11 @@ public class CommandPanels extends JavaPlugin {
             List<String> re_lore;
             if (lore != null) {
                 if (usePlaceholders && useColours) {
-                    re_lore = tex.placeholdersList(panel, PanelPosition.Top, p, lore, true);
+                    re_lore = tex.placeholdersList(panel, PanelPosition.TOP, p, lore, true);
                 } else if (usePlaceholders) {
-                    re_lore = tex.placeholdersNoColour(panel, PanelPosition.Top, p, lore);
+                    re_lore = tex.placeholdersNoColour(panel, PanelPosition.TOP, p, lore);
                 } else if (useColours) {
-                    re_lore = tex.placeholdersList(panel, PanelPosition.Top, p, lore, false);
+                    re_lore = tex.placeholdersList(panel, PanelPosition.TOP, p, lore, false);
                 } else {
                     re_lore = lore;
                 }

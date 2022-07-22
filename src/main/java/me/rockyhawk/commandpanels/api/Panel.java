@@ -73,27 +73,27 @@ public class Panel {
     }
 
     public ItemStack getItem(Player p, int slot) {
-        String section = plugin.has.hasSection(this, PanelPosition.Top, panelConfig.getConfigurationSection("item." + slot), p);
+        String section = plugin.has.hasSection(this, PanelPosition.TOP, panelConfig.getConfigurationSection("item." + slot), p);
         ConfigurationSection itemSection = panelConfig.getConfigurationSection("item." + slot + section);
-        return plugin.itemCreate.makeItemFromConfig(this, PanelPosition.Top, itemSection, p, true, true, false);
+        return plugin.itemCreate.makeItemFromConfig(this, PanelPosition.TOP, itemSection, p, true, true, false);
     }
 
     public ItemStack getCustomItem(Player p, String itemName) {
-        String section = plugin.has.hasSection(this, PanelPosition.Top, panelConfig.getConfigurationSection("custom-item." + itemName), p);
+        String section = plugin.has.hasSection(this, PanelPosition.TOP, panelConfig.getConfigurationSection("custom-item." + itemName), p);
         ConfigurationSection itemSection = panelConfig.getConfigurationSection("custom-item." + itemName + section);
-        return plugin.itemCreate.makeCustomItemFromConfig(this, PanelPosition.Top, itemSection, p, true, true, false);
+        return plugin.itemCreate.makeCustomItemFromConfig(this, PanelPosition.TOP, itemSection, p, true, true, false);
     }
 
     //NBT will equal to panelName:slot and the slot will be -1 if item is not stationery
     public ItemStack getHotbarItem(Player p) {
         if (this.getConfig().contains("open-with-item.pre-load-commands")) {
             try {
-                plugin.commandTags.runCommands(this, PanelPosition.Top, p, this.getConfig().getStringList("open-with-item.pre-load-commands"));
+                plugin.commandTags.runCommands(this, PanelPosition.TOP, p, this.getConfig().getStringList("open-with-item.pre-load-commands"));
             } catch (Exception s) {
                 plugin.debug(s, p);
             }
         }
-        ItemStack s = plugin.itemCreate.makeItemFromConfig(this, PanelPosition.Top, getHotbarSection(p), p, true, true, false);
+        ItemStack s = plugin.itemCreate.makeItemFromConfig(this, PanelPosition.TOP, getHotbarSection(p), p, true, true, false);
         int slot = -1;
         if (getHotbarSection(p).isSet("stationary")) {
             slot = getHotbarSection(p).getInt("stationary");
@@ -102,7 +102,7 @@ public class Panel {
     }
 
     public ConfigurationSection getHotbarSection(Player p) {
-        String section = plugin.has.hasSection(this, PanelPosition.Top, panelConfig.getConfigurationSection("open-with-item"), p);
+        String section = plugin.has.hasSection(this, PanelPosition.TOP, panelConfig.getConfigurationSection("open-with-item"), p);
         return panelConfig.getConfigurationSection("open-with-item" + section);
     }
 
@@ -112,7 +112,7 @@ public class Panel {
 
     //this will make a preview of the inventory using a certain player on the top
     public Inventory getInventory(Player p) {
-        return plugin.createGUI.openGui(this, p, PanelPosition.Top, PanelOpenType.Return, 0);
+        return plugin.createGUI.openGui(this, p, PanelPosition.TOP, PanelOpenType.RETURN, 0);
     }
 
     //open the panel for the player

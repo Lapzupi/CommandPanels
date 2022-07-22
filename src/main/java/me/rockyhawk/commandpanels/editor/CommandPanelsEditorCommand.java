@@ -8,8 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 //todo
 public class CommandPanelsEditorCommand implements CommandExecutor{
@@ -39,9 +37,9 @@ public class CommandPanelsEditorCommand implements CommandExecutor{
                         plugin.editorMain.settings.put(p.getUniqueId(), new EditorSettings("PanelEditMenu",panel.getName()));
                     }
                     //below will start the command, once it got the right file and panel
-                    panel.copy().open(p,PanelPosition.Top);
-                    plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(p.getUniqueId()).menuOpen,p,PanelPosition.Middle);
-                    plugin.editorMain.openGuiPage("BottomSettings",p,PanelPosition.Bottom);
+                    panel.copy().open(p,PanelPosition.TOP);
+                    plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(p.getUniqueId()).menuOpen,p,PanelPosition.MIDDLE);
+                    plugin.editorMain.openGuiPage("BottomSettings",p,PanelPosition.BOTTOM);
                     return true;
                 }
             }

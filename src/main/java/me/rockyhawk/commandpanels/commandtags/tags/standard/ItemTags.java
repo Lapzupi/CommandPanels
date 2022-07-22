@@ -28,9 +28,9 @@ public class ItemTags implements Listener {
             //make a section in the panel called "custom-item" then whatever the title of the item is, put that here
             ItemStack s = plugin.itemCreate.makeItemFromConfig(null, event.pos, event.panel.getConfig().getConfigurationSection("custom-item." + event.args[0]), event.p, true, true, true);
             PanelPosition position = PanelPosition.valueOf(event.args[2]);
-            if (position == PanelPosition.Top) {
+            if (position == PanelPosition.TOP) {
                 event.p.getOpenInventory().getTopInventory().setItem(Integer.parseInt(event.args[1]), s);
-            } else if (position == PanelPosition.Middle) {
+            } else if (position == PanelPosition.MIDDLE) {
                 event.p.getInventory().setItem(Integer.parseInt(event.args[1]) + 9, s);
             } else {
                 event.p.getInventory().setItem(Integer.parseInt(event.args[1]), s);

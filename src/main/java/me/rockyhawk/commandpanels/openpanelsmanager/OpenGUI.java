@@ -26,9 +26,9 @@ public class OpenGUI {
         ConfigurationSection pconfig = panel.getConfig();
 
         Inventory inventory;
-        if (position == PanelPosition.Top) {
+        if (position == PanelPosition.TOP) {
             String title;
-            if (openType != PanelOpenType.Editor) {
+            if (openType != PanelOpenType.EDITOR) {
                 //regular inventory
                 title = plugin.tex.placeholders(panel, position, player, pconfig.getString("title"));
             } else {
@@ -57,7 +57,7 @@ public class OpenGUI {
         for (String item : itemList) {
             String section = "";
             //openType needs to not be 3 so the editor won't include hasperm and hasvalue, etc items
-            if (openType != PanelOpenType.Editor) {
+            if (openType != PanelOpenType.EDITOR) {
                 section = plugin.has.hasSection(panel, position, pconfig.getConfigurationSection("item." + Integer.parseInt(item)), player);
                 //This section is for animations below here: VISUAL ONLY
 
@@ -71,12 +71,12 @@ public class OpenGUI {
             }
 
             //will only add NBT if not an editor GUI
-            ItemStack s = plugin.itemCreate.makeItemFromConfig(panel, position, Objects.requireNonNull(pconfig.getConfigurationSection("item." + item + section)), player, openType != PanelOpenType.Editor, openType != PanelOpenType.Editor, openType != PanelOpenType.Editor);
+            ItemStack s = plugin.itemCreate.makeItemFromConfig(panel, position, Objects.requireNonNull(pconfig.getConfigurationSection("item." + item + section)), player, openType != PanelOpenType.EDITOR, openType != PanelOpenType.EDITOR, openType != PanelOpenType.EDITOR);
 
             //This is for CUSTOM ITEMS
             if (pconfig.contains("item." + item + section + ".itemType")) {
                 //this is for contents in the itemType section
-                if (pconfig.getStringList("item." + item + section + ".itemType").contains("placeable") && openType == PanelOpenType.Refresh) {
+                if (pconfig.getStringList("item." + item + section + ".itemType").contains("placeable") && openType == PanelOpenType.REFRESH) {
                     //keep item the same, openType == 0 meaning panel is refreshing
                     setItem(player.getOpenInventory().getItem(Integer.parseInt(item)), Integer.parseInt(item), inventory, player, position);
                     takenSlots.add(Integer.parseInt(item));
@@ -90,7 +90,7 @@ public class OpenGUI {
                 takenSlots.add(Integer.parseInt(item));
                 //i.setItem(Integer.parseInt(item), s);
                 //only place duplicate items in without the editor mode. These are merely visual and will not carry over commands
-                if (pconfig.contains("item." + item + section + ".duplicate") && openType != PanelOpenType.Editor) {
+                if (pconfig.contains("item." + item + section + ".duplicate") && openType != PanelOpenType.EDITOR) {
                     try {
                         String[] duplicateItems = pconfig.getString("item." + item + section + ".duplicate").split(",");
                         for (String tempDupe : duplicateItems) {
@@ -153,7 +153,7 @@ public class OpenGUI {
                     for (int c = 0; getInvSize(inventory, position) > c; ++c) {
                         if (!takenSlots.contains(c)) {
                             //only place empty items if not editing
-                            if (openType != PanelOpenType.Editor) {
+                            if (openType != PanelOpenType.EDITOR) {
                                 setItem(empty, c, inventory, player, position);
                             }
                         }
@@ -163,7 +163,7 @@ public class OpenGUI {
                 plugin.debug(var26, player);
             }
         }
-        if (openType == PanelOpenType.Normal) {
+        if (openType == PanelOpenType.NORMAL) {
             //declare old panel closed
             if (plugin.openPanels.hasPanelOpen(player.getName(), position)) {
                 plugin.openPanels.getOpenPanel(player.getName(), position).isOpen = false;
@@ -172,19 +172,19 @@ public class OpenGUI {
             plugin.openPanels.skipPanelClose.add(player.getName());
             plugin.openPanels.openPanelForLoader(player.getName(), panel, position);
             //only if it needs to open the top inventory
-            if (position == PanelPosition.Top) {
+            if (position == PanelPosition.TOP) {
                 player.openInventory(inventory);
             }
             plugin.openPanels.skipPanelClose.remove(player.getName());
-        } else if (openType == PanelOpenType.Editor) {
+        } else if (openType == PanelOpenType.EDITOR) {
             //The editor will always be at panel position top
             player.openInventory(inventory);
-        } else if (openType == PanelOpenType.Refresh) {
+        } else if (openType == PanelOpenType.REFRESH) {
             //openType 0 will just refresh the panel
-            if (position == PanelPosition.Top) {
+            if (position == PanelPosition.TOP) {
                 player.getOpenInventory().getTopInventory().setContents(inventory.getStorageContents());
             }
-        } else if (openType == PanelOpenType.Return) {
+        } else if (openType == PanelOpenType.RETURN) {
             //will return the inventory, not opening it at all
             return inventory;
         }
@@ -192,9 +192,9 @@ public class OpenGUI {
     }
 
     private int getInvSize(Inventory inv, PanelPosition position) {
-        if (position == PanelPosition.Top) {
+        if (position == PanelPosition.TOP) {
             return inv.getSize();
-        } else if (position == PanelPosition.Middle) {
+        } else if (position == PanelPosition.MIDDLE) {
             return 27;
         } else {
             return 9;
@@ -202,9 +202,9 @@ public class OpenGUI {
     }
 
     private void setItem(ItemStack item, int slot, Inventory inv, Player p, PanelPosition position) throws ArrayIndexOutOfBoundsException {
-        if (position == PanelPosition.Top) {
+        if (position == PanelPosition.TOP) {
             inv.setItem(slot, item);
-        } else if (position == PanelPosition.Middle) {
+        } else if (position == PanelPosition.MIDDLE) {
             if (slot + 9 < 36) {
                 p.getInventory().setItem(slot + 9, item);
             }
