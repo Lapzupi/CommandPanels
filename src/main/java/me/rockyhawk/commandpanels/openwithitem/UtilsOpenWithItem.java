@@ -1,9 +1,6 @@
 package me.rockyhawk.commandpanels.openwithitem;
 
 import me.rockyhawk.commandpanels.CommandPanels;
-import me.rockyhawk.commandpanels.ioclasses.GetItemInHand;
-import me.rockyhawk.commandpanels.ioclasses.GetItemInHand_Legacy;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -121,12 +118,8 @@ public class UtilsOpenWithItem implements Listener {
         }
         //cancel everything if holding item (item frames eg)
         Player p = e.getPlayer();
-        ItemStack clicked;
-        if(Bukkit.getVersion().contains("1.8")){
-            clicked =  new GetItemInHand_Legacy(plugin).itemInHand(p);
-        }else{
-            clicked = new GetItemInHand(plugin).itemInHand(p);
-        }
+        ItemStack clicked = clicked = p.getInventory().getItemInMainHand();
+
         if(plugin.hotbar.itemCheckExecute(clicked,p,true,false)){
             e.setCancelled(true);
             p.updateInventory();

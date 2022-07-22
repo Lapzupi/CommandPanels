@@ -18,19 +18,11 @@ public class LegacyVersion {
         LOCAL_VERSION = MinecraftVersions.get(VERSION);
     }
 
-    public ItemStack[] getStorageContents(Inventory i){
-        if(LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)){
-            return new GetStorageContents_Legacy(plugin).getStorageContents(i);
-        }else{
-            return new GetStorageContents(plugin).getStorageContents(i);
-        }
+    public ItemStack[] getStorageContents(Inventory inventory){
+        return inventory.getContents();
     }
 
-    public void setStorageContents(Player p, ItemStack[] i){
-        if(LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)){
-            new GetStorageContents_Legacy(plugin).setStorageContents(p,i);
-        }else{
-            new GetStorageContents(plugin).setStorageContents(p,i);
-        }
+    public void setStorageContents(Player player, ItemStack[] inventoryContents){
+        player.getOpenInventory().getTopInventory().setContents(inventoryContents);
     }
 }
