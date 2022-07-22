@@ -476,24 +476,25 @@ public class CommandPanels extends JavaPlugin {
         }
     }
 
-    public final Map<String, Color> colourCodes = ImmutableMap.of(
-        "AQUA", Color.AQUA,
-            "BLUE", Color.BLUE,
-        "GRAY", Color.GRAY,
-        "GREEN", Color.GREEN,
-        "RED", Color.RED,
-        "WHITE", Color.WHITE,
-        "BLACK", Color.BLACK,
-        "FUCHSIA", Color.FUCHSIA,
-        "LIME", Color.LIME,
-        "MAROON", Color.MAROON,
-        "NAVY", Color.NAVY,
-        "OLIVE", Color.OLIVE,
-        "ORANGE", Color.ORANGE,
-        "PURPLE", Color.PURPLE,
-        "SILVER", Color.SILVER,
-        "TEAL", Color.TEAL,
-        "YELLOW", Color.YELLOW);
+    public final Map<String, Color> colourCodes = ImmutableMap.<String, Color>builder()
+            .put("AQUA",Color.AQUA)
+            .put("BLUE", Color.BLUE)
+            .put("GRAY", Color.GRAY)
+            .put("GREEN", Color.GREEN)
+            .put("RED", Color.RED)
+            .put("WHITE", Color.WHITE)
+            .put("BLACK", Color.BLACK)
+            .put("FUCHSIA", Color.FUCHSIA)
+            .put("LIME", Color.LIME)
+            .put("MAROON", Color.MAROON)
+            .put("NAVY", Color.NAVY)
+            .put("OLIVE", Color.OLIVE)
+            .put("ORANGE", Color.ORANGE)
+            .put("PURPLE", Color.PURPLE)
+            .put("SILVER", Color.SILVER)
+            .put("TEAL", Color.TEAL)
+            .put("YELLOW", Color.YELLOW).build();
+    //this reads the encrypted resource files in t
 
     public Reader getReaderFromStream(InputStream initialStream) throws IOException {
         //this reads the encrypted resource files in the jar file
