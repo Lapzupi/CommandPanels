@@ -10,9 +10,11 @@ import org.bukkit.event.inventory.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class Utils implements Listener {
-    final CommandPanels plugin;
+    private final Random random = new Random();
+    private final CommandPanels plugin;
     public Utils(CommandPanels pl) {
         this.plugin = pl;
     }
@@ -164,5 +166,9 @@ public class Utils implements Listener {
             return panel.getConfig().getStringList("panelType").contains("unmovable");
         }
         return false;
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }

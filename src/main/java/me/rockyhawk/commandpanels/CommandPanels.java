@@ -8,34 +8,38 @@ import me.rockyhawk.commandpanels.classresources.ExecuteOpenVoids;
 import me.rockyhawk.commandpanels.classresources.GetCustomHeads;
 import me.rockyhawk.commandpanels.classresources.HasSections;
 import me.rockyhawk.commandpanels.classresources.ItemCreation;
-import me.rockyhawk.commandpanels.classresources.placeholders.expansion.CpPlaceholderExpansion;
-import me.rockyhawk.commandpanels.completetabs.DataTabComplete;
-import me.rockyhawk.commandpanels.completetabs.ImportTabComplete;
 import me.rockyhawk.commandpanels.classresources.item_fall.ItemFallManager;
 import me.rockyhawk.commandpanels.classresources.placeholders.CreateText;
 import me.rockyhawk.commandpanels.classresources.placeholders.HexColours;
 import me.rockyhawk.commandpanels.classresources.placeholders.Placeholders;
-import me.rockyhawk.commandpanels.commands.*;
+import me.rockyhawk.commandpanels.classresources.placeholders.expansion.CpPlaceholderExpansion;
+import me.rockyhawk.commandpanels.commands.DataSubCommand;
+import me.rockyhawk.commandpanels.commands.ImportSubCommand;
+import me.rockyhawk.commandpanels.commands.MainCommand;
+import me.rockyhawk.commandpanels.commands.PanelSubCommand;
 import me.rockyhawk.commandpanels.commandtags.CommandTags;
-import me.rockyhawk.commandpanels.completetabs.CpTabComplete;
 import me.rockyhawk.commandpanels.customcommands.Commandpanelcustom;
 import me.rockyhawk.commandpanels.datamanager.DebugManager;
 import me.rockyhawk.commandpanels.datamanager.PanelDataLoader;
-import me.rockyhawk.commandpanels.generatepanels.GenUtils;
 import me.rockyhawk.commandpanels.editor.CPEventHandler;
 import me.rockyhawk.commandpanels.editor.CommandPanelsEditorCommand;
 import me.rockyhawk.commandpanels.editor.CommandPanelsEditorMain;
 import me.rockyhawk.commandpanels.editor.CommandPanelsEditorTabComplete;
-import me.rockyhawk.commandpanels.interactives.input.UserInputUtils;
+import me.rockyhawk.commandpanels.generatepanels.GenUtils;
 import me.rockyhawk.commandpanels.interactives.Commandpanelrefresher;
 import me.rockyhawk.commandpanels.interactives.OpenOnJoin;
+import me.rockyhawk.commandpanels.interactives.input.UserInputUtils;
+import me.rockyhawk.commandpanels.ioclasses.NBTManager;
 import me.rockyhawk.commandpanels.ioclasses.Sequence_1_13;
 import me.rockyhawk.commandpanels.ioclasses.Sequence_1_14;
-import me.rockyhawk.commandpanels.ioclasses.NBTManager;
 import me.rockyhawk.commandpanels.ioclasses.legacy.LegacyVersion;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
 import me.rockyhawk.commandpanels.ioclasses.legacy.PlayerHeads;
-import me.rockyhawk.commandpanels.openpanelsmanager.*;
+import me.rockyhawk.commandpanels.openpanelsmanager.OpenGUI;
+import me.rockyhawk.commandpanels.openpanelsmanager.OpenPanelsLoader;
+import me.rockyhawk.commandpanels.openpanelsmanager.PanelPermissions;
+import me.rockyhawk.commandpanels.openpanelsmanager.PanelPosition;
+import me.rockyhawk.commandpanels.openpanelsmanager.UtilsPanelsLoader;
 import me.rockyhawk.commandpanels.openwithitem.HotbarItemLoader;
 import me.rockyhawk.commandpanels.openwithitem.SwapItemEvent;
 import me.rockyhawk.commandpanels.openwithitem.UtilsChestSortEvent;
@@ -67,7 +71,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 public class CommandPanels extends JavaPlugin {
     public YamlConfiguration config;
@@ -80,6 +92,7 @@ public class CommandPanels extends JavaPlugin {
     public final List<Player> generateMode = new ArrayList<>(); //players that are currently in generate mode
     public List<String[]> editorInputStrings = new ArrayList<>();
     public final List<Panel> panelList = new ArrayList<>(); //contains all the panels that are included in the panels folder
+    private Utils utils;
 
     //get alternate classes
     public final CommandPanelsEditorMain editorMain = new CommandPanelsEditorMain(this);
@@ -154,8 +167,8 @@ public class CommandPanels extends JavaPlugin {
         paperCommandManager.registerCommand(new ImportSubCommand(this));
         paperCommandManager.registerCommand(new PanelSubCommand(this));
 
-
-        this.getServer().getPluginManager().registerEvents(new Utils(this), this);
+        this.utils = new Utils(this);
+        this.getServer().getPluginManager().registerEvents(utils, this);
         this.getServer().getPluginManager().registerEvents(inventorySaver, this);
         this.getServer().getPluginManager().registerEvents(inputUtils, this);
         this.getServer().getPluginManager().registerEvents(new UtilsPanelsLoader(this), this);
@@ -189,7 +202,7 @@ public class CommandPanels extends JavaPlugin {
         //if ingame-editor set to false, don't load this
         if (Objects.requireNonNull(config.getString("config.ingame-editor")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new CPEventHandler(this), this);
-            Objects.requireNonNull(this.getCommand("commandpaneledit")).setTabCompleter(new CommandPanelsEditorTabComplete(this));
+            Objects.requireNonNull(this.getCommand("commandpaneledit")).setTabCompleter(new CommandPanelsEditorTabComplete(this)); //todo
             Objects.requireNonNull(this.getCommand("commandpaneledit")).setExecutor(new CommandPanelsEditorCommand(this));
         }
 
@@ -244,10 +257,8 @@ public class CommandPanels extends JavaPlugin {
         hotbar.reloadHotbarSlots();
 
         //add custom charts bStats
-        metrics.addCustomChart(new SingleLineChart("panels_amount", () -> {
-            //this is the total panels loaded
-            return panelList.size();
-        }));
+        //this is the total panels loaded
+        metrics.addCustomChart(new SingleLineChart("panels_amount", panelList::size));
 
         //get tag
         tag = tex.colour(config.getString("config.format.tag"));
@@ -508,16 +519,15 @@ public class CommandPanels extends JavaPlugin {
             throw new IllegalArgumentException("max must be greater than min");
         }
 
-        Random r = new Random(); //todo
-        return r.nextInt((max - min) + 1) + min;
+        return utils.getRandom().nextInt((max - min) + 1) + min;
     }
 
     //returns true if the item is the MMO Item
     public boolean isMMOItem(ItemStack itm, String type, String id) {
         try {
             if (getServer().getPluginManager().isPluginEnabled("MMOItems")) {
-                NBTItem nbt = NBTItem.get(itm);
-                if (nbt.getType().equalsIgnoreCase(type) && nbt.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(id)) {
+                NBTItem nbtItem = NBTItem.get(itm);
+                if (nbtItem.getType().equalsIgnoreCase(type) && nbtItem.getString("MMOITEMS_ITEM_ID").equalsIgnoreCase(id)) {
                     return true;
                 }
                 itm.getType();
@@ -526,5 +536,9 @@ public class CommandPanels extends JavaPlugin {
             debug(ex, null);
         }
         return false;
+    }
+
+    public Utils getUtils() {
+        return utils;
     }
 }

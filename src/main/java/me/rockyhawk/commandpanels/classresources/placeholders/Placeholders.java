@@ -68,38 +68,36 @@ public class Placeholders {
     }
 
     //this requires the placeholder to already be identified
-    @SuppressWarnings("deprecation")
     public String cpPlaceholders(Panel panel, PanelPosition position, Player p, String identifier){
 
         //replace nodes with PlaceHolders
-        switch(identifier){
-            case("player-displayname"): {
-                return p.getDisplayName();
-            }
-            case("player-name"): {
-                return p.getName();
-            }
-            case("player-world"): {
-                return p.getWorld().getName();
-            }
-            case("player-x"): {
+        switch (identifier) {
+            case ("player-displayname") -> p.getDisplayName();
+            case ("player-name") -> p.getName();
+            case ("player-world") -> p.getWorld().getName();
+
+            case ("player-x") -> {
                 return String.valueOf(Math.round(p.getLocation().getX()));
             }
-            case("player-y"): {
+
+            case ("player-y") -> {
                 return String.valueOf(Math.round(p.getLocation().getY()));
             }
-            case("player-z"): {
+
+            case ("player-z") -> {
                 return String.valueOf(Math.round(p.getLocation().getZ()));
             }
-            case("online-players"): {
+
+            case ("online-players") -> {
                 return Integer.toString(Bukkit.getServer().getOnlinePlayers().size());
             }
-            case("panel-position"): {
+
+            case ("panel-position") -> {
                 return position.toString();
             }
-            case("tag"): {
-                return plugin.tex.colour(plugin.tag);
-            }
+
+            case ("tag") -> plugin.tex.colour(plugin.tag);
+
         }
 
         //set custom placeholders to their values
