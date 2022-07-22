@@ -231,28 +231,28 @@ public class ItemCreation {
             }
             if (itemSection.contains("enchanted")) {
                 try {
-                    ItemMeta EnchantMeta;
+                    ItemMeta enchantMeta;
                     if (itemSection.isList("enchanted")) {
                         //if there is a list of enchantments to add
-                        EnchantMeta = s.getItemMeta();
-                        assert EnchantMeta != null;
+                        enchantMeta = s.getItemMeta();
+                        assert enchantMeta != null;
                         for (String enchantment : itemSection.getStringList("enchanted")) {
-                            EnchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(enchantment.split("\\s")[0].toLowerCase()))), Integer.parseInt(enchantment.split("\\s")[1]), true);
+                            enchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(enchantment.split("\\s")[0].toLowerCase()))), Integer.parseInt(enchantment.split("\\s")[1]), true);
                         }
-                        s.setItemMeta(EnchantMeta);
+                        s.setItemMeta(enchantMeta);
                     } else if (Objects.requireNonNull(itemSection.getString("enchanted")).trim().equalsIgnoreCase("true")) {
                         //if used if enchanted is set to true
-                        EnchantMeta = s.getItemMeta();
-                        assert EnchantMeta != null;
-                        EnchantMeta.addEnchant(Enchantment.KNOCKBACK, 1, false);
-                        EnchantMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        s.setItemMeta(EnchantMeta);
+                        enchantMeta = s.getItemMeta();
+                        assert enchantMeta != null;
+                        enchantMeta.addEnchant(Enchantment.KNOCKBACK, 1, false);
+                        enchantMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                        s.setItemMeta(enchantMeta);
                     } else if (!Objects.requireNonNull(itemSection.getString("enchanted")).trim().equalsIgnoreCase("false")) {
                         //if used to ensure enchanted does not equal false but equals something else
-                        EnchantMeta = s.getItemMeta();
-                        assert EnchantMeta != null;
-                        EnchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[0].toLowerCase()))), Integer.parseInt(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[1]), true);
-                        s.setItemMeta(EnchantMeta);
+                        enchantMeta = s.getItemMeta();
+                        assert enchantMeta != null;
+                        enchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[0].toLowerCase()))), Integer.parseInt(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[1]), true);
+                        s.setItemMeta(enchantMeta);
                     }
                 } catch (Exception ench) {
                     p.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.error") + " enchanted: " + itemSection.getString("enchanted")));

@@ -101,7 +101,7 @@ public class ExecuteOpenVoids {
                 }
 
                 if (openForOtherUser) {
-                    sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Panel Opened for " + p.getDisplayName()));
+                    sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Panel Opened for " + p.getName()));
                 }
             } catch (Exception r) {
                 plugin.debug(r, null);
@@ -149,7 +149,7 @@ public class ExecuteOpenVoids {
                 p.getInventory().addItem(panel.getHotbarItem(p));
             }
             if (sendGiveMessage) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Item Given to " + p.getDisplayName()));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Item Given to " + p.getName()));
             }
         } catch (Exception r) {
             sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.notitem")));
