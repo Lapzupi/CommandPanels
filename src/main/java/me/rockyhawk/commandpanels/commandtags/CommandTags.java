@@ -40,10 +40,10 @@ public class CommandTags {
             }
 
             PaywallOutput val = plugin.commandTags.commandPayWall(panel,p,command);
-            if(val == PaywallOutput.Blocked){
+            if(val == PaywallOutput.BLOCKED){
                 break;
             }
-            if(val == PaywallOutput.NotApplicable){
+            if(val == PaywallOutput.NOT_APPLICABLE){
                 plugin.commandTags.runCommand(panel,position,p, command);
             }
         }
@@ -52,10 +52,10 @@ public class CommandTags {
     public void runCommands(Panel panel, PanelPosition position,Player p, List<String> commands){
         for (String command : commands) {
             PaywallOutput val = plugin.commandTags.commandPayWall(panel,p,command);
-            if(val == PaywallOutput.Blocked){
+            if(val == PaywallOutput.BLOCKED){
                 break;
             }
-            if(val == PaywallOutput.NotApplicable){
+            if(val == PaywallOutput.NOT_APPLICABLE){
                 plugin.commandTags.runCommand(panel,position,p, command);
             }
         }
@@ -149,21 +149,21 @@ public class CommandTags {
                             if(plugin.config.getBoolean("purchase.currency.enable")){
                                 plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                             }
-                            return PaywallOutput.Passed;
+                            return PaywallOutput.PASSED;
                         } else {
                             if(plugin.config.getBoolean("purchase.currency.enable")){
                                 plugin.tex.sendString(p,plugin.config.getString("purchase.currency.failure"));
                             }
-                            return PaywallOutput.Blocked;
+                            return PaywallOutput.BLOCKED;
                         }
                     } else {
                         plugin.tex.sendString(p, plugin.tag + ChatColor.RED + "Paying Requires Vault and an Economy to work!");
-                        return PaywallOutput.Blocked;
+                        return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc,p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
-                    return PaywallOutput.Blocked;
+                    return PaywallOutput.BLOCKED;
                 }
             }
             case "item-paywall=": {
@@ -184,7 +184,7 @@ public class CommandTags {
                         sellItem = new ItemStack(Objects.requireNonNull(Material.matchMaterial(command.split("\\s")[1])), Integer.parseInt(command.split("\\s")[2]), id);
                     }
                     //this is not a boolean because it needs to return an int
-                    PaywallOutput removedItem = PaywallOutput.Blocked;
+                    PaywallOutput removedItem = PaywallOutput.BLOCKED;
 
                     //loop through items in the inventory
                     for(int f = 0; f < 36; f++){
@@ -205,7 +205,7 @@ public class CommandTags {
                                         cont.get(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                         plugin.inventorySaver.inventoryConfig.set(p.getUniqueId().toString(), plugin.itemSerializer.itemStackArrayToBase64(cont.toArray(new ItemStack[0])));
                                     }
-                                    removedItem = PaywallOutput.Passed;
+                                    removedItem = PaywallOutput.PASSED;
                                     break;
                                 }
                             }
@@ -225,7 +225,7 @@ public class CommandTags {
                                             cont.get(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                             plugin.inventorySaver.inventoryConfig.set(p.getUniqueId().toString(), plugin.itemSerializer.itemStackArrayToBase64(cont.toArray(new ItemStack[0])));
                                         }
-                                        removedItem = PaywallOutput.Passed;
+                                        removedItem = PaywallOutput.PASSED;
                                         break;
                                     }
                                 }
@@ -244,7 +244,7 @@ public class CommandTags {
                                         cont.get(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                         plugin.inventorySaver.inventoryConfig.set(p.getUniqueId().toString(), plugin.itemSerializer.itemStackArrayToBase64(cont.toArray(new ItemStack[0])));
                                     }
-                                    removedItem = PaywallOutput.Passed;
+                                    removedItem = PaywallOutput.PASSED;
                                     break;
                                 }
                             }
@@ -252,7 +252,7 @@ public class CommandTags {
                     }
 
                     //send message and return
-                    if(removedItem == PaywallOutput.Blocked){
+                    if(removedItem == PaywallOutput.BLOCKED){
                         if(plugin.config.getBoolean("purchase.item.enable")){
                             plugin.tex.sendString(p, plugin.tag + plugin.config.getString("purchase.item.failure"));
                         }
@@ -265,7 +265,7 @@ public class CommandTags {
                 } catch (Exception buyc) {
                     plugin.debug(buyc,p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
-                    return PaywallOutput.Blocked;
+                    return PaywallOutput.BLOCKED;
                 }
             }
             case "xp-paywall=": {
@@ -287,17 +287,17 @@ public class CommandTags {
                         if(plugin.config.getBoolean("purchase.xp.enable")){
                             plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.xp.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                         }
-                        return PaywallOutput.Passed;
+                        return PaywallOutput.PASSED;
                     } else {
                         if(plugin.config.getBoolean("purchase.xp.enable")){
                             plugin.tex.sendString(p, plugin.config.getString("purchase.xp.failure"));
                         }
-                        return PaywallOutput.Blocked;
+                        return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc,p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
-                    return PaywallOutput.Blocked;
+                    return PaywallOutput.BLOCKED;
                 }
             }
             case "data-paywall=": {
@@ -309,21 +309,21 @@ public class CommandTags {
                         if(plugin.config.getBoolean("purchase.data.enable")){
                             plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));
                         }
-                        return PaywallOutput.Passed;
+                        return PaywallOutput.PASSED;
                     } else {
                         if(plugin.config.getBoolean("purchase.data.enable")){
                             plugin.tex.sendString(p, plugin.config.getString("purchase.data.failure"));
                         }
-                        return PaywallOutput.Blocked;
+                        return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc,p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
-                    return PaywallOutput.Blocked;
+                    return PaywallOutput.BLOCKED;
                 }
             }
         }
-        return PaywallOutput.NotApplicable;
+        return PaywallOutput.NOT_APPLICABLE;
     }
 
     //Experience math is a bit doggy doo doo so these will help to calculate values
