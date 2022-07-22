@@ -10,22 +10,24 @@ import org.bukkit.event.inventory.InventoryType;
 
 public class UtilsChestSortEvent implements Listener {
     final CommandPanels plugin;
+
     public UtilsChestSortEvent(CommandPanels pl) {
         this.plugin = pl;
     }
+
     @EventHandler
-    public void onChestSortEvent(ChestSortEvent e){
+    public void onChestSortEvent(ChestSortEvent e) {
         //if player is null it is not necessary
-        if(e.getPlayer() == null){
+        if (e.getPlayer() == null) {
             return;
         }
         //cancel if a panel is opened at all
-        if(plugin.openPanels.hasPanelOpen(e.getPlayer().getName(), PanelPosition.TOP)){
+        if (plugin.openPanels.hasPanelOpen(e.getPlayer().getName(), PanelPosition.TOP)) {
             e.setCancelled(true);
             return;
         }
         //hotbar item code below
-        if(!plugin.openWithItem){
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
@@ -36,7 +38,7 @@ public class UtilsChestSortEvent implements Listener {
                     e.setUnmovable(slot);
                 }
             }
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             plugin.debug(ex, (Player) e.getPlayer());
         }
     }

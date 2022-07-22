@@ -18,109 +18,124 @@ import java.util.Objects;
 
 public class UtilsOpenWithItem implements Listener {
     final CommandPanels plugin;
+
     public UtilsOpenWithItem(CommandPanels pl) {
         this.plugin = pl;
     }
+
     @EventHandler
     public void onAnyClick(InventoryClickEvent e) {
         //on a click when in any inventory
-        if(!plugin.openWithItem){
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
-        Player p = (Player)e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();
         //get the item clicked, then loop through panel names after action isn't nothing
-        if(e.getAction() == InventoryAction.NOTHING){return;}
-        if(e.getSlot() == -999){return;}
-        if(e.getClickedInventory() == null) {
+        if (e.getAction() == InventoryAction.NOTHING) {
+            return;
+        }
+        if (e.getSlot() == -999) {
+            return;
+        }
+        if (e.getClickedInventory() == null) {
             //skip if null to stop errors
             return;
         }
-        if(e.getClickedInventory().getType() == InventoryType.PLAYER && !e.isCancelled()) {
-            if (plugin.hotbar.stationaryExecute(e.getSlot(), p,e.getClick(), true)) {
+        if (e.getClickedInventory().getType() == InventoryType.PLAYER && !e.isCancelled()) {
+            if (plugin.hotbar.stationaryExecute(e.getSlot(), p, e.getClick(), true)) {
                 e.setCancelled(true);
                 p.updateInventory();
             }
         }
     }
+
     @EventHandler
-    public void onPlayerUse(PlayerInteractEvent e){
+    public void onPlayerUse(PlayerInteractEvent e) {
         //item right clicked only (not left because that causes issues when things are interacted with)
-        if(!plugin.openWithItem){
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
         try {
-            if(e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK || Objects.requireNonNull(e.getItem()).getType() == Material.AIR){
+            if (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK || Objects.requireNonNull(e.getItem()).getType() == Material.AIR) {
                 return;
             }
-        }catch(Exception b){
+        } catch (Exception b) {
             return;
         }
         Player p = e.getPlayer();
-        if(plugin.hotbar.itemCheckExecute(e.getItem(),p,true,false)){
+        if (plugin.hotbar.itemCheckExecute(e.getItem(), p, true, false)) {
             e.setCancelled(true);
             p.updateInventory();
         }
     }
+
     @EventHandler
-    public void onWorldChange(PlayerChangedWorldEvent e){
+    public void onWorldChange(PlayerChangedWorldEvent e) {
         plugin.hotbar.updateHotbarItems(e.getPlayer());
     }
+
     @EventHandler
-    public void onPlayerRespawn(PlayerRespawnEvent e){
+    public void onPlayerRespawn(PlayerRespawnEvent e) {
         plugin.hotbar.updateHotbarItems(e.getPlayer());
     }
+
     @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent e){
-        if(!plugin.openWithItem){
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
         //a new list instance has to be created with the dropped items to avoid ConcurrentModificationException
-        for(ItemStack s : new ArrayList<>(e.getDrops())){
+        for (ItemStack s : new ArrayList<>(e.getDrops())) {
             try {
                 if (plugin.nbt.getNBT(s, "CommandPanelsHotbar") != null) {
                     //do not remove items that are not stationary
-                    if(!plugin.nbt.getNBT(s, "CommandPanelsHotbar").endsWith("-1")) {
+                    if (!plugin.nbt.getNBT(s, "CommandPanelsHotbar").endsWith("-1")) {
                         e.getDrops().remove(s);
                     }
                 }
-            }catch(NullPointerException | IllegalArgumentException ignore){}
+            } catch (NullPointerException | IllegalArgumentException ignore) {
+            }
         }
     }
+
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e){
+    public void onPlayerJoin(PlayerJoinEvent e) {
         plugin.hotbar.updateHotbarItems(e.getPlayer());
     }
+
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e){
+    public void onPlayerQuit(PlayerQuitEvent e) {
         plugin.hotbar.stationaryItems.remove(e.getPlayer().getUniqueId());
     }
+
     @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent e){
-        if(!plugin.openWithItem){
+    public void onPlayerDropItem(PlayerDropItemEvent e) {
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
         //if item dropped
         Player p = e.getPlayer();
-        if(plugin.hotbar.itemCheckExecute(e.getItemDrop().getItemStack(),p,false,true)){
+        if (plugin.hotbar.itemCheckExecute(e.getItemDrop().getItemStack(), p, false, true)) {
             e.setCancelled(true);
             p.updateInventory();
         }
     }
+
     @EventHandler
-    public void onInteractEntity(PlayerInteractEntityEvent e){
-        if(!plugin.openWithItem){
+    public void onInteractEntity(PlayerInteractEntityEvent e) {
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
         //cancel everything if holding item (item frames eg)
         Player p = e.getPlayer();
-        ItemStack clicked = clicked = p.getInventory().getItemInMainHand();
+        ItemStack clicked = p.getInventory().getItemInMainHand();
 
-        if(plugin.hotbar.itemCheckExecute(clicked,p,true,false)){
+        if (plugin.hotbar.itemCheckExecute(clicked, p, true, false)) {
             e.setCancelled(true);
             p.updateInventory();
         }

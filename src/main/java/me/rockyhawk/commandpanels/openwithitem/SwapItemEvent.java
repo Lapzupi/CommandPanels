@@ -8,12 +8,14 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class SwapItemEvent implements Listener {
     final CommandPanels plugin;
+
     public SwapItemEvent(CommandPanels pl) {
         this.plugin = pl;
     }
+
     @EventHandler
-    public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent e){
-        if(!plugin.openWithItem){
+    public void onPlayerSwapHandItemsEvent(PlayerSwapHandItemsEvent e) {
+        if (!plugin.openWithItem) {
             //if none of the panels have open-with-item
             return;
         }
@@ -23,6 +25,7 @@ public class SwapItemEvent implements Listener {
                 e.setCancelled(true);
                 p.updateInventory();
             }
-        }catch(Exception ignore){}
+        } catch (Exception ignore) {
+        }
     }
 }
