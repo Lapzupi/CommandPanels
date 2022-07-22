@@ -86,7 +86,7 @@ public class MainCommand extends BaseCommand {
     public void onReload(final CommandSender sender) {
         //close all the panels
         for (String name : plugin.openPanels.openPanels.keySet()) {
-            plugin.openPanels.closePanelForLoader(name, PanelPosition.Top);
+            plugin.openPanels.closePanelForLoader(name, PanelPosition.TOP);
             try {
                 Bukkit.getPlayer(name).closeInventory();
             } catch (Exception ignore) {

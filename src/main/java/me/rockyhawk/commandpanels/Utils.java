@@ -22,7 +22,7 @@ public class Utils implements Listener {
     @EventHandler
     public void onItemDrag(InventoryDragEvent e) {
         Player p = (Player)e.getWhoClicked();
-        if(!plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Top)){
+        if(!plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.TOP)){
             return;
         }
         if(e.getInventory().getType() != InventoryType.PLAYER){
@@ -36,18 +36,18 @@ public class Utils implements Listener {
         Player p = (Player)e.getWhoClicked();
         int clickedSlot = e.getSlot();
 
-        if(!plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Top) || e.getClick() == ClickType.DOUBLE_CLICK){
+        if(!plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.TOP) || e.getClick() == ClickType.DOUBLE_CLICK){
             return;
         }
 
         //set the panel to the top panel
-        Panel panel = plugin.openPanels.getOpenPanel(p.getName(),PanelPosition.Top);
+        Panel panel = plugin.openPanels.getOpenPanel(p.getName(),PanelPosition.TOP);
 
         if(e.getSlotType() == InventoryType.SlotType.OUTSIDE){
             //if the panel is clicked on the outside area of the GUI
             if (panel.getConfig().contains("outside-commands")) {
                 try {
-                    plugin.commandTags.runCommands(panel,PanelPosition.Top,p, panel.getConfig().getStringList("outside-commands"),e.getClick());
+                    plugin.commandTags.runCommands(panel,PanelPosition.TOP,p, panel.getConfig().getStringList("outside-commands"),e.getClick());
                 }catch(Exception s){
                     plugin.debug(s,p);
                 }
@@ -55,7 +55,7 @@ public class Utils implements Listener {
             return;
         }
 
-        PanelPosition position = PanelPosition.Top;
+        PanelPosition position = PanelPosition.TOP;
         if(e.getClickedInventory().getType() == InventoryType.PLAYER) {
             //cancel the event and return, stops items going from players inventory to the panels
             if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY){
@@ -65,16 +65,16 @@ public class Utils implements Listener {
 
             //do player or panel inventory checks
             if (e.getSlotType() == InventoryType.SlotType.CONTAINER) {
-                if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Middle)) {
-                    position = PanelPosition.Middle;
+                if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.MIDDLE)) {
+                    position = PanelPosition.MIDDLE;
                     clickedSlot -= 9;
                 }else{
                     e.setCancelled(itemsUnmovable(panel));
                     return;
                 }
             } else{
-                if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.Bottom)) {
-                    position = PanelPosition.Bottom;
+                if(plugin.openPanels.hasPanelOpen(p.getName(),PanelPosition.BOTTOM)) {
+                    position = PanelPosition.BOTTOM;
                     //this is set to cancelled as if the command is to close the panel and there is a hotbar item in the same slot
                     //it will also trigger the hotbar item after the panel is closed
                     e.setCancelled(true);
@@ -90,9 +90,9 @@ public class Utils implements Listener {
 
         //this will cancel click on editor open and then change the slot clicked
         if(plugin.editorMain.settings.containsKey(p.getUniqueId())) {
-            if (plugin.editorMain.settings.get(p.getUniqueId()).hasEditorOpen && position == PanelPosition.Top) {
+            if (plugin.editorMain.settings.get(p.getUniqueId()).hasEditorOpen && position == PanelPosition.TOP) {
                 plugin.editorMain.settings.get(p.getUniqueId()).slotSelected = String.valueOf(e.getSlot());
-                plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(p.getUniqueId()).menuOpen, p, PanelPosition.Middle);
+                plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(p.getUniqueId()).menuOpen, p, PanelPosition.MIDDLE);
                 e.setCancelled(true);
                 return;
             }

@@ -103,7 +103,7 @@ public class OpenPanelsLoader {
         //remove if all panels closed or if top panel is closed
         if(openPanels.get(playerName).allClosed()){
             removePlayer(playerName);
-        }else if(openPanels.get(playerName).getPanel(PanelPosition.Top) == null){
+        }else if(openPanels.get(playerName).getPanel(PanelPosition.TOP) == null){
             removePlayer(playerName);
         }
 
@@ -113,9 +113,9 @@ public class OpenPanelsLoader {
 
     //removes player from openPanels map
     public void removePlayer(String playerName){
-        openPanels.get(playerName).setPanel(null,PanelPosition.Top);
-        openPanels.get(playerName).setPanel(null,PanelPosition.Middle);
-        openPanels.get(playerName).setPanel(null,PanelPosition.Bottom);
+        openPanels.get(playerName).setPanel(null,PanelPosition.TOP);
+        openPanels.get(playerName).setPanel(null,PanelPosition.MIDDLE);
+        openPanels.get(playerName).setPanel(null,PanelPosition.BOTTOM);
         openPanels.remove(playerName);
     }
 

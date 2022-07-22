@@ -28,9 +28,9 @@ public class BasicTags implements Listener {
             event.commandTagUsed();
 
             //unclosable panels are at the Top only
-            if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.Top).getConfig().contains("panelType")) {
-                if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.Top).getConfig().getStringList("panelType").contains("unclosable")) {
-                    plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Top);
+            if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.TOP).getConfig().contains("panelType")) {
+                if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.TOP).getConfig().getStringList("panelType").contains("unclosable")) {
+                    plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.TOP);
                     plugin.openPanels.skipPanelClose.add(event.p.getName());
                 }
             }
@@ -43,7 +43,7 @@ public class BasicTags implements Listener {
         if (event.name.equalsIgnoreCase("refresh")) {
             event.commandTagUsed();
             if (plugin.openPanels.hasPanelOpen(event.p.getName(), event.pos)) {
-                plugin.createGUI.openGui(event.panel, event.p, event.pos, PanelOpenType.Refresh, 0);
+                plugin.createGUI.openGui(event.panel, event.p, event.pos, PanelOpenType.REFRESH, 0);
             }
             if (plugin.inventorySaver.hasNormalInventory(event.p)) {
                 plugin.hotbar.updateHotbarItems(event.p);

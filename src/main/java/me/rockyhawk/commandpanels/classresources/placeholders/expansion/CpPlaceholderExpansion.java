@@ -42,6 +42,6 @@ public class CpPlaceholderExpansion extends PlaceholderExpansion {
     */
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String identifier) {
-        return plugin.placeholders.cpPlaceholders(null, PanelPosition.Top, (Player)player, identifier);
+        return plugin.placeholders.cpPlaceholders(null, PanelPosition.TOP, (Player)player, identifier);
     }
 }

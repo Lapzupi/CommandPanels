@@ -49,13 +49,13 @@ public class PanelSubCommand extends BaseCommand {
                 return;
             }
 
-            plugin.openVoids.openCommandPanel(sender, target.getPlayer(), panel.copy(), PanelPosition.Top, true);
+            plugin.openVoids.openCommandPanel(sender, target.getPlayer(), panel.copy(), PanelPosition.TOP, true);
             return;
         }
 
         //Player
         if (target == null) {
-            plugin.openVoids.openCommandPanel(sender, player, panel.copy(), PanelPosition.Top, false);
+            plugin.openVoids.openCommandPanel(sender, player, panel.copy(), PanelPosition.TOP, false);
             return;
         }
 
@@ -63,7 +63,7 @@ public class PanelSubCommand extends BaseCommand {
             sender.sendMessage("You do not have permission to open panels for other players.");
             return;
         }
-        plugin.openVoids.openCommandPanel(sender, target.getPlayer(), panel.copy(), PanelPosition.Top, true);
+        plugin.openVoids.openCommandPanel(sender, target.getPlayer(), panel.copy(), PanelPosition.TOP, true);
     }
 
     @Subcommand("panel item")
