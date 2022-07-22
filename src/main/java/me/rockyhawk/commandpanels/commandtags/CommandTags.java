@@ -134,25 +134,24 @@ public class CommandTags {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public PaywallOutput commandPayWall(Panel panel, Player p, String rawCommand) { //return 0 means no funds, 1 is they passed and 2 means paywall is not this command
 
         //create new instance of command but with placeholders parsed
         String command = plugin.tex.placeholders(panel,PanelPosition.Top,p,rawCommand);
-        switch(command.split("\\s")[0]){
-            case "paywall=": {
+        switch (command.split("\\s")[0]) {
+            case "paywall=" -> {
                 //if player uses paywall= [price]
                 try {
                     if (plugin.econ != null) {
                         if (plugin.econ.getBalance(p) >= Double.parseDouble(command.split("\\s")[1])) {
                             plugin.econ.withdrawPlayer(p, Double.parseDouble(command.split("\\s")[1]));
-                            if(plugin.config.getBoolean("purchase.currency.enable")){
-                                plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
+                            if (plugin.config.getBoolean("purchase.currency.enable")) {
+                                plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                             }
                             return PaywallOutput.PASSED;
                         } else {
-                            if(plugin.config.getBoolean("purchase.currency.enable")){
-                                plugin.tex.sendString(p,plugin.config.getString("purchase.currency.failure"));
+                            if (plugin.config.getBoolean("purchase.currency.enable")) {
+                                plugin.tex.sendString(p, plugin.config.getString("purchase.currency.failure"));
                             }
                             return PaywallOutput.BLOCKED;
                         }
@@ -161,42 +160,42 @@ public class CommandTags {
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
-                    plugin.debug(buyc,p);
+                    plugin.debug(buyc, p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
-            case "item-paywall=": {
+            case "item-paywall=" -> {
                 //if player uses item-paywall= [Material] [Amount] [Id]
                 //player can use item-paywall= [custom-item]
                 List<ItemStack> cont = new ArrayList<>(Arrays.asList(plugin.inventorySaver.getNormalInventory(p)));
                 try {
                     short id = 0;
-                    if(command.split("\\s").length == 4){
+                    if (command.split("\\s").length == 4) {
                         id = Short.parseShort(command.split("\\s")[3]);
                     }
 
                     //create the item to be removed
                     ItemStack sellItem;
-                    if(command.split("\\s").length == 2) {
-                        sellItem = plugin.itemCreate.makeCustomItemFromConfig(panel,PanelPosition.Top,panel.getConfig().getConfigurationSection("custom-item." + command.split("\\s")[1]), p, true, true, false);
-                    }else{
+                    if (command.split("\\s").length == 2) {
+                        sellItem = plugin.itemCreate.makeCustomItemFromConfig(panel, PanelPosition.Top, panel.getConfig().getConfigurationSection("custom-item." + command.split("\\s")[1]), p, true, true, false);
+                    } else {
                         sellItem = new ItemStack(Objects.requireNonNull(Material.matchMaterial(command.split("\\s")[1])), Integer.parseInt(command.split("\\s")[2]), id);
                     }
                     //this is not a boolean because it needs to return an int
                     PaywallOutput removedItem = PaywallOutput.BLOCKED;
 
                     //loop through items in the inventory
-                    for(int f = 0; f < 36; f++){
+                    for (int f = 0; f < 36; f++) {
 
-                        if(cont.get(f) == null){
+                        if (cont.get(f) == null) {
                             //skip slot if empty
                             continue;
                         }
 
-                        if(command.split("\\s").length == 2){
+                        if (command.split("\\s").length == 2) {
                             //if item paywall is custom item
-                            if(plugin.itemCreate.isIdentical(sellItem,cont.get(f))){
+                            if (plugin.itemCreate.isIdentical(sellItem, cont.get(f))) {
                                 if (sellItem.getAmount() <= cont.get(f).getAmount()) {
                                     if (plugin.inventorySaver.hasNormalInventory(p)) {
                                         p.getInventory().getItem(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
@@ -217,11 +216,11 @@ public class CommandTags {
                                     String mmoType = customItemMaterial.split("\\s")[1];
                                     String mmoID = customItemMaterial.split("\\s")[2];
 
-                                    if (plugin.isMMOItem(cont.get(f),mmoType,mmoID) && sellItem.getAmount() <= cont.get(f).getAmount()) {
-                                        if(plugin.inventorySaver.hasNormalInventory(p)){
+                                    if (plugin.isMMOItem(cont.get(f), mmoType, mmoID) && sellItem.getAmount() <= cont.get(f).getAmount()) {
+                                        if (plugin.inventorySaver.hasNormalInventory(p)) {
                                             p.getInventory().getItem(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                             p.updateInventory();
-                                        }else{
+                                        } else {
                                             cont.get(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                             plugin.inventorySaver.inventoryConfig.set(p.getUniqueId().toString(), plugin.itemSerializer.itemStackArrayToBase64(cont.toArray(new ItemStack[0])));
                                         }
@@ -229,18 +228,18 @@ public class CommandTags {
                                         break;
                                     }
                                 }
-                            }catch (Exception ex){
-                                plugin.debug(ex,p);
+                            } catch (Exception ex) {
+                                plugin.debug(ex, p);
                             }
 
-                        }else {
+                        } else {
                             //if the item is a standard material
                             if (cont.get(f).getType() == sellItem.getType()) {
                                 if (sellItem.getAmount() <= cont.get(f).getAmount()) {
-                                    if(plugin.inventorySaver.hasNormalInventory(p)){
+                                    if (plugin.inventorySaver.hasNormalInventory(p)) {
                                         p.getInventory().getItem(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                         p.updateInventory();
-                                    }else{
+                                    } else {
                                         cont.get(f).setAmount(cont.get(f).getAmount() - sellItem.getAmount());
                                         plugin.inventorySaver.inventoryConfig.set(p.getUniqueId().toString(), plugin.itemSerializer.itemStackArrayToBase64(cont.toArray(new ItemStack[0])));
                                     }
@@ -252,72 +251,72 @@ public class CommandTags {
                     }
 
                     //send message and return
-                    if(removedItem == PaywallOutput.BLOCKED){
-                        if(plugin.config.getBoolean("purchase.item.enable")){
+                    if (removedItem == PaywallOutput.BLOCKED) {
+                        if (plugin.config.getBoolean("purchase.item.enable")) {
                             plugin.tex.sendString(p, plugin.tag + plugin.config.getString("purchase.item.failure"));
                         }
-                    }else{
-                        if(plugin.config.getBoolean("purchase.item.enable")){
-                            plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.item.success")).replaceAll("%cp-args%",sellItem.getType().toString()));
+                    } else {
+                        if (plugin.config.getBoolean("purchase.item.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.item.success")).replaceAll("%cp-args%", sellItem.getType().toString()));
                         }
                     }
                     return removedItem;
                 } catch (Exception buyc) {
-                    plugin.debug(buyc,p);
+                    plugin.debug(buyc, p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
-            case "xp-paywall=": {
+            case "xp-paywall=" -> {
                 //if player uses xp-paywall= <price> <levels:points>
                 try {
                     int balance;
-                    if(command.split("\\s")[2].startsWith("level")){
+                    if (command.split("\\s")[2].startsWith("level")) {
                         balance = p.getLevel();
-                    }else{
+                    } else {
                         balance = getPlayerExp(p);
                     }
                     if (balance >= Integer.parseInt(command.split("\\s")[1])) {
-                        if(command.split("\\s")[2].startsWith("level")){
+                        if (command.split("\\s")[2].startsWith("level")) {
                             p.setLevel(p.getLevel() - Integer.parseInt(command.split("\\s")[1]));
-                        }else{
-                            removePlayerExp(p,Integer.parseInt(command.split("\\s")[1]));
+                        } else {
+                            removePlayerExp(p, Integer.parseInt(command.split("\\s")[1]));
                         }
                         //if the message is empty don't send
-                        if(plugin.config.getBoolean("purchase.xp.enable")){
-                            plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.xp.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
+                        if (plugin.config.getBoolean("purchase.xp.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.xp.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                         }
                         return PaywallOutput.PASSED;
                     } else {
-                        if(plugin.config.getBoolean("purchase.xp.enable")){
+                        if (plugin.config.getBoolean("purchase.xp.enable")) {
                             plugin.tex.sendString(p, plugin.config.getString("purchase.xp.failure"));
                         }
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
-                    plugin.debug(buyc,p);
+                    plugin.debug(buyc, p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
-            case "data-paywall=": {
+            case "data-paywall=" -> {
                 //if player uses data-paywall= <data> <amount>
                 try {
-                    if (Double.parseDouble(plugin.panelData.getUserData(p.getUniqueId(),command.split("\\s")[1])) >= Double.parseDouble(command.split("\\s")[2])) {
-                        plugin.panelData.doDataMath(p.getUniqueId(),command.split("\\s")[1],"-" + plugin.tex.placeholdersNoColour(panel,PanelPosition.Top,p,command.split("\\s")[2]));
+                    if (Double.parseDouble(plugin.panelData.getUserData(p.getUniqueId(), command.split("\\s")[1])) >= Double.parseDouble(command.split("\\s")[2])) {
+                        plugin.panelData.doDataMath(p.getUniqueId(), command.split("\\s")[1], "-" + plugin.tex.placeholdersNoColour(panel, PanelPosition.Top, p, command.split("\\s")[2]));
                         //if the message is empty don't send
-                        if(plugin.config.getBoolean("purchase.data.enable")){
-                            plugin.tex.sendString(p,Objects.requireNonNull(plugin.config.getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));
+                        if (plugin.config.getBoolean("purchase.data.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));
                         }
                         return PaywallOutput.PASSED;
                     } else {
-                        if(plugin.config.getBoolean("purchase.data.enable")){
+                        if (plugin.config.getBoolean("purchase.data.enable")) {
                             plugin.tex.sendString(p, plugin.config.getString("purchase.data.failure"));
                         }
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
-                    plugin.debug(buyc,p);
+                    plugin.debug(buyc, p);
                     plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }

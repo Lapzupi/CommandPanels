@@ -22,7 +22,6 @@ public class OpenGUI {
         this.plugin = pl;
     }
 
-    @SuppressWarnings("deprecation")
     public Inventory openGui(Panel panel, Player player, PanelPosition position, PanelOpenType openType, int animateValue) {
         ConfigurationSection pconfig = panel.getConfig();
 

@@ -14,133 +14,142 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SpecialTags implements Listener {
     final CommandPanels plugin;
+
     public SpecialTags(CommandPanels pl) {
         this.plugin = pl;
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("open=")) {
-            e.commandTagUsed();
+    public void commandTag(CommandTagEvent event) {
+        if (event.name.equalsIgnoreCase("open=")) {
+            event.commandTagUsed();
             //if player uses open= it will open the panel, with the option to add custom placeholders
-            String panelName = e.args[0];
-            String cmd = String.join(" ",e.args).replace(e.args[0] + " ","").trim();
+            String panelName = event.args[0];
+            String cmd = String.join(" ", event.args).replace(event.args[0] + " ", "").trim();
 
             Panel openPanel = null;
-            PanelPosition openPosition = e.pos;
-            for(Panel pane : plugin.panelList){
-                if(pane.getName().equals(panelName)){
+            PanelPosition openPosition = event.pos;
+            for (Panel pane : plugin.panelList) {
+                if (pane.getName().equals(panelName)) {
                     openPanel = pane.copy();
                 }
             }
-            if(openPanel == null){
+            if (openPanel == null) {
                 return;
             }
 
             Character[] cm = ArrayUtils.toObject(cmd.toCharArray());
-            for(int i = 0; i < cm.length; i++){
-                if(cm[i].equals('[')){
-                    String contents = cmd.substring(i+1, i+cmd.substring(i).indexOf(']'));
+            for (int i = 0; i < cm.length; i++) {
+                if (cm[i].equals('[')) {
+                    String contents = cmd.substring(i + 1, i + cmd.substring(i).indexOf(']'));
                     //do not change the placeholder
-                    String placeholder = contents.substring(0,contents.indexOf(':'));
+                    String placeholder = contents.substring(0, contents.indexOf(':'));
                     //only convert placeholders for the value
-                    String value = plugin.tex.placeholders(e.panel,e.pos,e.p,contents.substring(contents.indexOf(':')+1));
-                    openPanel.placeholders.addPlaceholder(placeholder,value);
-                    i = i+contents.length()-1;
-                }else if(cm[i].equals('{')){
-                    String contents = cmd.substring(i+1, i+cmd.substring(i).indexOf('}'));
+                    String value = plugin.tex.placeholders(event.panel, event.pos, event.p, contents.substring(contents.indexOf(':') + 1));
+                    openPanel.placeholders.addPlaceholder(placeholder, value);
+                    i = i + contents.length() - 1;
+                } else if (cm[i].equals('{')) {
+                    String contents = cmd.substring(i + 1, i + cmd.substring(i).indexOf('}'));
                     openPosition = PanelPosition.valueOf(contents);
-                    i = i+contents.length()-1;
+                    i = i + contents.length() - 1;
                 }
             }
-            openPanel.open(e.p,openPosition);
+            openPanel.open(event.p, openPosition);
             return;
         }
-        if(e.name.equalsIgnoreCase("close=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("close=")) {
+            event.commandTagUsed();
             //closes specific panel positions
-            PanelPosition position = PanelPosition.valueOf(e.args[0]);
-            if(position == PanelPosition.Middle && plugin.openPanels.hasPanelOpen(e.p.getName(),position)){
-                plugin.openPanels.closePanelForLoader(e.p.getName(),PanelPosition.Middle);
-            }else if(position == PanelPosition.Bottom && plugin.openPanels.hasPanelOpen(e.p.getName(),position)){
-                plugin.openPanels.closePanelForLoader(e.p.getName(),PanelPosition.Bottom);
-            }else if(position == PanelPosition.Top && plugin.openPanels.hasPanelOpen(e.p.getName(),position)){
+            PanelPosition position = PanelPosition.valueOf(event.args[0]);
+            if (position == PanelPosition.Middle && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
+                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Middle);
+            } else if (position == PanelPosition.Bottom && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
+                plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Bottom);
+            } else if (position == PanelPosition.Top && plugin.openPanels.hasPanelOpen(event.p.getName(), position)) {
                 //closing top closes all
-                plugin.commandTags.runCommand(e.panel,e.pos,e.p,"cpc");
+                plugin.commandTags.runCommand(event.panel, event.pos, event.p, "cpc");
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("title=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("title=")) {
+            event.commandTagUsed();
             //added into the 1.11 API
             //will send a title to the player title= <player> <fadeIn> <stay> <fadeOut>
-            if(e.args.length >= 5){
-                Player p = Bukkit.getPlayer(e.args[0]);
+            if (event.args.length >= 5) {
+                Player p = Bukkit.getPlayer(event.args[0]);
                 StringBuilder message = new StringBuilder();
-                for(int i = 4; i < e.args.length; i++){
-                    message.append(e.args[i]).append(" ");
+                for (int i = 4; i < event.args.length; i++) {
+                    message.append(event.args[i]).append(" ");
                 }
-                message.deleteCharAt(message.length()-1);
+                message.deleteCharAt(message.length() - 1);
                 String title;
                 String subtitle = "";
-                if(message.toString().contains("/n/")) {
-                    title = plugin.tex.placeholders(e.panel, e.pos, e.p, message.toString().split("/n/")[0]);
-                    subtitle = plugin.tex.placeholders(e.panel, e.pos, e.p, message.toString().split("/n/")[1]);
-                }else{
-                    title = plugin.tex.placeholders(e.panel, e.pos, e.p, message.toString().trim());
+                if (message.toString().contains("/n/")) {
+                    title = plugin.tex.placeholders(event.panel, event.pos, event.p, message.toString().split("/n/")[0]);
+                    subtitle = plugin.tex.placeholders(event.panel, event.pos, event.p, message.toString().split("/n/")[1]);
+                } else {
+                    title = plugin.tex.placeholders(event.panel, event.pos, event.p, message.toString().trim());
                 }
-                try{
-                    p.sendTitle(title, subtitle, Integer.parseInt(e.args[1]), Integer.parseInt(e.args[2]), Integer.parseInt(e.args[3]));
-                }catch(Exception ex) {
-                    plugin.debug(ex, e.p);
+                try {
+                    p.sendTitle(title, subtitle, Integer.parseInt(event.args[1]), Integer.parseInt(event.args[2]), Integer.parseInt(event.args[3]));
+                } catch (Exception ex) {
+                    plugin.debug(ex, event.p);
                 }
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("teleport=")) {
-            e.commandTagUsed();
-            if (e.args.length == 5) {
-                float x, y, z, yaw, pitch; //pitch is the heads Y axis and yaw is the X axis
-                x = Float.parseFloat(e.args[0]);
-                y = Float.parseFloat(e.args[1]);
-                z = Float.parseFloat(e.args[2]);
-                yaw = Float.parseFloat(e.args[3]);
-                pitch = Float.parseFloat(e.args[4]);
-                e.p.teleport(new Location(e.p.getWorld(), x, y, z, yaw, pitch));
-            } else if (e.args.length <= 3) {
-                float x, y, z;
-                x = Float.parseFloat(e.args[0]);
-                y = Float.parseFloat(e.args[1]);
-                z = Float.parseFloat(e.args[2]);
-                e.p.teleport(new Location(e.p.getWorld(), x, y, z));
+        if (event.name.equalsIgnoreCase("teleport=")) {
+            event.commandTagUsed();
+            if (event.args.length == 5) {
+                float x;
+                float y;
+                float z;
+                float yaw;
+                float pitch; //pitch is the heads Y axis and yaw is the X axis
+                x = Float.parseFloat(event.args[0]);
+                y = Float.parseFloat(event.args[1]);
+                z = Float.parseFloat(event.args[2]);
+                yaw = Float.parseFloat(event.args[3]);
+                pitch = Float.parseFloat(event.args[4]);
+                event.p.teleport(new Location(event.p.getWorld(), x, y, z, yaw, pitch));
+            } else if (event.args.length <= 3) {
+                float x;
+                float y;
+                float z;
+                x = Float.parseFloat(event.args[0]);
+                y = Float.parseFloat(event.args[1]);
+                z = Float.parseFloat(event.args[2]);
+                event.p.teleport(new Location(event.p.getWorld(), x, y, z));
             } else {
                 try {
-                    Player otherplayer = Bukkit.getPlayer(e.args[3]);
-                    float x, y, z;
-                    x = Float.parseFloat(e.args[0]);
-                    y = Float.parseFloat(e.args[1]);
-                    z = Float.parseFloat(e.args[2]);
+                    Player otherplayer = Bukkit.getPlayer(event.args[3]);
+                    float x;
+                    float y;
+                    float z;
+                    x = Float.parseFloat(event.args[0]);
+                    y = Float.parseFloat(event.args[1]);
+                    z = Float.parseFloat(event.args[2]);
                     assert otherplayer != null;
                     otherplayer.teleport(new Location(otherplayer.getWorld(), x, y, z));
                 } catch (Exception tpe) {
-                    plugin.tex.sendMessage(e.p,plugin.config.getString("config.format.notitem"));
+                    plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.notitem"));
                 }
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("delay=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("delay=")) {
+            event.commandTagUsed();
             //if player uses op= it will perform command as op
-            final int delayTicks = Integer.parseInt(e.args[0]);
-            String finalCommand = String.join(" ",e.args).replaceFirst(e.args[0],"").trim();
+            final int delayTicks = Integer.parseInt(event.args[0]);
+            String finalCommand = String.join(" ", event.args).replaceFirst(event.args[0], "").trim();
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     try {
-                        plugin.commandTags.runCommand(e.panel,e.pos, e.p, finalCommand);
+                        plugin.commandTags.runCommand(event.panel, event.pos, event.p, finalCommand);
                     } catch (Exception ex) {
                         //if there are any errors, cancel so that it doesn't loop errors
-                        plugin.debug(ex, e.p);
+                        plugin.debug(ex, event.p);
                         this.cancel();
                     }
                     this.cancel();

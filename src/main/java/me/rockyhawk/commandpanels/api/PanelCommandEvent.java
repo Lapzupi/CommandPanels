@@ -16,19 +16,20 @@ public class PanelCommandEvent extends Event {
         this.panel = panel1;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return this.p;
     }
 
-    public Panel getPanel(){
+    public Panel getPanel() {
         return this.panel;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return this.args;
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
+
     public HandlerList getHandlers() {
         return HANDLERS;
     }

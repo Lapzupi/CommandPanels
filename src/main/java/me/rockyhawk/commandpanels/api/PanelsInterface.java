@@ -9,17 +9,17 @@ public class PanelsInterface {
     private Panel middle;
     private Panel bottom = null;
 
-    public PanelsInterface(String player){
+    public PanelsInterface(String player) {
         playerName = player;
     }
 
     //if all panels are closed
-    public boolean allClosed(){
+    public boolean allClosed() {
         return top == null && middle == null && bottom == null;
     }
 
     //get the panels based on position
-    public void setPanel(Panel panel, PanelPosition position){
+    public void setPanel(Panel panel, PanelPosition position) {
         switch (position) {
             case Top -> {
                 if (panel == null && top != null) {
@@ -43,7 +43,7 @@ public class PanelsInterface {
     }
 
     //get the panels based on position
-    public Panel getPanel(PanelPosition position){
+    public Panel getPanel(PanelPosition position) {
         switch (position) {
             case Top -> {
                 return top;

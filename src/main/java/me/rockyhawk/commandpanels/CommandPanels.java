@@ -110,7 +110,7 @@ public class CommandPanels extends JavaPlugin {
     public final HasSections has = new HasSections(this);
     public final GetCustomHeads customHeads = new GetCustomHeads(this);
     public final PlayerHeads getHeads = new PlayerHeads(this);
-    public final LegacyVersion legacy = new LegacyVersion(this);
+    public final LegacyVersion legacy = new LegacyVersion();
 
     public final OpenPanelsLoader openPanels = new OpenPanelsLoader(this);
     public final OpenGUI createGUI = new OpenGUI(this);

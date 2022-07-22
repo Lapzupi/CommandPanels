@@ -17,112 +17,113 @@ import org.bukkit.event.Listener;
 
 public class BasicTags implements Listener {
     final CommandPanels plugin;
+
     public BasicTags(CommandPanels pl) {
         this.plugin = pl;
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("cpc")){
-            e.commandTagUsed();
+    public void commandTag(CommandTagEvent event) {
+        if (event.name.equalsIgnoreCase("cpc")) {
+            event.commandTagUsed();
 
             //unclosable panels are at the Top only
-            if(plugin.openPanels.getOpenPanel(e.p.getName(),PanelPosition.Top).getConfig().contains("panelType")){
-                if(plugin.openPanels.getOpenPanel(e.p.getName(),PanelPosition.Top).getConfig().getStringList("panelType").contains("unclosable")){
-                    plugin.openPanels.closePanelForLoader(e.p.getName(),PanelPosition.Top);
-                    plugin.openPanels.skipPanelClose.add(e.p.getName());
+            if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.Top).getConfig().contains("panelType")) {
+                if (plugin.openPanels.getOpenPanel(event.p.getName(), PanelPosition.Top).getConfig().getStringList("panelType").contains("unclosable")) {
+                    plugin.openPanels.closePanelForLoader(event.p.getName(), PanelPosition.Top);
+                    plugin.openPanels.skipPanelClose.add(event.p.getName());
                 }
             }
 
             //this will close the current inventory
-            e.p.closeInventory();
-            plugin.openPanels.skipPanelClose.remove(e.p.getName());
+            event.p.closeInventory();
+            plugin.openPanels.skipPanelClose.remove(event.p.getName());
             return;
         }
-        if(e.name.equalsIgnoreCase("refresh")) {
-            e.commandTagUsed();
-            if(plugin.openPanels.hasPanelOpen(e.p.getName(),e.pos)) {
-                plugin.createGUI.openGui(e.panel, e.p, e.pos, PanelOpenType.Refresh, 0);
+        if (event.name.equalsIgnoreCase("refresh")) {
+            event.commandTagUsed();
+            if (plugin.openPanels.hasPanelOpen(event.p.getName(), event.pos)) {
+                plugin.createGUI.openGui(event.panel, event.p, event.pos, PanelOpenType.Refresh, 0);
             }
-            if(plugin.inventorySaver.hasNormalInventory(e.p)){
-                plugin.hotbar.updateHotbarItems(e.p);
+            if (plugin.inventorySaver.hasNormalInventory(event.p)) {
+                plugin.hotbar.updateHotbarItems(event.p);
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("console=")) {
-            e.commandTagUsed();
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.join(" ",e.args));
+        if (event.name.equalsIgnoreCase("console=")) {
+            event.commandTagUsed();
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), String.join(" ", event.args));
             return;
         }
-        if(e.name.equalsIgnoreCase("send=")) {
-            e.commandTagUsed();
-            e.p.chat(String.join(" ",e.args));
+        if (event.name.equalsIgnoreCase("send=")) {
+            event.commandTagUsed();
+            event.p.chat(String.join(" ", event.args));
             return;
         }
-        if(e.name.equalsIgnoreCase("sudo=")) {
-            e.commandTagUsed();
-            e.p.chat("/" + String.join(" ",e.args));
+        if (event.name.equalsIgnoreCase("sudo=")) {
+            event.commandTagUsed();
+            event.p.chat("/" + String.join(" ", event.args));
             return;
         }
-        if(e.name.equalsIgnoreCase("msg=")) {
-            e.commandTagUsed();
-            plugin.tex.sendString(e.panel,e.pos,e.p,String.join(" ",e.args));
+        if (event.name.equalsIgnoreCase("msg=")) {
+            event.commandTagUsed();
+            plugin.tex.sendString(event.panel, event.pos, event.p, String.join(" ", event.args));
             return;
         }
-        if(e.name.equalsIgnoreCase("op=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("op=")) {
+            event.commandTagUsed();
             //if player uses op= it will perform command as op
-            boolean isop = e.p.isOp();
+            boolean isop = event.p.isOp();
             try {
-                e.p.setOp(true);
-                Bukkit.dispatchCommand(e.p,String.join(" ",e.args));
-                e.p.setOp(isop);
+                event.p.setOp(true);
+                Bukkit.dispatchCommand(event.p, String.join(" ", event.args));
+                event.p.setOp(isop);
             } catch (Exception exc) {
-                e.p.setOp(isop);
-                plugin.debug(exc,e.p);
-                e.p.sendMessage(plugin.tag + plugin.tex.colour( plugin.config.getString("config.format.error") + " op=: Error in op command!"));
+                event.p.setOp(isop);
+                plugin.debug(exc, event.p);
+                event.p.sendMessage(plugin.tag + plugin.tex.colour(plugin.config.getString("config.format.error") + " op=: Error in op command!"));
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("sound=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("sound=")) {
+            event.commandTagUsed();
             try {
-                if(e.args.length == 3){
+                if (event.args.length == 3) {
                     //volume (0.0 to 1.0), pitch (0.5 to 2.0)
-                    e.p.playSound(e.p.getLocation(), Sound.valueOf(e.args[0]), Float.parseFloat(e.args[1]), Float.parseFloat(e.args[2]));
-                }else{
-                    e.p.playSound(e.p.getLocation(), Sound.valueOf(e.args[0]), 1F, 1F);
+                    event.p.playSound(event.p.getLocation(), Sound.valueOf(event.args[0]), Float.parseFloat(event.args[1]), Float.parseFloat(event.args[2]));
+                } else {
+                    event.p.playSound(event.p.getLocation(), Sound.valueOf(event.args[0]), 1F, 1F);
                 }
             } catch (Exception s) {
-                plugin.debug(s, e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.args[0]);
+                plugin.debug(s, event.p);
+                plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.error") + " " + "commands: " + event.args[0]);
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("stopsound=")) {
-            e.commandTagUsed();
+        if (event.name.equalsIgnoreCase("stopsound=")) {
+            event.commandTagUsed();
             try {
-                e.p.stopSound(Sound.valueOf(e.args[0]));
+                event.p.stopSound(Sound.valueOf(event.args[0]));
             } catch (Exception ss) {
-                plugin.debug(ss, e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.args[0]);
+                plugin.debug(ss, event.p);
+                plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.error") + " " + "commands: " + event.args[0]);
             }
             return;
         }
-        if(e.name.equalsIgnoreCase("event=")) {
-            e.commandTagUsed();
-            PanelCommandEvent commandEvent = new PanelCommandEvent(e.p, String.join(" ",e.args), e.panel);
+        if (event.name.equalsIgnoreCase("event=")) {
+            event.commandTagUsed();
+            PanelCommandEvent commandEvent = new PanelCommandEvent(event.p, String.join(" ", event.args), event.panel);
             Bukkit.getPluginManager().callEvent(commandEvent);
             return;
         }
-        if(e.name.equalsIgnoreCase("minimessage=")){
-            e.commandTagUsed();
-            if(plugin.legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_18) && Bukkit.getServer().getVersion().contains("Paper")){
-                Audience player = e.p; // Needed because the basic Player from the Event can't send Paper's Components
-                Component parsedText = SerializerUtils.serializeText(String.join(" ",e.args));
+        if (event.name.equalsIgnoreCase("minimessage=")) {
+            event.commandTagUsed();
+            if (plugin.legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_18) && Bukkit.getServer().getVersion().contains("Paper")) {
+                Audience player = event.p; // Needed because the basic Player from the Event can't send Paper's Components
+                Component parsedText = SerializerUtils.serializeText(String.join(" ", event.args));
                 player.sendMessage(parsedText);
-            }else{
-                plugin.tex.sendString(e.p, plugin.tag + ChatColor.RED + "MiniMessage-Feature needs Paper 1.18 or newer to work!");
+            } else {
+                plugin.tex.sendString(event.p, plugin.tag + ChatColor.RED + "MiniMessage-Feature needs Paper 1.18 or newer to work!");
             }
         }
     }

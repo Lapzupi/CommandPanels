@@ -11,19 +11,20 @@ import org.bukkit.event.Listener;
 
 public class BungeeTags implements Listener {
     final CommandPanels plugin;
+
     public BungeeTags(CommandPanels pl) {
         this.plugin = pl;
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("server=")){
-            e.commandTagUsed();
+    public void commandTag(CommandTagEvent event) {
+        if (event.name.equalsIgnoreCase("server=")) {
+            event.commandTagUsed();
             //this contacts bungee and tells it to send the server change command
             ByteArrayDataOutput out = ByteStreams.newDataOutput();
             out.writeUTF("Connect");
-            out.writeUTF(e.args[0]);
-            Player player = Bukkit.getPlayerExact(e.p.getName());
+            out.writeUTF(event.args[0]);
+            Player player = Bukkit.getPlayerExact(event.p.getName());
             assert player != null;
             player.sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
         }

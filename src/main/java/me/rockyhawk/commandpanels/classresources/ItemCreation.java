@@ -24,6 +24,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.io.File;
@@ -214,7 +215,7 @@ public class ItemCreation {
                     }
                     if (new File(plugin.getDataFolder().getPath() + File.separator + "maps" + File.separator + itemSection.getString("map")).exists()) {
                         map.addRenderer(new MapRenderer() {
-                            public void render(MapView view, MapCanvas canvas, Player player) {
+                            public void render(@NotNull MapView view, @NotNull MapCanvas canvas, @NotNull Player player) {
                                 canvas.drawImage(0, 0, new ImageIcon(plugin.getDataFolder().getPath() + File.separator + "maps" + File.separator + itemSection.getString("map")).getImage());
                             }
                         });

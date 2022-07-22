@@ -8,43 +8,20 @@ import org.bukkit.event.Listener;
 
 public class PlaceholderTags implements Listener {
     final CommandPanels plugin;
+
     public PlaceholderTags(CommandPanels pl) {
         this.plugin = pl;
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("placeholder=")) {
-            e.commandTagUsed();
+    public void commandTag(CommandTagEvent event) {
+        if (event.name.equalsIgnoreCase("placeholder=")) {
+            event.commandTagUsed();
             //placeholder is placeholder= [%placeholder%:value]
             String cmd;
-            cmd = String.join(" ",e.raw);
+            cmd = String.join(" ", event.raw);
 
-            if(e.panel == null){
-                return;
-            }
-
-            Character[] cm = ArrayUtils.toObject(cmd.toCharArray());
-            for(int i = 0; i < cm.length; i++){
-                if(cm[i].equals('[')){
-                    String contents = cmd.substring(i+1, i+cmd.substring(i).indexOf(']'));
-                    //do not change the placeholder
-                    String placeholder = contents.substring(0,contents.indexOf(':'));
-                    //only convert placeholders for the value
-                    String value = plugin.tex.placeholders(e.panel,e.pos,e.p,contents.substring(contents.indexOf(':')+1));
-                    e.panel.placeholders.addPlaceholder(placeholder,value);
-                    i = i+contents.length()-1;
-                }
-            }
-            return;
-        }
-        if(e.name.equalsIgnoreCase("add-placeholder=")) {
-            e.commandTagUsed();
-            //this will only run the placeholder command if the placeholder doesn't yet exist in the panel
-            String cmd;
-            cmd = String.join(" ",e.raw);
-
-            if (e.panel == null) {
+            if (event.panel == null) {
                 return;
             }
 
@@ -55,10 +32,34 @@ public class PlaceholderTags implements Listener {
                     //do not change the placeholder
                     String placeholder = contents.substring(0, contents.indexOf(':'));
                     //only convert placeholders for the value
-                    if (!e.panel.placeholders.keys.containsKey(placeholder)) {
+                    String value = plugin.tex.placeholders(event.panel, event.pos, event.p, contents.substring(contents.indexOf(':') + 1));
+                    event.panel.placeholders.addPlaceholder(placeholder, value);
+                    i = i + contents.length() - 1;
+                }
+            }
+            return;
+        }
+        if (event.name.equalsIgnoreCase("add-placeholder=")) {
+            event.commandTagUsed();
+            //this will only run the placeholder command if the placeholder doesn't yet exist in the panel
+            String cmd;
+            cmd = String.join(" ", event.raw);
+
+            if (event.panel == null) {
+                return;
+            }
+
+            Character[] cm = ArrayUtils.toObject(cmd.toCharArray());
+            for (int i = 0; i < cm.length; i++) {
+                if (cm[i].equals('[')) {
+                    String contents = cmd.substring(i + 1, i + cmd.substring(i).indexOf(']'));
+                    //do not change the placeholder
+                    String placeholder = contents.substring(0, contents.indexOf(':'));
+                    //only convert placeholders for the value
+                    if (!event.panel.placeholders.keys.containsKey(placeholder)) {
                         //only convert placeholders for the value
-                        String value = plugin.tex.placeholders(e.panel,e.pos, e.p, contents.substring(contents.indexOf(':') + 1));
-                        e.panel.placeholders.addPlaceholder(placeholder, value);
+                        String value = plugin.tex.placeholders(event.panel, event.pos, event.p, contents.substring(contents.indexOf(':') + 1));
+                        event.panel.placeholders.addPlaceholder(placeholder, value);
                     }
                     i = i + contents.length() - 1;
                 }

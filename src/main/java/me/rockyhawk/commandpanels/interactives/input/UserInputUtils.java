@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class UserInputUtils implements Listener {
@@ -20,7 +21,7 @@ public class UserInputUtils implements Listener {
         this.plugin = pl;
     }
 
-    public final HashMap<Player, PlayerInput> playerInput = new HashMap<>();
+    public final Map<Player, PlayerInput> playerInput = new HashMap<>();
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent e) {

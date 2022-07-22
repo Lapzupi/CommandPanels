@@ -65,33 +65,29 @@ public class PanelDataLoader {
         }
 
         BigDecimal output;
-        switch(dataValue.charAt(0)){
-            case '+':{
+        switch (dataValue.charAt(0)) {
+            case '+' -> {
                 newValue = new BigDecimal(dataValue.substring(1));
                 output = originalValue.add(newValue);
-                break;
             }
-            case '-':{
+            case '-' -> {
                 newValue = new BigDecimal(dataValue.substring(1));
                 output = originalValue.subtract(newValue);
-                break;
             }
-            case '*':{
+            case '*' -> {
                 newValue = new BigDecimal(dataValue.substring(1));
                 output = originalValue.multiply(newValue);
-                break;
             }
-            case '/':{
+            case '/' -> {
                 newValue = new BigDecimal(dataValue.substring(1));
                 try {
                     output = originalValue.divide(newValue);
-                }catch (ArithmeticException ex){
-                    plugin.debug(ex,null);
+                } catch (ArithmeticException ex) {
+                    plugin.debug(ex, null);
                     output = originalValue;
                 }
-                break;
             }
-            default:{
+            default -> {
                 newValue = new BigDecimal(dataValue);
                 output = newValue;
             }

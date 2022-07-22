@@ -19,12 +19,13 @@ import java.util.Objects;
 
 public class Placeholders {
     final CommandPanels plugin;
+
     public Placeholders(CommandPanels pl) {
         this.plugin = pl;
     }
 
-    public String setPlaceholders(Panel panel,PanelPosition position, Player p, String str, boolean primary){
-        String[] HOLDERS = getPlaceholderEnds(panel,primary);
+    public String setPlaceholders(Panel panel, PanelPosition position, Player p, String str, boolean primary) {
+        String[] HOLDERS = getPlaceholderEnds(panel, primary);
         while (str.contains(HOLDERS[0] + "cp-")) {
             try {
                 int start = str.indexOf(HOLDERS[0] + "cp-");
@@ -32,13 +33,13 @@ public class Placeholders {
                 String identifier = str.substring(start, end).replace(HOLDERS[0] + "cp-", "").replace(HOLDERS[1], "");
                 String value;
                 try {
-                    value = cpPlaceholders(panel,position,p,identifier);
+                    value = cpPlaceholders(panel, position, p, identifier);
                 } catch (NullPointerException er) {
                     value = "";
                 }
                 str = str.replace(str.substring(start, end) + HOLDERS[1], value);
-            }catch(Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 break;
             }
         }
@@ -46,11 +47,11 @@ public class Placeholders {
     }
 
     //returns primary then secondary {[start,end],[start,end]}
-    public String[] getPlaceholderEnds(Panel panel, boolean primary){
+    public String[] getPlaceholderEnds(Panel panel, boolean primary) {
         List<String[]> values = new ArrayList<>();
-        values.add(new String[]{plugin.config.getString("placeholders.primary.start"),plugin.config.getString("placeholders.primary.end")});
-        values.add(new String[]{plugin.config.getString("placeholders.secondary.start"),plugin.config.getString("placeholders.secondary.end")});
-        if(panel != null) {
+        values.add(new String[]{plugin.config.getString("placeholders.primary.start"), plugin.config.getString("placeholders.primary.end")});
+        values.add(new String[]{plugin.config.getString("placeholders.secondary.start"), plugin.config.getString("placeholders.secondary.end")});
+        if (panel != null) {
             if (panel.getConfig().isSet("placeholders")) {
                 if (panel.getConfig().isSet("placeholders.primary")) {
                     values.set(0, new String[]{panel.getConfig().getString("placeholders.primary.start"), panel.getConfig().getString("placeholders.primary.end")});
@@ -60,15 +61,15 @@ public class Placeholders {
                 }
             }
         }
-        if(primary){
+        if (primary) {
             return values.get(0);
-        }else{
+        } else {
             return values.get(1);
         }
     }
 
     //this requires the placeholder to already be identified
-    public String cpPlaceholders(Panel panel, PanelPosition position, Player p, String identifier){
+    public String cpPlaceholders(Panel panel, PanelPosition position, Player p, String identifier) {
 
         //replace nodes with PlaceHolders
         switch (identifier) {
@@ -101,9 +102,9 @@ public class Placeholders {
         }
 
         //set custom placeholders to their values
-        if(panel != null) {
+        if (panel != null) {
             for (String placeholder : panel.placeholders.keys.keySet()) {
-                if(identifier.equals(placeholder)) {
+                if (identifier.equals(placeholder)) {
                     try {
                         return panel.placeholders.keys.get(placeholder);
                     } catch (Exception ex) {
@@ -115,99 +116,98 @@ public class Placeholders {
         }
 
         //placeholder to check for server availability %cp-server-IP:PORT%
-        if(identifier.startsWith("server-")) {
+        if (identifier.startsWith("server-")) {
             String ip_port = identifier.replace("server-", "");
-            Socket s = new Socket();
-            try {
-                s.connect(new InetSocketAddress(ip_port.split(":")[0], (int)Double.parseDouble(ip_port.split(":")[1])), plugin.config.getInt("config.server-ping-timeout"));
-                s.close();
+            try (Socket s = new Socket()) {
+                s.connect(new InetSocketAddress(ip_port.split(":")[0], (int) Double.parseDouble(ip_port.split(":")[1])), plugin.config.getInt("config.server-ping-timeout"));
                 return "true";
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 return "false";
             }
+
         }
 
         //placeholder to check if an item has NBT %cp-nbt-slot:key%
-        if(identifier.startsWith("nbt-")) {
+        if (identifier.startsWith("nbt-")) {
             try {
                 String slot_key = identifier.replace("nbt-", "");
                 String value;
-                value = plugin.nbt.getNBT(p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(slot_key.split(":")[0])),slot_key.split(":")[1]);
-                if(value == null){
+                value = plugin.nbt.getNBT(p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(slot_key.split(":")[0])), slot_key.split(":")[1]);
+                if (value == null) {
                     value = "empty";
                 }
                 return value;
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
 
         //DO placeholders for detection of other items in a panel
         //get material value from slot in current open inventory (panel)
-        if(identifier.startsWith("material-")) {
+        if (identifier.startsWith("material-")) {
             try {
                 String matNumber = identifier.replace("material-", "");
                 String material;
                 try {
-                    material = p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(matNumber)).getType().toString();
+                    material = p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(matNumber)).getType().toString();
                     if (plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
                         //add the ID to the end if it is legacy (eg, material:id)
-                        material = material + ":" + p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(matNumber)).getType().getId();
+                        material = material + ":" + p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(matNumber)).getType().getId();
                     }
                 } catch (NullPointerException er) {
                     material = "AIR";
                 }
                 return material;
             } catch (Exception ex) {
-                plugin.debug(ex,p);
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //get stack amount from slot in current open inventory (panel)
-        if(identifier.startsWith("stack-")) {
+        if (identifier.startsWith("stack-")) {
             try {
                 String matNumber = identifier.replace("stack-", "");
                 int amount;
                 try {
-                    amount = p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(matNumber)).getAmount();
+                    amount = p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(matNumber)).getAmount();
                 } catch (NullPointerException er) {
                     amount = 0;
                 }
                 return String.valueOf(amount);
-            }catch(Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //get stack amount from slot in current open inventory (panel)
-        if(identifier.startsWith("modeldata-")) {
+        if (identifier.startsWith("modeldata-")) {
             try {
                 String matNumber = identifier.replace("modeldata-", "");
                 int modelData;
                 try {
-                    modelData = p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(matNumber)).getItemMeta().getCustomModelData();
+                    modelData = p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(matNumber)).getItemMeta().getCustomModelData();
                 } catch (NullPointerException er) {
                     modelData = 0;
                 }
                 return String.valueOf(modelData);
-            }catch(Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //is an item damaged
-        if(identifier.startsWith("damaged-")) {
+        if (identifier.startsWith("damaged-")) {
             try {
                 String matNumber = identifier.replace("damaged-", "");
                 boolean damaged = false;
-                ItemStack itm = p.getOpenInventory().getTopInventory().getItem((int)Double.parseDouble(matNumber));
+                ItemStack itm = p.getOpenInventory().getTopInventory().getItem((int) Double.parseDouble(matNumber));
                 try {
-                    if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)){
-                        if(itm.getType().getMaxDurability() != 0) {
+                    if (plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)) {
+                        if (itm.getType().getMaxDurability() != 0) {
                             damaged = (itm.getType().getMaxDurability() - itm.getDurability()) < itm.getType().getMaxDurability();
                         }
-                    }else {
+                    } else {
                         Damageable itemDamage = (Damageable) itm.getItemMeta();
                         damaged = itemDamage.hasDamage();
                     }
@@ -215,29 +215,29 @@ public class Placeholders {
                     damaged = false;
                 }
                 return String.valueOf(damaged);
-            }catch(Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //is an item identical, uses custom-items (custom item, slot)
-        if(identifier.startsWith("identical-")) {
+        if (identifier.startsWith("identical-")) {
             try {
                 String matLocSlot = identifier.replace("identical-", "");
                 String matLoc = matLocSlot.split(",")[0];
-                int matSlot = (int)Double.parseDouble(matLocSlot.split(",")[1]);
+                int matSlot = (int) Double.parseDouble(matLocSlot.split(",")[1]);
                 boolean isIdentical = false;
                 ItemStack itm = p.getOpenInventory().getTopInventory().getItem(matSlot);
 
-                if(itm == null){
+                if (itm == null) {
                     //continue if material is null
                     return "false";
                 }
 
                 try {
                     //if it is a regular custom item
-                    ItemStack confItm = plugin.itemCreate.makeItemFromConfig(panel,position,panel.getConfig().getConfigurationSection("custom-item." + matLoc),p,true,true, false);
-                    if(plugin.itemCreate.isIdentical(confItm,itm)){
+                    ItemStack confItm = plugin.itemCreate.makeItemFromConfig(panel, position, panel.getConfig().getConfigurationSection("custom-item." + matLoc), p, true, true, false);
+                    if (plugin.itemCreate.isIdentical(confItm, itm)) {
                         isIdentical = true;
                     }
 
@@ -247,7 +247,7 @@ public class Placeholders {
                         String mmoType = customItemMaterial.split("\\s")[1];
                         String mmoID = customItemMaterial.split("\\s")[2];
 
-                        if (plugin.isMMOItem(itm,mmoType,mmoID) && itm.getAmount() <= confItm.getAmount()) {
+                        if (plugin.isMMOItem(itm, mmoType, mmoID) && itm.getAmount() <= confItm.getAmount()) {
                             isIdentical = true;
                         }
                     }
@@ -256,85 +256,85 @@ public class Placeholders {
                 }
 
                 return String.valueOf(isIdentical);
-            }catch(Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
 
         //does %cp-random-MIN,MAX%
-        if(identifier.startsWith("random-")) {
+        if (identifier.startsWith("random-")) {
             try {
                 String min_max = identifier.replace("random-", "");
-                int min = (int)Double.parseDouble(min_max.split(",")[0]);
-                int max = (int)Double.parseDouble(min_max.split(",")[1]);
+                int min = (int) Double.parseDouble(min_max.split(",")[0]);
+                int max = (int) Double.parseDouble(min_max.split(",")[1]);
                 return String.valueOf(plugin.getRandomNumberInRange(min, max));
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //returns value of stored data
-        if(identifier.startsWith("data-")) {
+        if (identifier.startsWith("data-")) {
             try {
                 String dataPoint = identifier.replace("data-", "");
                 //get data from other user
-                if(dataPoint.contains(",")){
+                if (dataPoint.contains(",")) {
                     String dataName = dataPoint.split(",")[0];
                     String playerName = dataPoint.split(",")[1];
-                    return plugin.panelData.getUserData(Bukkit.getOfflinePlayer(playerName).getUniqueId(),dataName);
-                }else{
-                    return plugin.panelData.getUserData(p.getUniqueId(),dataPoint);
+                    return plugin.panelData.getUserData(Bukkit.getOfflinePlayer(playerName).getUniqueId(), dataName);
+                } else {
+                    return plugin.panelData.getUserData(p.getUniqueId(), dataPoint);
                 }
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //edits data via placeholder execution (will return empty output)
-        if(identifier.startsWith("setdata-")) {
+        if (identifier.startsWith("setdata-")) {
             try {
                 String point_value = identifier.replace("cp-setdata-", "");
                 String command = "set-data= " + point_value.split(",")[0] + " " + point_value.split(",")[1];
-                plugin.commandTags.runCommand(panel,position,p, command);
+                plugin.commandTags.runCommand(panel, position, p, command);
                 return "";
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
         //math data via placeholder execution (will return empty output)
-        if(identifier.startsWith("mathdata-")) {
+        if (identifier.startsWith("mathdata-")) {
             try {
                 String point_value = identifier.replace("mathdata-", "");
                 String command = "math-data= " + point_value.split(",")[0] + " " + point_value.split(",")[1];
-                plugin.commandTags.runCommand(panel,position,p,command);
+                plugin.commandTags.runCommand(panel, position, p, command);
                 return "";
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
 
         //checks for players online
-        if(identifier.startsWith("player-online-")) {
+        if (identifier.startsWith("player-online-")) {
             try {
                 String playerLocation = identifier.replace("player-online-", "");
                 Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
                 if (Double.parseDouble(playerLocation) > playerFind.length) {
                     return plugin.tex.colour(Objects.requireNonNull(plugin.config.getString("config.format.offline")));
                 } else {
-                    return playerFind[(int)(Double.parseDouble(playerLocation) - 1)].getName();
+                    return playerFind[(int) (Double.parseDouble(playerLocation) - 1)].getName();
                 }
-            }catch (Exception ex){
-                plugin.debug(ex,p);
+            } catch (Exception ex) {
+                plugin.debug(ex, p);
                 return "";
             }
         }
 
         try {
             if (plugin.econ != null) {
-                if(identifier.equals("player-balance")) {
+                if (identifier.equals("player-balance")) {
                     return String.valueOf(Math.round(plugin.econ.getBalance(p)));
                 }
             }
@@ -342,7 +342,7 @@ public class Placeholders {
             //skip
         }
         if (plugin.getServer().getPluginManager().isPluginEnabled("VotingPlugin")) {
-            if(identifier.equals("votingplugin-points")) {
+            if (identifier.equals("votingplugin-points")) {
                 return String.valueOf(UserManager.getInstance().getVotingPluginUser(p).getPoints());
             }
         }

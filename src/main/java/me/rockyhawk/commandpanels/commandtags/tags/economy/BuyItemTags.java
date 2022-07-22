@@ -4,7 +4,6 @@ package me.rockyhawk.commandpanels.commandtags.tags.economy;
 import me.rockyhawk.commandpanels.CommandPanels;
 import me.rockyhawk.commandpanels.commandtags.CommandTagEvent;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,13 +15,14 @@ import java.util.Objects;
 
 public class BuyItemTags implements Listener {
     final CommandPanels plugin;
+
     public BuyItemTags(CommandPanels pl) {
         this.plugin = pl;
     }
 
     @EventHandler
-    public void commandTag(CommandTagEvent e){
-        if(e.name.equalsIgnoreCase("buy=")){
+    public void commandTag(CommandTagEvent e) {
+        if (e.name.equalsIgnoreCase("buy=")) {
             e.commandTagUsed();
             //if player uses buy= it will be eg. buy= <price> <item> <amount of item> <ID>
             try {
@@ -38,16 +38,16 @@ public class BuyItemTags implements Listener {
                     plugin.tex.sendMessage(e.p, ChatColor.RED + "Buying Requires Vault and an Economy to work!");
                 }
             } catch (Exception buy) {
-                plugin.debug(buy,e.p);
+                plugin.debug(buy, e.p);
                 plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
             }
         }
     }
 
-    private void giveItem(Player p, String[] args){
+    private void giveItem(Player p, String[] args) {
         //legacy ID
         byte id = 0;
-        if(plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)) {
+        if (plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_15)) {
             for (String argsTemp : args) {
                 if (argsTemp.startsWith("id:")) {
                     id = Byte.parseByte(argsTemp.replace("id:", ""));
@@ -55,6 +55,6 @@ public class BuyItemTags implements Listener {
                 }
             }
         }
-        plugin.inventorySaver.addItem(p,new ItemStack(Objects.requireNonNull(Material.matchMaterial(args[1])), Integer.parseInt(args[2]),id));
+        plugin.inventorySaver.addItem(p, new ItemStack(Objects.requireNonNull(Material.matchMaterial(args[1])), Integer.parseInt(args[2]), id));
     }
 }

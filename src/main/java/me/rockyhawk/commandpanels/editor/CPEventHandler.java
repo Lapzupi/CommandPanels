@@ -17,11 +17,14 @@ import java.util.List;
 
 public class CPEventHandler implements Listener {
     final CommandPanels plugin;
-    public CPEventHandler(CommandPanels pl) { this.plugin = pl; }
+
+    public CPEventHandler(CommandPanels pl) {
+        this.plugin = pl;
+    }
 
     @EventHandler
-    public void onCommandEventOpen(PanelCommandEvent e){
-        if(!e.getMessage().startsWith("CommandPanels_")) {
+    public void onCommandEventOpen(PanelCommandEvent e) {
+        if (!e.getMessage().startsWith("CommandPanels_")) {
             return;
         }
         if (e.getMessage().equals("CommandPanels_OpenPanelSettings")) {
@@ -43,26 +46,26 @@ public class CPEventHandler implements Listener {
         }
     }
 
-    void savePanelFile(Panel p){
+    void savePanelFile(Panel p) {
         try {
             YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(p.getFile());
             newConfig.set("panels." + p.getName(), p.getConfig());
             newConfig.save(p.getFile());
         } catch (Exception io) {
-            plugin.debug(io,null);
+            plugin.debug(io, null);
         }
     }
 
     @EventHandler
-    public void onCommandEventView(PanelCommandEvent e){
-        if(!e.getMessage().startsWith("CPEditorItem_") && !e.getMessage().startsWith("CPEditorPanel_")){
+    public void onCommandEventView(PanelCommandEvent e) {
+        if (!e.getMessage().startsWith("CPEditorItem_") && !e.getMessage().startsWith("CPEditorPanel_")) {
             return;
         }
 
         EditorSettings editor = plugin.editorMain.settings.get(e.getPlayer().getUniqueId());
 
         Panel panel = null;
-        for(Panel pnl : plugin.panelList) {
+        for (Panel pnl : plugin.panelList) {
             if (pnl.getName().equals(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).panelName)) {
                 panel = pnl.copy();
                 break;
@@ -70,27 +73,27 @@ public class CPEventHandler implements Listener {
         }
         assert panel != null;
 
-        if(e.getMessage().startsWith("CPEditorItem_")){
-            String input = e.getMessage().replace("CPEditorItem_","");
+        if (e.getMessage().startsWith("CPEditorItem_")) {
+            String input = e.getMessage().replace("CPEditorItem_", "");
             viewContents(e.getPlayer(), panel, "item." + editor.slotSelected + "." + input);
         }
-        if(e.getMessage().startsWith("CPEditorPanel_")){
-            String input = e.getMessage().replace("CPEditorPanel_","");
-            viewContents(e.getPlayer() , panel, input);
+        if (e.getMessage().startsWith("CPEditorPanel_")) {
+            String input = e.getMessage().replace("CPEditorPanel_", "");
+            viewContents(e.getPlayer(), panel, input);
         }
     }
 
     @EventHandler
-    public void onCommandEventSettings(PanelCommandEvent e){
-        if(!e.getMessage().startsWith("CPEditor_")) {
+    public void onCommandEventSettings(PanelCommandEvent e) {
+        if (!e.getMessage().startsWith("CPEditor_")) {
             return;
         }
 
-        String editType = e.getMessage().split("\\s")[0].replace("CPEditor_","");
-        String playerInput = e.getMessage().replace("CPEditor_" + editType + " ","");
+        String editType = e.getMessage().split("\\s")[0].replace("CPEditor_", "");
+        String playerInput = e.getMessage().replace("CPEditor_" + editType + " ", "");
         EditorSettings editor = plugin.editorMain.settings.get(e.getPlayer().getUniqueId());
         Panel panel = null;
-        for(Panel pnl : plugin.panelList) {
+        for (Panel pnl : plugin.panelList) {
             if (pnl.getName().equals(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).panelName)) {
                 panel = pnl.copy();
                 break;
@@ -98,7 +101,7 @@ public class CPEventHandler implements Listener {
         }
         assert panel != null;
 
-        if(editType.startsWith("item")) {
+        if (editType.startsWith("item")) {
             switch (editType) {
                 case "itemslot":
                     plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).slotSelected = playerInput;
@@ -171,7 +174,7 @@ public class CPEventHandler implements Listener {
                     }
                     break;
             }
-        }else{
+        } else {
             switch (editType) {
                 case "panelpermission":
                     panel.getConfig().set("perm", playerInput);
@@ -195,9 +198,9 @@ public class CPEventHandler implements Listener {
                     panel.getConfig().set("title", playerInput);
                     break;
                 case "panelrows":
-                    if(isNumeric(playerInput)){
+                    if (isNumeric(playerInput)) {
                         panel.getConfig().set("rows", Integer.parseInt(playerInput));
-                    }else {
+                    } else {
                         panel.getConfig().set("rows", playerInput);
                     }
                     break;
@@ -240,16 +243,16 @@ public class CPEventHandler implements Listener {
                         YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(panel.getFile());
                         newConfig.set("panels." + panel.getName(), null);
                         e.getPlayer().sendMessage(ChatColor.GREEN + "Panel deleted!");
-                        if(newConfig.getKeys(true).size() == 1){
+                        if (newConfig.getKeys(true).size() == 1) {
                             //file is empty
-                            if(panel.getFile().delete()){
+                            if (panel.getFile().delete()) {
                                 plugin.reloadPanelFiles();
                                 return;
                             }
                         }
                         newConfig.save(panel.getFile());
                     } catch (Exception io) {
-                        plugin.debug(io,e.getPlayer());
+                        plugin.debug(io, e.getPlayer());
                     }
                     plugin.reloadPanelFiles();
                     return;
@@ -260,7 +263,7 @@ public class CPEventHandler implements Listener {
                     try {
                         newConfig.save(panel.getFile());
                     } catch (Exception io) {
-                        plugin.debug(io,e.getPlayer());
+                        plugin.debug(io, e.getPlayer());
                     }
                     plugin.reloadPanelFiles();
                     e.getPlayer().sendMessage(ChatColor.GREEN + "Panel name changed!");
@@ -270,9 +273,9 @@ public class CPEventHandler implements Listener {
         savePanelFile(panel);
 
         //This will open the editor back up
-        panel.open(e.getPlayer(),PanelPosition.Top);
-        plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).menuOpen,e.getPlayer(),PanelPosition.Middle);
-        plugin.editorMain.openGuiPage("BottomSettings",e.getPlayer(),PanelPosition.Bottom);
+        panel.open(e.getPlayer(), PanelPosition.Top);
+        plugin.editorMain.openGuiPage(plugin.editorMain.settings.get(e.getPlayer().getUniqueId()).menuOpen, e.getPlayer(), PanelPosition.Middle);
+        plugin.editorMain.openGuiPage("BottomSettings", e.getPlayer(), PanelPosition.Bottom);
     }
 
     /*
@@ -282,41 +285,41 @@ public class CPEventHandler implements Listener {
     insert 1 msg= new line
     remove 1
     */
-    public void listChanger(String playerInput, Panel panel, String location){
+    public void listChanger(String playerInput, Panel panel, String location) {
         List<String> contents = panel.getConfig().getStringList(location);
-        if(playerInput.startsWith("add")){
+        if (playerInput.startsWith("add")) {
             String str = playerInput.split("\\s", 2)[1];
             contents.add(str);
-        }else if(playerInput.startsWith("edit")){
+        } else if (playerInput.startsWith("edit")) {
             List<String> str = new ArrayList<>(Arrays.asList(playerInput.split("\\s")));
-            str.subList(0,2).clear();
-            int element = Integer.parseInt(playerInput.split("\\s")[1])-1;
-            contents.set(element,String.join(" ",str));
-        }else if(playerInput.startsWith("insert")){
+            str.subList(0, 2).clear();
+            int element = Integer.parseInt(playerInput.split("\\s")[1]) - 1;
+            contents.set(element, String.join(" ", str));
+        } else if (playerInput.startsWith("insert")) {
             List<String> str = new ArrayList<>(Arrays.asList(playerInput.split("\\s")));
-            str.subList(0,2).clear();
-            int element = Integer.parseInt(playerInput.split("\\s")[1])-1;
-            contents.add(element,String.join(" ",str));
-        }else if(playerInput.startsWith("remove")){
-            int element = Integer.parseInt(playerInput.split("\\s")[1])-1;
+            str.subList(0, 2).clear();
+            int element = Integer.parseInt(playerInput.split("\\s")[1]) - 1;
+            contents.add(element, String.join(" ", str));
+        } else if (playerInput.startsWith("remove")) {
+            int element = Integer.parseInt(playerInput.split("\\s")[1]) - 1;
             contents.remove(element);
         }
-        if(contents.isEmpty()){
+        if (contents.isEmpty()) {
             panel.getConfig().set(location, null);
-        }else {
+        } else {
             panel.getConfig().set(location, contents);
         }
     }
 
-    public void viewContents(Player player, Panel panel, String location){
-        if(panel.getConfig().isList(location)){
+    public void viewContents(Player player, Panel panel, String location) {
+        if (panel.getConfig().isList(location)) {
             player.sendMessage("Current Value: ");
             int n = 1;
-            for(String value : panel.getConfig().getStringList(location)){
+            for (String value : panel.getConfig().getStringList(location)) {
                 player.sendMessage("(" + n + ") " + value);
                 n++;
             }
-        }else{
+        } else {
             player.sendMessage("Current Value: " + panel.getConfig().getString(location));
         }
     }
@@ -326,7 +329,7 @@ public class CPEventHandler implements Listener {
         try {
             Double.parseDouble(str);
             return true;
-        } catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }
