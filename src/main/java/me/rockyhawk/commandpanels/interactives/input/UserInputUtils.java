@@ -70,7 +70,7 @@ public class UserInputUtils implements Listener {
             inputMessages = new ArrayList<>(plugin.config.getStringList("input.input-message"));
         }
         for (String temp : inputMessages) {
-            temp = temp.replaceAll("%cp-args%", Objects.requireNonNull(plugin.config.getString("input.input-cancel")));
+            temp = temp.replace("%cp-args%", Objects.requireNonNull(plugin.config.getString("input.input-cancel")));
             p.sendMessage(plugin.tex.placeholders(panel,pos,p, temp));
         }
     }

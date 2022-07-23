@@ -35,7 +35,6 @@ import me.rockyhawk.commandpanels.ioclasses.Sequence_1_13;
 import me.rockyhawk.commandpanels.ioclasses.Sequence_1_14;
 import me.rockyhawk.commandpanels.ioclasses.legacy.LegacyVersion;
 import me.rockyhawk.commandpanels.ioclasses.legacy.MinecraftVersions;
-import me.rockyhawk.commandpanels.ioclasses.legacy.PlayerHeads;
 import me.rockyhawk.commandpanels.openpanelsmanager.OpenGUI;
 import me.rockyhawk.commandpanels.openpanelsmanager.OpenPanelsLoader;
 import me.rockyhawk.commandpanels.openpanelsmanager.PanelPermissions;
@@ -45,6 +44,7 @@ import me.rockyhawk.commandpanels.openwithitem.HotbarItemLoader;
 import me.rockyhawk.commandpanels.openwithitem.SwapItemEvent;
 import me.rockyhawk.commandpanels.openwithitem.UtilsChestSortEvent;
 import me.rockyhawk.commandpanels.openwithitem.UtilsOpenWithItem;
+import me.rockyhawk.commandpanels.panelblocks.BlocksCommand;
 import me.rockyhawk.commandpanels.panelblocks.PanelBlockOnClick;
 import me.rockyhawk.commandpanels.playerinventoryhandler.InventorySaver;
 import me.rockyhawk.commandpanels.playerinventoryhandler.ItemStackSerializer;
@@ -105,7 +105,6 @@ public class CommandPanels extends JavaPlugin {
     public final ItemCreation itemCreate = new ItemCreation(this);
     public final HasSections has = new HasSections(this);
     public final GetCustomHeads customHeads = new GetCustomHeads(this);
-    public final PlayerHeads getHeads = new PlayerHeads(this);
     public final LegacyVersion legacy = new LegacyVersion();
 
     public final OpenPanelsLoader openPanels = new OpenPanelsLoader(this);
@@ -205,15 +204,12 @@ public class CommandPanels extends JavaPlugin {
 
         //if panel-blocks set to false, don't load this
         if (Objects.requireNonNull(config.getString("config.panel-blocks")).equalsIgnoreCase("true")) {
-            Objects.requireNonNull(this.getCommand("commandpanelblock")).setExecutor(new Commandpanelblocks(this));
-            Objects.requireNonNull(this.getCommand("commandpanelblock")).setTabCompleter(new BlocksTabComplete(this));
+            paperCommandManager.registerCommand(new BlocksCommand(this));
             this.getServer().getPluginManager().registerEvents(new PanelBlockOnClick(this), this);
         }
+        
+        this.getServer().getPluginManager().registerEvents(new SwapItemEvent(this), this);
 
-        //if 1.8 don't use this
-        if (!Bukkit.getVersion().contains("1.8")) {
-            this.getServer().getPluginManager().registerEvents(new SwapItemEvent(this), this);
-        }
 
         //if plugin ChestSort is enabled
         if (getServer().getPluginManager().isPluginEnabled("ChestSort")) {
