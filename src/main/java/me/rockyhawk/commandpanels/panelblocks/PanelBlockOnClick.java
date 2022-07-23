@@ -46,7 +46,7 @@ public class PanelBlockOnClick implements Listener {
         if(Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-blocks")).equalsIgnoreCase("false")){
             return false;
         }
-        if(!plugin.blockConfig.contains("blocks")){
+        if(!plugin.getBlockConfig().getConfig().contains("blocks")){
             return false;
         }
         if(plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP)) {
@@ -54,13 +54,13 @@ public class PanelBlockOnClick implements Listener {
             //as blocks cannot be clicked obviously if a panel is open
             return false;
         }
-        for (String configLocation : Objects.requireNonNull(plugin.blockConfig.getConfigurationSection("blocks")).getKeys(false)) {
+        for (String configLocation : Objects.requireNonNull(plugin.getBlockConfig().getConfig().getConfigurationSection("blocks")).getKeys(false)) {
             String[] loc = configLocation.split("_");
             Location tempLocation = new Location(plugin.getServer().getWorld(loc[0].replaceAll("%dash%","_")),Double.parseDouble(loc[1]),Double.parseDouble(loc[2]),Double.parseDouble(loc[3]));
             if(tempLocation.equals(location)){
-                if(plugin.blockConfig.contains("blocks." + configLocation + ".commands")){
+                if(plugin.getBlockConfig().getConfig().contains("blocks." + configLocation + ".commands")){
                     if(!isVoid) {
-                        for (String command : plugin.blockConfig.getStringList("blocks." + configLocation + ".commands")) {
+                        for (String command : plugin.getBlockConfig().getConfig().getStringList("blocks." + configLocation + ".commands")) {
                             plugin.commandTags.runCommand(null, PanelPosition.TOP, p, command);
                         }
                     }
@@ -68,7 +68,7 @@ public class PanelBlockOnClick implements Listener {
                 }
                 //uses the open= tag because it will open a panel with panel names, but also works with open= features like placeholders
                 if(!isVoid) {
-                    String command = "open= " + plugin.blockConfig.getString("blocks." + configLocation + ".panel");
+                    String command = "open= " + plugin.getBlockConfig().getConfig().getString("blocks." + configLocation + ".panel");
                     plugin.commandTags.runCommand(null, PanelPosition.TOP, p, command);
                 }
                 return true;

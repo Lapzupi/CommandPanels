@@ -55,14 +55,9 @@ public class BlocksCommand extends BaseCommand {
             }
             Location blockLocation = blockType.getLocation();
             String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replace("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
-            plugin.blockConfig.set(configValue, panelId);
-            try {
-                plugin.blockConfig.save(new File(plugin.getDataFolder() + File.separator + "blocks.yml"));
-            } catch (IOException e) {
-                plugin.debug(e, sender);
-                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Could not save to file!"));
-                return;
-            }
+            plugin.getBlockConfig().getConfig().set(configValue, panelId);
+            plugin.getBlockConfig().saveConfig();
+
             //make the material name look okay
             String coordinates = blockLocation.getBlockX() + ", " + blockLocation.getBlockY() + ", " + blockLocation.getBlockZ();
             sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.WHITE + panelId) + ChatColor.GREEN + "will now open when right clicking a block in the coordinates " + ChatColor.WHITE + coordinates);
@@ -78,18 +73,13 @@ public class BlocksCommand extends BaseCommand {
             Block blockType = sender.getTargetBlock(null, 5);
             Location blockLocation = blockType.getLocation();
             String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replace("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
-            if (!plugin.blockConfig.contains(configValue)) {
+            if (!plugin.getBlockConfig().getConfig().contains(configValue)) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
                 return;
             }
-            plugin.blockConfig.set(configValue.replace(".panel", ""), null);
-            try {
-                plugin.blockConfig.save(new File(plugin.getDataFolder() + File.separator + "blocks.yml"));
-            } catch (IOException e) {
-                plugin.debug(e, sender);
-                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Could not save to file!"));
-                return;
-            }
+            plugin.getBlockConfig().getConfig().set(configValue.replace(".panel", ""), null);
+            plugin.getBlockConfig().saveConfig();
+
             sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Panel has been removed from block."));
 
         }
@@ -97,18 +87,18 @@ public class BlocksCommand extends BaseCommand {
         @Subcommand("list")
         @CommandPermission("commandpanel.block.list")
         public void onList(final Player sender) {
-            if (!plugin.blockConfig.contains("blocks")) {
+            if (!plugin.getBlockConfig().getConfig().contains("blocks")) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag) + ChatColor.RED + "No panel blocks found.");
                 return;
             }
 
-            if (Objects.requireNonNull(plugin.blockConfig.getConfigurationSection("blocks")).getKeys(false).isEmpty()) {
+            if (Objects.requireNonNull(plugin.getBlockConfig().getConfig().getConfigurationSection("blocks")).getKeys(false).isEmpty()) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag) + ChatColor.RED + "No panel blocks found.");
                 return;
             }
             sender.sendMessage(plugin.tex.colour(plugin.tag) + ChatColor.DARK_AQUA + "Panel Block Locations:");
-            for (String location : Objects.requireNonNull(plugin.blockConfig.getConfigurationSection("blocks")).getKeys(false)) {
-                sender.sendMessage(ChatColor.GREEN + location.replace("_", " ") + ": " + ChatColor.WHITE + plugin.blockConfig.getString("blocks." + location + ".panel"));
+            for (String location : Objects.requireNonNull(plugin.getBlockConfig().getConfig().getConfigurationSection("blocks")).getKeys(false)) {
+                sender.sendMessage(ChatColor.GREEN + location.replace("_", " ") + ": " + ChatColor.WHITE + plugin.getBlockConfig().getConfig().getString("blocks." + location + ".panel"));
             }
 
         }

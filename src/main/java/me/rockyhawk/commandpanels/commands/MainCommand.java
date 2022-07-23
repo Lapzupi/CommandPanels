@@ -101,7 +101,7 @@ public class MainCommand extends BaseCommand {
             //log
         }
         plugin.getDefaultConfig().reloadConfig();
-        plugin.blockConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "blocks.yml"));
+        plugin.getBlockConfig().reloadConfig();
 
         //check for duplicates
         plugin.checkDuplicatePanel(sender);

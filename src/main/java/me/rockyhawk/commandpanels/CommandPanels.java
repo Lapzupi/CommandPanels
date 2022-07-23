@@ -19,6 +19,7 @@ import me.rockyhawk.commandpanels.commands.ImportSubCommand;
 import me.rockyhawk.commandpanels.commands.MainCommand;
 import me.rockyhawk.commandpanels.commands.PanelSubCommand;
 import me.rockyhawk.commandpanels.commandtags.CommandTags;
+import me.rockyhawk.commandpanels.config.BlockConfig;
 import me.rockyhawk.commandpanels.config.DefaultConfig;
 import me.rockyhawk.commandpanels.customcommands.CustomCommandListener;
 import me.rockyhawk.commandpanels.datamanager.DebugManager;
@@ -121,14 +122,15 @@ public class CommandPanels extends JavaPlugin {
     public final File panelsFolder = new File(this.getDataFolder() + File.separator + "panels");
 
     private DefaultConfig defaultConfig; //default
-    public YamlConfiguration blockConfig; //where panel block locations are stored
+    private BlockConfig blockConfig;
+    //public YamlConfiguration blockConfig; //where panel block locations are stored
 
     @Override
     public void onEnable() {
         getLogger().info("RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loading...");
 
         //register config files
-        this.blockConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "blocks.yml"));
+        this.setBlockConfig(new BlockConfig(this));
         panelData.dataConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "data.yml"));
         inventorySaver.inventoryConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "inventories.yml"));
 
@@ -479,5 +481,13 @@ public class CommandPanels extends JavaPlugin {
 
     public void setDefaultConfig(DefaultConfig defaultConfig) {
         this.defaultConfig = defaultConfig;
+    }
+
+    public BlockConfig getBlockConfig() {
+        return blockConfig;
+    }
+
+    public void setBlockConfig(BlockConfig blockConfig) {
+        this.blockConfig = blockConfig;
     }
 }
