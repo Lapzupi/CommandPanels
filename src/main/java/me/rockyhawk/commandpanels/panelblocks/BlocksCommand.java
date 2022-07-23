@@ -54,7 +54,7 @@ public class BlocksCommand extends BaseCommand {
                 return;
             }
             Location blockLocation = blockType.getLocation();
-            String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replaceAll("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
+            String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replace("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
             plugin.blockConfig.set(configValue, panelId);
             try {
                 plugin.blockConfig.save(new File(plugin.getDataFolder() + File.separator + "blocks.yml"));
@@ -77,7 +77,7 @@ public class BlocksCommand extends BaseCommand {
             }
             Block blockType = sender.getTargetBlock(null, 5);
             Location blockLocation = blockType.getLocation();
-            String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replaceAll("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
+            String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replace("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
             if (!plugin.blockConfig.contains(configValue)) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.nopanel")));
                 return;
