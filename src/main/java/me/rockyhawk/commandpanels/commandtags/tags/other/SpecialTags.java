@@ -132,7 +132,7 @@ public class SpecialTags implements Listener {
                     assert otherplayer != null;
                     otherplayer.teleport(new Location(otherplayer.getWorld(), x, y, z));
                 } catch (Exception tpe) {
-                    plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.notitem"));
+                    plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("config.format.notitem"));
                 }
             }
             return;

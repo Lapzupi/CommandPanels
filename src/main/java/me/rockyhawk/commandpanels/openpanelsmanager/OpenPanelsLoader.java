@@ -69,8 +69,8 @@ public class OpenPanelsLoader {
         }
         openPanels.get(playerName).setPanel(panel, position);
         openPanels.get(playerName).getPanel(position).isOpen = true;
-        if (plugin.config.contains("config.panel-snooper")) {
-            if (Objects.requireNonNull(plugin.config.getString("config.panel-snooper")).trim().equalsIgnoreCase("true")) {
+        if (plugin.getDefaultConfig().getConfig().contains("config.panel-snooper")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-snooper")).trim().equalsIgnoreCase("true")) {
                 Bukkit.getConsoleSender().sendMessage("[CommandPanels] " + playerName + " Opened " + panel.getName() + " at " + position);
             }
         }
@@ -84,8 +84,8 @@ public class OpenPanelsLoader {
         }
 
         //snooper
-        if (plugin.config.contains("config.panel-snooper")) {
-            if (Objects.requireNonNull(plugin.config.getString("config.panel-snooper")).equalsIgnoreCase("true")) {
+        if (plugin.getDefaultConfig().getConfig().contains("config.panel-snooper")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-snooper")).equalsIgnoreCase("true")) {
                 Bukkit.getConsoleSender().sendMessage("[CommandPanels] " + playerName + " Closed " + openPanels.get(playerName).getPanel(position).getName() + " at " + position);
             }
         }

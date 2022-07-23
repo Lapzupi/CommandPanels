@@ -36,7 +36,7 @@ public class HexColours {
 
     //automatically format regex to escape special characters
     public String formatRegex(String path){
-        String inputString = plugin.config.getString(path);
+        String inputString = plugin.getDefaultConfig().getConfig().getString(path);
         final String[] metaCharacters = {"\\","^","$","{","}","[","]","(",")",".","*","+","?","|","<",">","-","&","%"};
 
         for (String metaCharacter : metaCharacters) {

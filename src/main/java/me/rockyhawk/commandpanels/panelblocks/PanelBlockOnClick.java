@@ -43,7 +43,7 @@ public class PanelBlockOnClick implements Listener {
     //if isVoid is used, it will not trigger anything to happen
     public boolean blockClickEventTrigger(Location location, Player p, boolean isVoid){
         //if panel blocks are disabled return
-        if(Objects.requireNonNull(plugin.config.getString("config.panel-blocks")).equalsIgnoreCase("false")){
+        if(Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-blocks")).equalsIgnoreCase("false")){
             return false;
         }
         if(!plugin.blockConfig.contains("blocks")){

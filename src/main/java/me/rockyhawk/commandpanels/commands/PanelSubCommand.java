@@ -28,7 +28,7 @@ public class PanelSubCommand extends BaseCommand {
     public void onOpenPanel(final CommandSender sender, final String panelId, @Optional final OnlinePlayer target) {
         final Panel panel = CommandPanels.getAPI().getPanel(panelId);
         if (panel == null) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.nopanel")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
             return;
         }
 
@@ -71,7 +71,7 @@ public class PanelSubCommand extends BaseCommand {
     public void onGivePanelItem(final CommandSender sender, final String panelId, @Optional final OnlinePlayer target) {
         final Panel panel = CommandPanels.getAPI().getPanel(panelId);
         if (panel == null) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.nopanel")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
             return;
         }
 

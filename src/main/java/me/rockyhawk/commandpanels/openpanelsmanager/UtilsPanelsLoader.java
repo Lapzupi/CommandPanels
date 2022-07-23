@@ -98,8 +98,8 @@ public class UtilsPanelsLoader implements Listener {
         Bukkit.getPluginManager().callEvent(closedEvent);
 
         //do message
-        if (plugin.config.contains("config.panel-snooper")) {
-            if (Objects.requireNonNull(plugin.config.getString("config.panel-snooper")).equalsIgnoreCase("true")) {
+        if (plugin.getDefaultConfig().getConfig().contains("config.panel-snooper")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-snooper")).equalsIgnoreCase("true")) {
                 Bukkit.getConsoleSender().sendMessage("[CommandPanels] " + event.getPlayer().getName() + "'s Panel was Force Closed");
             }
         }

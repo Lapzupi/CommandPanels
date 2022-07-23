@@ -32,7 +32,7 @@ public class ExecuteOpenVoids {
             //avoid plugin glitches when sleeping
             return;
         }
-        if ((plugin.debug.isEnabled(sender) || plugin.config.getBoolean("config.auto-update-panels")) && panel.getFile() != null) {
+        if ((plugin.debug.isEnabled(sender) || plugin.getDefaultConfig().getConfig().getBoolean("config.auto-update-panels")) && panel.getFile() != null) {
             //reload the panel if debug is enabled
             panel.setConfig(YamlConfiguration.loadConfiguration(panel.getFile()));
         }
@@ -40,7 +40,7 @@ public class ExecuteOpenVoids {
             if (panel.getConfig().getString("custom-messages.perms") != null) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + panel.getConfig().getString("custom-messages.perms")));
             } else {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             }
             return;
         }
@@ -51,7 +51,7 @@ public class ExecuteOpenVoids {
                 if (panel.getConfig().getString("custom-messages.perms") != null) {
                     sender.sendMessage(plugin.tex.colour(plugin.tag + panel.getConfig().getString("custom-messages.perms")));
                 } else {
-                    sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+                    sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
                 }
                 return;
             }
@@ -85,7 +85,7 @@ public class ExecuteOpenVoids {
                     try {
                         plugin.commandTags.runCommands(panel, position, p, panel.getConfig().getStringList("commands-on-open"));
                     } catch (Exception s) {
-                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.error") + " " + "commands-on-open: " + panel.getConfig().getString("commands-on-open")));
+                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands-on-open: " + panel.getConfig().getString("commands-on-open")));
                     }
                 }
 
@@ -95,7 +95,7 @@ public class ExecuteOpenVoids {
                         try {
                             p.playSound(p.getLocation(), Sound.valueOf(Objects.requireNonNull(panel.getConfig().getString("sound-on-open")).toUpperCase()), 1F, 1F);
                         } catch (Exception s) {
-                            p.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.error") + " " + "sound-on-open: " + panel.getConfig().getString("sound-on-open")));
+                            p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "sound-on-open: " + panel.getConfig().getString("sound-on-open")));
                         }
                     }
                 }
@@ -105,7 +105,7 @@ public class ExecuteOpenVoids {
                 }
             } catch (Exception r) {
                 plugin.debug(r, null);
-                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.error")));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error")));
                 plugin.openPanels.closePanelForLoader(p.getName(), position);
                 p.closeInventory();
             }
@@ -113,7 +113,7 @@ public class ExecuteOpenVoids {
             if (panel.getConfig().getString("custom-messages.perms") != null) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + panel.getConfig().getString("custom-messages.perms")));
             } else {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             }
         }
     }
@@ -121,24 +121,24 @@ public class ExecuteOpenVoids {
     //this will give a hotbar item to a player
     public void giveHotbarItem(CommandSender sender, Player p, Panel panel, boolean sendGiveMessage) {
         if (sender.hasPermission("commandpanel.item." + panel.getConfig().getString("perm")) && panel.getConfig().contains("open-with-item")) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             return;
         }
 
         if (!panel.getConfig().contains("open-with-item")) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.noitem")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.noitem")));
             return;
         }
 
         //check for disabled worlds
         if (!plugin.panelPerms.isPanelWorldEnabled(p, panel.getConfig())) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             return;
         }
 
         //if the sender has OTHER perms, or if sendGiveMessage is false, implying it is not for another person
         if (!(sender.hasPermission("commandpanel.other") || !sendGiveMessage)) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.perms")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             return;
         }
 
@@ -152,7 +152,7 @@ public class ExecuteOpenVoids {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Item Given to " + p.getName()));
             }
         } catch (Exception r) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.notitem")));
+            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.notitem")));
         }
 
     }

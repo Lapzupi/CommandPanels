@@ -29,17 +29,17 @@ public class BuyItemTags implements Listener {
                 if (plugin.econ != null) {
                     if (plugin.econ.getBalance(e.p) >= Double.parseDouble(e.args[0])) {
                         plugin.econ.withdrawPlayer(e.p, Double.parseDouble(e.args[0]));
-                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.config.getString("purchase.currency.success")).replaceAll("%cp-args%", e.args[0]));
+                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.currency.success")).replaceAll("%cp-args%", e.args[0]));
                         giveItem(e.p, e.args);
                     } else {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.currency.failure"));
+                        plugin.tex.sendMessage(e.p, plugin.getDefaultConfig().getConfig().getString("purchase.currency.failure"));
                     }
                 } else {
                     plugin.tex.sendMessage(e.p, ChatColor.RED + "Buying Requires Vault and an Economy to work!");
                 }
             } catch (Exception buy) {
                 plugin.debug(buy, e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
+                plugin.tex.sendMessage(e.p, plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + e.name);
             }
         }
     }

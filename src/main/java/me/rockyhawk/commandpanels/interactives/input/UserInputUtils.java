@@ -27,8 +27,8 @@ public class UserInputUtils implements Listener {
     public void onPlayerChat(AsyncPlayerChatEvent e) {
         if(playerInput.containsKey(e.getPlayer())){
             e.setCancelled(true);
-            if(e.getMessage().equalsIgnoreCase(plugin.config.getString("input.input-cancel"))){
-                e.getPlayer().sendMessage(plugin.tex.colour( Objects.requireNonNull(plugin.config.getString("input.input-cancelled"))));
+            if(e.getMessage().equalsIgnoreCase(plugin.getDefaultConfig().getConfig().getString("input.input-cancel"))){
+                e.getPlayer().sendMessage(plugin.tex.colour( Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("input.input-cancelled"))));
                 playerInput.remove(e.getPlayer());
                 return;
             }
@@ -38,8 +38,8 @@ public class UserInputUtils implements Listener {
             if((playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length") != null) && (Integer.parseInt(playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length")) != -1) && (e.getMessage().length() > Integer.parseInt(playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length")))) {
                 e.getPlayer().sendMessage(plugin.tex.colour(plugin.tag + playerInput.get(e.getPlayer()).panel.getConfig().getString("custom-messages.input")));
                 return;
-            }else if(e.getMessage().length() > Integer.parseInt(plugin.config.getString("input.max-input-length")) && (Integer.parseInt(plugin.config.getString("input.max-input-length")) != -1)) {
-                e.getPlayer().sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.input")));
+            }else if(e.getMessage().length() > Integer.parseInt(plugin.getDefaultConfig().getConfig().getString("input.max-input-length")) && (Integer.parseInt(plugin.getDefaultConfig().getConfig().getString("input.max-input-length")) != -1)) {
+                e.getPlayer().sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.input")));
                 return;
             }
             //get certain words from the input
@@ -67,10 +67,10 @@ public class UserInputUtils implements Listener {
         if(panel.getConfig().contains("custom-messages.input-message")){
             inputMessages = new ArrayList<>(panel.getConfig().getStringList("custom-messages.input-message"));
         }else{
-            inputMessages = new ArrayList<>(plugin.config.getStringList("input.input-message"));
+            inputMessages = new ArrayList<>(plugin.getDefaultConfig().getConfig().getStringList("input.input-message"));
         }
         for (String temp : inputMessages) {
-            temp = temp.replace("%cp-args%", Objects.requireNonNull(plugin.config.getString("input.input-cancel")));
+            temp = temp.replace("%cp-args%", Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("input.input-cancel")));
             p.sendMessage(plugin.tex.placeholders(panel,pos,p, temp));
         }
     }

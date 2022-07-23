@@ -35,13 +35,13 @@ public class BuyCommandTags implements Listener {
                 String price = event.args[0];
                 String command = String.join(" ", Arrays.copyOfRange(event.raw, 1, event.raw.length));
                 plugin.commandTags.runCommand(event.panel, event.pos, event.p, command);
-                plugin.tex.sendMessage(event.p, plugin.config.getString("purchase.currency.success").replace("%cp-args%", price));
+                plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("purchase.currency.success").replace("%cp-args%", price));
             } else {
-                plugin.tex.sendMessage(event.p, plugin.config.getString("purchase.currency.failure"));
+                plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("purchase.currency.failure"));
             }
         } catch (Exception buyc) {
             plugin.debug(buyc, event.p);
-            plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.error") + " " + "commands: " + event.name);
+            plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + event.name);
         }
 
     }

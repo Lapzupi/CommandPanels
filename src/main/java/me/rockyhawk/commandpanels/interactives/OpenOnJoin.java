@@ -26,8 +26,8 @@ public class OpenOnJoin implements Listener {
     }
 
     private void openOnJoin(Player p, String joinType){
-        if(plugin.config.contains(joinType + p.getWorld().getName())){
-            String command = "open= " + plugin.config.getString(joinType + p.getWorld().getName());
+        if(plugin.getDefaultConfig().getConfig().contains(joinType + p.getWorld().getName())){
+            String command = "open= " + plugin.getDefaultConfig().getConfig().getString(joinType + p.getWorld().getName());
             plugin.commandTags.runCommand(null, PanelPosition.TOP,p, command);
         }
     }

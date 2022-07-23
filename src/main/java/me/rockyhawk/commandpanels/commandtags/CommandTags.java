@@ -145,13 +145,13 @@ public class CommandTags {
                     if (plugin.econ != null) {
                         if (plugin.econ.getBalance(p) >= Double.parseDouble(command.split("\\s")[1])) {
                             plugin.econ.withdrawPlayer(p, Double.parseDouble(command.split("\\s")[1]));
-                            if (plugin.config.getBoolean("purchase.currency.enable")) {
-                                plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
+                            if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.currency.enable")) {
+                                plugin.tex.sendString(p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                             }
                             return PaywallOutput.PASSED;
                         } else {
-                            if (plugin.config.getBoolean("purchase.currency.enable")) {
-                                plugin.tex.sendString(p, plugin.config.getString("purchase.currency.failure"));
+                            if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.currency.enable")) {
+                                plugin.tex.sendString(p, plugin.getDefaultConfig().getConfig().getString("purchase.currency.failure"));
                             }
                             return PaywallOutput.BLOCKED;
                         }
@@ -161,7 +161,7 @@ public class CommandTags {
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -252,18 +252,18 @@ public class CommandTags {
 
                     //send message and return
                     if (removedItem == PaywallOutput.BLOCKED) {
-                        if (plugin.config.getBoolean("purchase.item.enable")) {
-                            plugin.tex.sendString(p, plugin.tag + plugin.config.getString("purchase.item.failure"));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.item.enable")) {
+                            plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("purchase.item.failure"));
                         }
                     } else {
-                        if (plugin.config.getBoolean("purchase.item.enable")) {
-                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.item.success")).replaceAll("%cp-args%", sellItem.getType().toString()));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.item.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.item.success")).replaceAll("%cp-args%", sellItem.getType().toString()));
                         }
                     }
                     return removedItem;
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -283,19 +283,19 @@ public class CommandTags {
                             removePlayerExp(p, Integer.parseInt(command.split("\\s")[1]));
                         }
                         //if the message is empty don't send
-                        if (plugin.config.getBoolean("purchase.xp.enable")) {
-                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.xp.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.xp.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.xp.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                         }
                         return PaywallOutput.PASSED;
                     } else {
-                        if (plugin.config.getBoolean("purchase.xp.enable")) {
-                            plugin.tex.sendString(p, plugin.config.getString("purchase.xp.failure"));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.xp.enable")) {
+                            plugin.tex.sendString(p, plugin.getDefaultConfig().getConfig().getString("purchase.xp.failure"));
                         }
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -305,19 +305,19 @@ public class CommandTags {
                     if (Double.parseDouble(plugin.panelData.getUserData(p.getUniqueId(), command.split("\\s")[1])) >= Double.parseDouble(command.split("\\s")[2])) {
                         plugin.panelData.doDataMath(p.getUniqueId(), command.split("\\s")[1], "-" + plugin.tex.placeholdersNoColour(panel, PanelPosition.TOP, p, command.split("\\s")[2]));
                         //if the message is empty don't send
-                        if (plugin.config.getBoolean("purchase.data.enable")) {
-                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.config.getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.data.enable")) {
+                            plugin.tex.sendString(p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.data.success")).replaceAll("%cp-args%", command.split("\\s")[2]));
                         }
                         return PaywallOutput.PASSED;
                     } else {
-                        if (plugin.config.getBoolean("purchase.data.enable")) {
-                            plugin.tex.sendString(p, plugin.config.getString("purchase.data.failure"));
+                        if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.data.enable")) {
+                            plugin.tex.sendString(p, plugin.getDefaultConfig().getConfig().getString("purchase.data.failure"));
                         }
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.config.getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }

@@ -25,8 +25,8 @@ public class Commandpanelrefresher implements Listener {
 
     @EventHandler
     public void onPanelOpen(PanelOpenedEvent event) { //Handles when Players open inventory
-        if (plugin.config.contains("config.refresh-panels")) {
-            if (Objects.requireNonNull(plugin.config.getString("config.refresh-panels")).trim().equalsIgnoreCase("false")) {
+        if (plugin.getDefaultConfig().getConfig().contains("config.refresh-panels")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.refresh-panels")).trim().equalsIgnoreCase("false")) {
                 return;
             }
         }
@@ -36,7 +36,7 @@ public class Commandpanelrefresher implements Listener {
 
 
         //if panel has custom refresh delay
-        int tempRefreshDelay = plugin.config.getInt("config.refresh-delay");
+        int tempRefreshDelay = plugin.getDefaultConfig().getConfig().getInt("config.refresh-delay");
         if (panel.getConfig().contains("refresh-delay")) {
             tempRefreshDelay = panel.getConfig().getInt("refresh-delay");
         }
@@ -97,7 +97,7 @@ public class Commandpanelrefresher implements Listener {
                         }
                     }
                 } else {
-                    if (Objects.requireNonNull(plugin.config.getString("config.stop-sound")).trim().equalsIgnoreCase("true")) {
+                    if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.stop-sound")).trim().equalsIgnoreCase("true")) {
                         try {
                             player.stopSound(Sound.valueOf(Objects.requireNonNull(panel.getConfig().getString("sound-on-open")).toUpperCase()));
                         } catch (Exception sou) {

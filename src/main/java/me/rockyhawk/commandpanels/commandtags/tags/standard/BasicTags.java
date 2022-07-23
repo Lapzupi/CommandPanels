@@ -81,7 +81,7 @@ public class BasicTags implements Listener {
             } catch (Exception exc) {
                 event.p.setOp(isop);
                 plugin.debug(exc, event.p);
-                event.p.sendMessage(plugin.tag + plugin.tex.colour(plugin.config.getString("config.format.error") + " op=: Error in op command!"));
+                event.p.sendMessage(plugin.tag + plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.error") + " op=: Error in op command!"));
             }
             return;
         }
@@ -96,7 +96,7 @@ public class BasicTags implements Listener {
                 }
             } catch (Exception s) {
                 plugin.debug(s, event.p);
-                plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.error") + " " + "commands: " + event.args[0]);
+                plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + event.args[0]);
             }
             return;
         }
@@ -106,7 +106,7 @@ public class BasicTags implements Listener {
                 event.p.stopSound(Sound.valueOf(event.args[0]));
             } catch (Exception ss) {
                 plugin.debug(ss, event.p);
-                plugin.tex.sendMessage(event.p, plugin.config.getString("config.format.error") + " " + "commands: " + event.args[0]);
+                plugin.tex.sendMessage(event.p, plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + event.args[0]);
             }
             return;
         }

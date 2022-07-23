@@ -19,6 +19,7 @@ import me.rockyhawk.commandpanels.commands.ImportSubCommand;
 import me.rockyhawk.commandpanels.commands.MainCommand;
 import me.rockyhawk.commandpanels.commands.PanelSubCommand;
 import me.rockyhawk.commandpanels.commandtags.CommandTags;
+import me.rockyhawk.commandpanels.config.DefaultConfig;
 import me.rockyhawk.commandpanels.customcommands.CustomCommandListener;
 import me.rockyhawk.commandpanels.datamanager.DebugManager;
 import me.rockyhawk.commandpanels.datamanager.PanelDataLoader;
@@ -80,7 +81,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CommandPanels extends JavaPlugin {
-    public YamlConfiguration config;
+
     public Economy econ = null;
     public boolean openWithItem = false; //this will be true if there is a panel with open-with-item
 
@@ -88,7 +89,6 @@ public class CommandPanels extends JavaPlugin {
     public String tag = "[CommandPanels]";
 
     public final List<Player> generateMode = new ArrayList<>(); //players that are currently in generate mode
-    public List<String[]> editorInputStrings = new ArrayList<>();
     public final List<Panel> panelList = new ArrayList<>(); //contains all the panels that are included in the panels folder
     private Utils utils;
 
@@ -119,6 +119,8 @@ public class CommandPanels extends JavaPlugin {
     public final UserInputUtils inputUtils = new UserInputUtils(this);
 
     public final File panelsFolder = new File(this.getDataFolder() + File.separator + "panels");
+
+    private DefaultConfig defaultConfig; //default
     public YamlConfiguration blockConfig; //where panel block locations are stored
 
     @Override
@@ -129,35 +131,16 @@ public class CommandPanels extends JavaPlugin {
         this.blockConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "blocks.yml"));
         panelData.dataConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "data.yml"));
         inventorySaver.inventoryConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder() + File.separator + "inventories.yml"));
-        this.config = YamlConfiguration.loadConfiguration(new File(this.getDataFolder() + File.separator + "config.yml"));
 
-        //save the config.yml file
-        File configFile = new File(this.getDataFolder() + File.separator + "config.yml");
-        if (!configFile.exists()) {
-            //generate a new config file from internal resources
-            try {
-                FileConfiguration configFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("config.yml")));
-                configFileConfiguration.save(configFile);
-                this.config = YamlConfiguration.loadConfiguration(new File(this.getDataFolder() + File.separator + "config.yml"));
-            } catch (IOException var11) {
-                getLogger().warning("WARNING: Could not save the config file!");
-            }
-        } else {
-            //check if the config file has any missing elements
-            try {
-                YamlConfiguration configFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("config.yml")));
-                this.config.addDefaults(configFileConfiguration);
-                this.config.options().copyDefaults(true);
-                this.config.save(new File(this.getDataFolder() + File.separator + "config.yml"));
-            } catch (IOException var10) {
-                getLogger().warning("WARNING: Could not save the config file!");
-            }
-        }
+        this.setDefaultConfig(new DefaultConfig(this));
+        this.getDefaultConfig().saveDefaultConfig();
+
+
 
         //setup class files
         this.setupEconomy();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        Metrics metrics = new Metrics(this,5097);
+        Metrics metrics = new Metrics(this, 5097);
         PaperCommandManager paperCommandManager = new PaperCommandManager(this);
         paperCommandManager.registerCommand(new MainCommand(this));
         paperCommandManager.registerCommand(new DataSubCommand(this));
@@ -182,29 +165,29 @@ public class CommandPanels extends JavaPlugin {
         commandTags.registerBuiltInTags();
 
         //if refresh-panels set to false, don't load this
-        if (Objects.requireNonNull(config.getString("config.refresh-panels")).equalsIgnoreCase("true")) {
+        if (Objects.requireNonNull(getDefaultConfig().getConfig().getString("config.refresh-panels")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new Commandpanelrefresher(this), this);
         }
 
         //if custom-commands set to false, don't load this
-        if (Objects.requireNonNull(config.getString("config.custom-commands")).equalsIgnoreCase("true")) {
+        if (Objects.requireNonNull(getDefaultConfig().getConfig().getString("config.custom-commands")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new CustomCommandListener(this), this);
         }
 
         //if hotbar-items set to false, don't load this
-        if (Objects.requireNonNull(config.getString("config.hotbar-items")).equalsIgnoreCase("true")) {
+        if (Objects.requireNonNull(getDefaultConfig().getConfig().getString("config.hotbar-items")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new UtilsOpenWithItem(this), this);
         }
 
         //if ingame-editor set to false, don't load this
-        if (Objects.requireNonNull(config.getString("config.ingame-editor")).equalsIgnoreCase("true")) {
+        if (Objects.requireNonNull(getDefaultConfig().getConfig().getString("config.ingame-editor")).equalsIgnoreCase("true")) {
             this.getServer().getPluginManager().registerEvents(new CPEventHandler(this), this);
             Objects.requireNonNull(this.getCommand("commandpaneledit")).setTabCompleter(new CommandPanelsEditorTabComplete(this)); //todo
             Objects.requireNonNull(this.getCommand("commandpaneledit")).setExecutor(new CommandPanelsEditorCommand(this));
         }
 
         //if panel-blocks set to false, don't load this
-        if (Objects.requireNonNull(config.getString("config.panel-blocks")).equalsIgnoreCase("true")) {
+        if (Objects.requireNonNull(getDefaultConfig().getConfig().getString("config.panel-blocks")).equalsIgnoreCase("true")) {
             paperCommandManager.registerCommand(new BlocksCommand(this));
             this.getServer().getPluginManager().registerEvents(new PanelBlockOnClick(this), this);
         }
@@ -255,7 +238,7 @@ public class CommandPanels extends JavaPlugin {
         metrics.addCustomChart(new SingleLineChart("panels_amount", panelList::size));
 
         //get tag
-        tag = tex.colour(config.getString("config.format.tag"));
+        tag = tex.colour(getDefaultConfig().getConfig().getString("config.format.tag"));
 
         getLogger().info("RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loaded!");
     }
@@ -377,14 +360,14 @@ public class CommandPanels extends JavaPlugin {
     //look through all files in all folders
     public void fileNamesFromDirectory(File directory) {
         File[] filesArray = directory.listFiles();
-        if(filesArray == null)
+        if (filesArray == null)
             return;
-        
+
         List<File> fileList = Arrays.stream(filesArray)
                 .filter(name -> new File(directory + File.separator + name).isDirectory() || name.getName().endsWith(".yml") || name.getName().endsWith(".yaml")).collect(Collectors.toList());
 
-        for(File file: fileList) {
-            if(file.isDirectory()) {
+        for (File file : fileList) {
+            if (file.isDirectory()) {
                 fileNamesFromDirectory(file);
             }
 
@@ -423,50 +406,8 @@ public class CommandPanels extends JavaPlugin {
         }
     }
 
-    public void helpMessage(CommandSender p) {
-        p.sendMessage(tex.colour(tag + ChatColor.GREEN + "Commands:"));
-        p.sendMessage(ChatColor.GOLD + "/cp <panel> [player:item] [player] " + ChatColor.WHITE + "Open a command panel.");
-        if (p.hasPermission("commandpanel.reload")) {
-            p.sendMessage(ChatColor.GOLD + "/cpr " + ChatColor.WHITE + "Reloads plugin config.");
-        }
-        if (p.hasPermission("commandpanel.generate")) {
-            p.sendMessage(ChatColor.GOLD + "/cpg <rows> " + ChatColor.WHITE + "Generate GUI from popup menu.");
-        }
-        if (p.hasPermission("commandpanel.version")) {
-            p.sendMessage(ChatColor.GOLD + "/cpv " + ChatColor.WHITE + "Display the current version.");
-        }
-        if (p.hasPermission("commandpanel.update")) {
-            p.sendMessage(ChatColor.GOLD + "/cpv latest " + ChatColor.WHITE + "Download the latest update upon server reload/restart.");
-            p.sendMessage(ChatColor.GOLD + "/cpv [version:cancel] " + ChatColor.WHITE + "Download an update upon server reload/restart.");
-        }
-        if (p.hasPermission("commandpanel.import")) {
-            p.sendMessage(ChatColor.GOLD + "/cpi [file name] [URL] " + ChatColor.WHITE + "Downloads a panel from a raw link online.");
-        }
-        if (p.hasPermission("commandpanel.list")) {
-            p.sendMessage(ChatColor.GOLD + "/cpl " + ChatColor.WHITE + "Lists the currently loaded panels.");
-        }
-        if (p.hasPermission("commandpanel.data")) {
-            p.sendMessage(ChatColor.GOLD + "/cpdata " + ChatColor.WHITE + "Change panel data for a user.");
-        }
-        if (p.hasPermission("commandpanel.debug")) {
-            p.sendMessage(ChatColor.GOLD + "/cpd " + ChatColor.WHITE + "Enable and Disable debug mode globally.");
-        }
-        if (p.hasPermission("commandpanel.block.add")) {
-            p.sendMessage(ChatColor.GOLD + "/cpb add <panel> " + ChatColor.WHITE + "Add panel to a block being looked at.");
-        }
-        if (p.hasPermission("commandpanel.block.remove")) {
-            p.sendMessage(ChatColor.GOLD + "/cpb remove " + ChatColor.WHITE + "Removes any panel assigned to a block looked at.");
-        }
-        if (p.hasPermission("commandpanel.block.list")) {
-            p.sendMessage(ChatColor.GOLD + "/cpb list " + ChatColor.WHITE + "List blocks that will open panels.");
-        }
-        if (p.hasPermission("commandpanel.edit")) {
-            p.sendMessage(ChatColor.GOLD + "/cpe <panel> " + ChatColor.WHITE + "Edit a panel with the Panel Editor.");
-        }
-    }
-
     public final Map<String, Color> colourCodes = ImmutableMap.<String, Color>builder()
-            .put("AQUA",Color.AQUA)
+            .put("AQUA", Color.AQUA)
             .put("BLUE", Color.BLUE)
             .put("GRAY", Color.GRAY)
             .put("GREEN", Color.GREEN)
@@ -530,5 +471,13 @@ public class CommandPanels extends JavaPlugin {
 
     public Utils getUtils() {
         return utils;
+    }
+
+    public DefaultConfig getDefaultConfig() {
+        return defaultConfig;
+    }
+
+    public void setDefaultConfig(DefaultConfig defaultConfig) {
+        this.defaultConfig = defaultConfig;
     }
 }

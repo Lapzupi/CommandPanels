@@ -33,7 +33,7 @@ public class BlocksCommand extends BaseCommand {
         @Subcommand("add")
         @CommandPermission("commandpanel.block.add")
         public void onAdd(final Player sender, final String panelId) {
-            if (Objects.requireNonNull(plugin.config.getString("config.panel-blocks")).equalsIgnoreCase("false")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-blocks")).equalsIgnoreCase("false")) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Panel blocks disabled in config!"));
                 return;
             }
@@ -45,7 +45,7 @@ public class BlocksCommand extends BaseCommand {
                 }
             }
             if (!foundPanel) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.nopanel")));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
                 return;
             }
             Block blockType = sender.getTargetBlock(null, 5);
@@ -71,7 +71,7 @@ public class BlocksCommand extends BaseCommand {
         @Subcommand("remove")
         @CommandPermission("commandpanel.block.remove")
         public void onRemove(final Player sender) {
-            if (Objects.requireNonNull(plugin.config.getString("config.panel-blocks")).equalsIgnoreCase("false")) {
+            if (Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.panel-blocks")).equalsIgnoreCase("false")) {
                 sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Panel blocks disabled in config!"));
                 return;
             }
@@ -79,7 +79,7 @@ public class BlocksCommand extends BaseCommand {
             Location blockLocation = blockType.getLocation();
             String configValue = "blocks." + Objects.requireNonNull(blockLocation.getWorld()).getName().replace("_", "%dash%") + "_" + blockLocation.getBlockX() + "_" + blockLocation.getBlockY() + "_" + blockLocation.getBlockZ() + ".panel";
             if (!plugin.blockConfig.contains(configValue)) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.nopanel")));
+                sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
                 return;
             }
             plugin.blockConfig.set(configValue.replace(".panel", ""), null);

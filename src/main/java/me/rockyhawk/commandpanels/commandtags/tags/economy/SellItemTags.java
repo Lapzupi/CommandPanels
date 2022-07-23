@@ -31,17 +31,17 @@ public class SellItemTags implements Listener {
                 if (plugin.econ != null) {
                     boolean sold = removeItem(e.p, e.args);
                     if (!sold) {
-                        plugin.tex.sendMessage(e.p, plugin.config.getString("purchase.item.failure"));
+                        plugin.tex.sendMessage(e.p, plugin.getDefaultConfig().getConfig().getString("purchase.item.failure"));
                     } else {
                         plugin.econ.depositPlayer(e.p, Double.parseDouble(e.args[0]));
-                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.config.getString("purchase.item.success")).replaceAll("%cp-args%", e.args[1]));
+                        plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.item.success")).replaceAll("%cp-args%", e.args[1]));
                     }
                 } else {
                     plugin.tex.sendMessage(e.p, ChatColor.RED + "Selling Requires Vault and an Economy to work!");
                 }
             } catch (Exception sell) {
                 plugin.debug(sell,e.p);
-                plugin.tex.sendMessage(e.p, plugin.config.getString("config.format.error") + " " + "commands: " + e.name);
+                plugin.tex.sendMessage(e.p, plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + e.name);
             }
         }
     }

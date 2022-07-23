@@ -49,8 +49,8 @@ public class Placeholders {
     //returns primary then secondary {[start,end],[start,end]}
     public String[] getPlaceholderEnds(Panel panel, boolean primary) {
         List<String[]> values = new ArrayList<>();
-        values.add(new String[]{plugin.config.getString("placeholders.primary.start"), plugin.config.getString("placeholders.primary.end")});
-        values.add(new String[]{plugin.config.getString("placeholders.secondary.start"), plugin.config.getString("placeholders.secondary.end")});
+        values.add(new String[]{plugin.getDefaultConfig().getConfig().getString("placeholders.primary.start"), plugin.getDefaultConfig().getConfig().getString("placeholders.primary.end")});
+        values.add(new String[]{plugin.getDefaultConfig().getConfig().getString("placeholders.secondary.start"), plugin.getDefaultConfig().getConfig().getString("placeholders.secondary.end")});
         if (panel != null) {
             if (panel.getConfig().isSet("placeholders")) {
                 if (panel.getConfig().isSet("placeholders.primary")) {
@@ -119,7 +119,7 @@ public class Placeholders {
         if (identifier.startsWith("server-")) {
             String ip_port = identifier.replace("server-", "");
             try (Socket s = new Socket()) {
-                s.connect(new InetSocketAddress(ip_port.split(":")[0], (int) Double.parseDouble(ip_port.split(":")[1])), plugin.config.getInt("config.server-ping-timeout"));
+                s.connect(new InetSocketAddress(ip_port.split(":")[0], (int) Double.parseDouble(ip_port.split(":")[1])), plugin.getDefaultConfig().getConfig().getInt("config.server-ping-timeout"));
                 return "true";
             } catch (IOException ex) {
                 return "false";
@@ -322,7 +322,7 @@ public class Placeholders {
                 String playerLocation = identifier.replace("player-online-", "");
                 Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
                 if (Double.parseDouble(playerLocation) > playerFind.length) {
-                    return plugin.tex.colour(Objects.requireNonNull(plugin.config.getString("config.format.offline")));
+                    return plugin.tex.colour(Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("config.format.offline")));
                 } else {
                     return playerFind[(int) (Double.parseDouble(playerLocation) - 1)].getName();
                 }

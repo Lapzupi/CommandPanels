@@ -100,8 +100,7 @@ public class MainCommand extends BaseCommand {
         } catch (IOException e) {
             //log
         }
-
-        plugin.config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "config.yml"));
+        plugin.getDefaultConfig().reloadConfig();
         plugin.blockConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "blocks.yml"));
 
         //check for duplicates
@@ -111,14 +110,14 @@ public class MainCommand extends BaseCommand {
         plugin.hotbar.reloadHotbarSlots();
 
         //reload tag
-        plugin.tag = plugin.tex.colour(plugin.config.getString("config.format.tag"));
+        plugin.tag = plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.tag"));
 
         //add custom commands to commands.yml
-        if (plugin.config.getBoolean("config.auto-register-commands")) {
+        if (plugin.getDefaultConfig().getConfig().getBoolean("config.auto-register-commands")) {
             registerCommands();
         }
 
-        sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.config.getString("config.format.reload")));
+        sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.reload")));
     }
 
     public void registerCommands() {
