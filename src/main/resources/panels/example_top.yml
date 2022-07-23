@@ -1,6 +1,7 @@
 # |------------------------------------------------------------------------
 # |                       CommandPanels Example File
-# |                            By RockyHawk v3.1
+# |                    Generated with V${project.version}
+# |                              By RockyHawk
 # | https://www.spigotmc.org/resources/command-panels-custom-guis.67788/
 # |------------------------------------------------------------------------
 panels:

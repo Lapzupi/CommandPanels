@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class MainCommand extends BaseCommand {
 
     @Subcommand("version")
     @CommandPermission("commandpanel.version")
-    public void onVersion(final CommandSender sender) {
+    public void onVersion(final @NotNull CommandSender sender) {
         //version command
         sender.sendMessage(plugin.tex.colour(plugin.tag));
         sender.sendMessage(ChatColor.GREEN + "This Version   " + ChatColor.GRAY + plugin.getDescription().getVersion());

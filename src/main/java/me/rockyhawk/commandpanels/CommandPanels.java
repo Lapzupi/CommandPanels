@@ -138,7 +138,6 @@ public class CommandPanels extends JavaPlugin {
         this.getDefaultConfig().saveDefaultConfig();
 
 
-
         //setup class files
         this.setupEconomy();
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -205,23 +204,20 @@ public class CommandPanels extends JavaPlugin {
         //save the example_top.yml file and the template.yml file
         if (!this.panelsFolder.exists()) {
             try {
-                if (legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
-                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/exampleLegacy.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "example.yml"));
-                } else {
-                    //top
-                    FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_top.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_top.yml"));
-                    //middle one
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_one.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_one.yml"));
-                    //middle two
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_two.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_two.yml"));
-                    //bottom
-                    exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_bottom.yml")));
-                    exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_bottom.yml"));
-                }
+
+                //top
+                FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_top.yml")));
+                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_top.yml"));
+                //middle one
+                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_one.yml")));
+                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_one.yml"));
+                //middle two
+                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_two.yml")));
+                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_two.yml"));
+                //bottom
+                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_bottom.yml")));
+                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_bottom.yml"));
+
                 FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/template.yml")));
                 templateFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/template.yml"));
             } catch (IOException var11) {

@@ -32,7 +32,7 @@
         <bstats.version>3.0.0</bstats.version>
         <itemsadder.api.version>3.0.0</itemsadder.api.version>
         <asynchttp.version>2.12.3</asynchttp.version>
-        <kraken.core.version>1.5.3</kraken.core.version>
+        <kraken.core.version>1.5.5</kraken.core.version>
     </properties>
 
     <repositories>
