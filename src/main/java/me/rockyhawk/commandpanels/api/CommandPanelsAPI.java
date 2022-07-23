@@ -6,6 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +21,13 @@ public class CommandPanelsAPI {
     }
 
     //returns true if the player has a panel open
-    public boolean isPanelOpen(Player p) {
-        return plugin.openPanels.hasPanelOpen(p.getName(), PanelPosition.TOP);
+    public boolean isPanelOpen(@NotNull Player player) {
+        return plugin.openPanels.hasPanelOpen(player.getName(), PanelPosition.TOP);
     }
 
     //get the name of a panel currently open, will return null if panel is not open
-    public Panel getOpenPanel(Player p, PanelPosition position) {
-        return plugin.openPanels.getOpenPanel(p.getName(), position);
+    public Panel getOpenPanel(@NotNull Player player, PanelPosition position) {
+        return plugin.openPanels.getOpenPanel(player.getName(), position);
     }
 
     //loaded panels in folder
@@ -35,7 +36,7 @@ public class CommandPanelsAPI {
     }
 
     //import panel into folder
-    public void addPanel(Panel panel) throws IOException {
+    public void addPanel(@NotNull Panel panel) throws IOException {
         File addedFile = new File(plugin.panelsFolder + File.separator + panel.getName() + ".yml");
         YamlConfiguration newYaml = new YamlConfiguration();
         if (panel.getConfig().contains("panels")) {
