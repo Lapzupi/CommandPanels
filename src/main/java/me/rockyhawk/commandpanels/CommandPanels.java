@@ -77,6 +77,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CommandPanels extends JavaPlugin {
     public YamlConfiguration config;
@@ -207,7 +208,7 @@ public class CommandPanels extends JavaPlugin {
             paperCommandManager.registerCommand(new BlocksCommand(this));
             this.getServer().getPluginManager().registerEvents(new PanelBlockOnClick(this), this);
         }
-        
+
         this.getServer().getPluginManager().registerEvents(new SwapItemEvent(this), this);
 
 
@@ -375,29 +376,25 @@ public class CommandPanels extends JavaPlugin {
 
     //look through all files in all folders
     public void fileNamesFromDirectory(File directory) {
-        for (String fileName : Objects.requireNonNull(directory.list())) {
-            if (new File(directory + File.separator + fileName).isDirectory()) {
-                fileNamesFromDirectory(new File(directory + File.separator + fileName));
-                continue;
+        File[] filesArray = directory.listFiles();
+        if(filesArray == null)
+            return;
+        
+        List<File> fileList = Arrays.stream(filesArray)
+                .filter(name -> new File(directory + File.separator + name).isDirectory() || name.getName().endsWith(".yml") || name.getName().endsWith(".yaml")).collect(Collectors.toList());
+
+        for(File file: fileList) {
+            if(file.isDirectory()) {
+                fileNamesFromDirectory(file);
             }
 
-            try {
-                int ind = fileName.lastIndexOf(".");
-                if (!fileName.substring(ind).equalsIgnoreCase(".yml") && !fileName.substring(ind).equalsIgnoreCase(".yaml")) {
-                    continue;
-                }
-            } catch (Exception ex) {
+            if (!checkPanels(YamlConfiguration.loadConfiguration(file))) {
+                this.getServer().getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " Error in: " + file.getName());
                 continue;
             }
-
-            //check before adding the file to commandpanels
-            if (!checkPanels(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)))) {
-                this.getServer().getConsoleSender().sendMessage("[CommandPanels]" + ChatColor.RED + " Error in: " + fileName);
-                continue;
-            }
-            for (String tempName : Objects.requireNonNull(YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)).getConfigurationSection("panels")).getKeys(false)) {
-                panelList.add(new Panel(new File((directory + File.separator + fileName)), tempName));
-                if (YamlConfiguration.loadConfiguration(new File(directory + File.separator + fileName)).contains("panels." + tempName + ".open-with-item")) {
+            for (String tempName : Objects.requireNonNull(YamlConfiguration.loadConfiguration(file).getConfigurationSection("panels")).getKeys(false)) {
+                panelList.add(new Panel(file, tempName));
+                if (YamlConfiguration.loadConfiguration(file).contains("panels." + tempName + ".open-with-item")) {
                     openWithItem = true;
                 }
             }

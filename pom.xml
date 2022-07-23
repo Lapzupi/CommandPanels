@@ -32,6 +32,7 @@
         <bstats.version>3.0.0</bstats.version>
         <itemsadder.api.version>3.0.0</itemsadder.api.version>
         <asynchttp.version>2.12.3</asynchttp.version>
+        <kraken.core.version>1.5.3</kraken.core.version>
     </properties>
 
     <repositories>
@@ -164,6 +165,12 @@
             <artifactId>async-http-client</artifactId>
             <version>${asynchttp.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sarhatabaot</groupId>
+            <artifactId>KrakenCore</artifactId>
+            <version>${kraken.core.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
