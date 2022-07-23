@@ -19,7 +19,7 @@ import me.rockyhawk.commandpanels.commands.ImportSubCommand;
 import me.rockyhawk.commandpanels.commands.MainCommand;
 import me.rockyhawk.commandpanels.commands.PanelSubCommand;
 import me.rockyhawk.commandpanels.commandtags.CommandTags;
-import me.rockyhawk.commandpanels.customcommands.Commandpanelcustom;
+import me.rockyhawk.commandpanels.customcommands.CustomCommandListener;
 import me.rockyhawk.commandpanels.datamanager.DebugManager;
 import me.rockyhawk.commandpanels.datamanager.PanelDataLoader;
 import me.rockyhawk.commandpanels.editor.CPEventHandler;
@@ -188,7 +188,7 @@ public class CommandPanels extends JavaPlugin {
 
         //if custom-commands set to false, don't load this
         if (Objects.requireNonNull(config.getString("config.custom-commands")).equalsIgnoreCase("true")) {
-            this.getServer().getPluginManager().registerEvents(new Commandpanelcustom(this), this);
+            this.getServer().getPluginManager().registerEvents(new CustomCommandListener(this), this);
         }
 
         //if hotbar-items set to false, don't load this
