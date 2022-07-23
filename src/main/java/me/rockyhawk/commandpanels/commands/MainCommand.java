@@ -114,7 +114,7 @@ public class MainCommand extends BaseCommand {
         plugin.tag = plugin.tex.colour(plugin.config.getString("config.format.tag"));
 
         //add custom commands to commands.yml
-        if (plugin.config.getString("config.auto-register-commands").equalsIgnoreCase("true")) {
+        if (plugin.config.getBoolean("config.auto-register-commands")) {
             registerCommands();
         }
 
