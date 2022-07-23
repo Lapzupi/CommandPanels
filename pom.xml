@@ -5,8 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.rockyhawk.commandpanels</groupId>
-    <artifactId>CommandPanels</artifactId>
+    <artifactId>command-panels</artifactId>
     <version>3.18.1.1-L</version>
+
+    <name>CommandPanels</name>
+    <description>Fully Custom GUIs. Make your Server Professional.</description>
 
     <properties>
         <java.version>17</java.version>
@@ -28,6 +31,7 @@
         <nbtapi.version>2.10.0</nbtapi.version>
         <bstats.version>3.0.0</bstats.version>
         <itemsadder.api.version>3.0.0</itemsadder.api.version>
+        <asynchttp.version>2.12.3</asynchttp.version>
     </properties>
 
     <repositories>
@@ -154,6 +158,12 @@
             <artifactId>bstats-bukkit</artifactId>
             <version>${bstats.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.asynchttpclient</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>${asynchttp.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
