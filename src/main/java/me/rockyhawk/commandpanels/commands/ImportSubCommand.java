@@ -5,18 +5,23 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
 import me.rockyhawk.commandpanels.CommandPanels;
+import org.asynchttpclient.AsyncCompletionHandler;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Dsl;
+import org.asynchttpclient.HttpResponseBodyPart;
+import org.asynchttpclient.Response;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
-//todo make async https://www.baeldung.com/java-download-file
 @CommandAlias(Alias.BASE_COMMAND_ALIAS)
 public class ImportSubCommand extends BaseCommand {
     private final CommandPanels plugin;
@@ -31,30 +36,36 @@ public class ImportSubCommand extends BaseCommand {
         new BukkitRunnable() {
             @Override
             public void run() {
-                downloadPanel(sender, url, fileName);
-                plugin.reloadPanelFiles();
+                try {
+                    downloadPanelAsync(url, fileName);
+                    sender.sendMessage(plugin.tag + ChatColor.GREEN + "Finished downloading.");
+                    plugin.reloadPanelFiles();
+                } catch (IOException e) {
+                    sender.sendMessage(plugin.tag + ChatColor.RED + "Could not download panel.");
+                    plugin.getLogger().log(Level.SEVERE,"",e);
+                }
             }
         }.runTask(plugin);
     }
 
 
-    private void downloadPanel(CommandSender sender, String url, String fileName) {
-        try {
-            URL fileUrl = new URL(url);
-            try (BufferedInputStream in = new BufferedInputStream(fileUrl.openStream())) {
-                try (FileOutputStream fout = new FileOutputStream(new File(plugin.panelsFolder, fileName + ".yml"))) {
-                    byte[] data = new byte[1024];
+    private void downloadPanelAsync(final String url,final String fileName) throws IOException {
+        try (FileOutputStream stream = new FileOutputStream(new File(plugin.panelsFolder, fileName + ".yml"))) {
+            try (AsyncHttpClient client = Dsl.asyncHttpClient()) {
 
-                    int count;
-                    while ((count = in.read(data, 0, 1024)) != -1) {
-                        fout.write(data, 0, count);
+                client.prepareGet(url).execute(new AsyncCompletionHandler<FileOutputStream>() {
+                    @Override
+                    public State onBodyPartReceived(final HttpResponseBodyPart bodyPart) throws Exception {
+                        stream.getChannel().write(bodyPart.getBodyByteBuffer());
+                        return State.CONTINUE;
                     }
-                    sender.sendMessage(plugin.tag + ChatColor.GREEN + "Finished downloading.");
-                }
+
+                    @Override
+                    public FileOutputStream onCompleted(final Response response) throws Exception {
+                        return stream;
+                    }
+                });
             }
-        } catch (IOException e) {
-            sender.sendMessage(plugin.tag + ChatColor.RED + "Could not download panel.");
-            plugin.getLogger().log(Level.SEVERE,"",e);
         }
     }
 }
