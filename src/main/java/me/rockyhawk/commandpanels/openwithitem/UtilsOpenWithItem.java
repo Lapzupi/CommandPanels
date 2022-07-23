@@ -26,7 +26,7 @@ public class UtilsOpenWithItem implements Listener {
     @EventHandler
     public void onAnyClick(InventoryClickEvent e) {
         //on a click when in any inventory
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }
@@ -53,7 +53,7 @@ public class UtilsOpenWithItem implements Listener {
     @EventHandler
     public void onPlayerUse(PlayerInteractEvent e) {
         //item right clicked only (not left because that causes issues when things are interacted with)
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }
@@ -83,7 +83,7 @@ public class UtilsOpenWithItem implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }
@@ -113,7 +113,7 @@ public class UtilsOpenWithItem implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent e) {
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }
@@ -127,7 +127,7 @@ public class UtilsOpenWithItem implements Listener {
 
     @EventHandler
     public void onInteractEntity(PlayerInteractEntityEvent e) {
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }

@@ -20,14 +20,14 @@ public class CreateText {
     //CommandPanels send message function with all placeholders
     public void sendMessage(Panel panel, PanelPosition position, Player p, String message) {
         if (!message.equals("")) {
-            p.sendMessage(placeholders(panel, position, p, plugin.tag + message));
+            p.sendMessage(placeholders(panel, position, p, plugin.getTag() + message));
         }
     }
 
     //CommandPanels send message function
     public void sendMessage(Player p, String message) {
         if (!message.equals("")) {
-            p.sendMessage(colour(plugin.tag + message));
+            p.sendMessage(colour(plugin.getTag() + message));
         }
     }
 

@@ -97,7 +97,7 @@ public class Placeholders {
                 return position.toString();
             }
 
-            case ("tag") -> plugin.tex.colour(plugin.tag);
+            case ("tag") -> plugin.tex.colour(plugin.getTag());
 
         }
 
@@ -333,9 +333,9 @@ public class Placeholders {
         }
 
         try {
-            if (plugin.econ != null) {
+            if (plugin.getEcon() != null) {
                 if (identifier.equals("player-balance")) {
-                    return String.valueOf(Math.round(plugin.econ.getBalance(p)));
+                    return String.valueOf(Math.round(plugin.getEcon().getBalance(p)));
                 }
             }
         } catch (Exception place) {

@@ -27,7 +27,7 @@ public class UtilsChestSortEvent implements Listener {
             return;
         }
         //hotbar item code below
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }

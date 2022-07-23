@@ -142,9 +142,9 @@ public class CommandTags {
             case "paywall=" -> {
                 //if player uses paywall= [price]
                 try {
-                    if (plugin.econ != null) {
-                        if (plugin.econ.getBalance(p) >= Double.parseDouble(command.split("\\s")[1])) {
-                            plugin.econ.withdrawPlayer(p, Double.parseDouble(command.split("\\s")[1]));
+                    if (plugin.getEcon() != null) {
+                        if (plugin.getEcon().getBalance(p) >= Double.parseDouble(command.split("\\s")[1])) {
+                            plugin.getEcon().withdrawPlayer(p, Double.parseDouble(command.split("\\s")[1]));
                             if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.currency.enable")) {
                                 plugin.tex.sendString(p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.currency.success")).replaceAll("%cp-args%", command.split("\\s")[1]));
                             }
@@ -156,12 +156,12 @@ public class CommandTags {
                             return PaywallOutput.BLOCKED;
                         }
                     } else {
-                        plugin.tex.sendString(p, plugin.tag + ChatColor.RED + "Paying Requires Vault and an Economy to work!");
+                        plugin.tex.sendString(p, plugin.getTag() + ChatColor.RED + "Paying Requires Vault and an Economy to work!");
                         return PaywallOutput.BLOCKED;
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -253,7 +253,7 @@ public class CommandTags {
                     //send message and return
                     if (removedItem == PaywallOutput.BLOCKED) {
                         if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.item.enable")) {
-                            plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("purchase.item.failure"));
+                            plugin.tex.sendString(p, plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("purchase.item.failure"));
                         }
                     } else {
                         if (plugin.getDefaultConfig().getConfig().getBoolean("purchase.item.enable")) {
@@ -263,7 +263,7 @@ public class CommandTags {
                     return removedItem;
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -295,7 +295,7 @@ public class CommandTags {
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }
@@ -317,7 +317,7 @@ public class CommandTags {
                     }
                 } catch (Exception buyc) {
                     plugin.debug(buyc, p);
-                    plugin.tex.sendString(p, plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
+                    plugin.tex.sendString(p, plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " " + "commands: " + command);
                     return PaywallOutput.BLOCKED;
                 }
             }

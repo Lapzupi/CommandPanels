@@ -36,7 +36,7 @@ public class MainCommand extends BaseCommand {
     @CommandPermission("commandpanel.version")
     public void onVersion(final @NotNull CommandSender sender) {
         //version command
-        sender.sendMessage(plugin.tex.colour(plugin.tag));
+        sender.sendMessage(plugin.tex.colour(plugin.getTag()));
         sender.sendMessage(ChatColor.GREEN + "This Version   " + ChatColor.GRAY + plugin.getDescription().getVersion());
         sender.sendMessage(ChatColor.GRAY + "-------------------");
         sender.sendMessage(ChatColor.GREEN + "Developer " + ChatColor.GRAY + "RockyHawk");
@@ -48,18 +48,18 @@ public class MainCommand extends BaseCommand {
     public void onDebug(final CommandSender sender) {
         if (!(sender instanceof Player player)) {
             plugin.debug.consoleDebug = !plugin.debug.consoleDebug;
-            sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Global Debug Mode: " + plugin.debug.consoleDebug));
+            sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.GREEN + "Global Debug Mode: " + plugin.debug.consoleDebug));
             return;
         }
 
         if (plugin.debug.isEnabled(player)) {
             plugin.debug.debugSet.remove(player);
-            sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Personal Debug Mode Disabled!"));
+            sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.GREEN + "Personal Debug Mode Disabled!"));
             return;
         }
 
         plugin.debug.debugSet.add(player);
-        sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.GREEN + "Personal Debug Mode Enabled!"));
+        sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.GREEN + "Personal Debug Mode Enabled!"));
     }
 
     @Subcommand("generate")
@@ -70,10 +70,10 @@ public class MainCommand extends BaseCommand {
         if(rows == null) {
             if (this.plugin.generateMode.contains(player)) {
                 this.plugin.generateMode.remove(player);
-                player.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.GREEN + "Generate Mode Disabled!"));
+                player.sendMessage(plugin.tex.colour( plugin.getTag() + ChatColor.GREEN + "Generate Mode Disabled!"));
             } else {
                 this.plugin.generateMode.add(player);
-                player.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.GREEN + "Generate Mode Enabled!"));
+                player.sendMessage(plugin.tex.colour( plugin.getTag() + ChatColor.GREEN + "Generate Mode Enabled!"));
             }
             return;
         }
@@ -111,14 +111,14 @@ public class MainCommand extends BaseCommand {
         plugin.hotbar.reloadHotbarSlots();
 
         //reload tag
-        plugin.tag = plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.tag"));
+        plugin.setTag(plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.tag")));
 
         //add custom commands to commands.yml
         if (plugin.getDefaultConfig().getConfig().getBoolean("config.auto-register-commands")) {
             registerCommands();
         }
 
-        sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.reload")));
+        sender.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.reload")));
     }
 
     public void registerCommands() {

@@ -81,7 +81,7 @@ public class BasicTags implements Listener {
             } catch (Exception exc) {
                 event.p.setOp(isop);
                 plugin.debug(exc, event.p);
-                event.p.sendMessage(plugin.tag + plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.error") + " op=: Error in op command!"));
+                event.p.sendMessage(plugin.getTag() + plugin.tex.colour(plugin.getDefaultConfig().getConfig().getString("config.format.error") + " op=: Error in op command!"));
             }
             return;
         }
@@ -123,7 +123,7 @@ public class BasicTags implements Listener {
                 Component parsedText = SerializerUtils.serializeText(String.join(" ", event.args));
                 player.sendMessage(parsedText);
             } else {
-                plugin.tex.sendString(event.p, plugin.tag + ChatColor.RED + "MiniMessage-Feature needs Paper 1.18 or newer to work!");
+                plugin.tex.sendString(event.p, plugin.getTag() + ChatColor.RED + "MiniMessage-Feature needs Paper 1.18 or newer to work!");
             }
         }
     }

@@ -28,7 +28,7 @@ public class PanelSubCommand extends BaseCommand {
     public void onOpenPanel(final CommandSender sender, final String panelId, @Optional final OnlinePlayer target) {
         final Panel panel = CommandPanels.getAPI().getPanel(panelId);
         if (panel == null) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
+            sender.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
             return;
         }
 
@@ -37,7 +37,7 @@ public class PanelSubCommand extends BaseCommand {
                 && !sender.hasPermission("commandpanel.panel.bypass.nocommand")) {
             //do not allow command with noCommand, console is an exception
             if (sender.hasPermission("commandpanel.panel.notify.nocommand")) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + "Cannot open this panel since it has no-command enabled."));
+                sender.sendMessage(plugin.tex.colour(plugin.getTag() + "Cannot open this panel since it has no-command enabled."));
             }
             return;
         }
@@ -45,7 +45,7 @@ public class PanelSubCommand extends BaseCommand {
         //Console
         if (!(sender instanceof Player player)) {
             if (target == null) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "You must specify a target player when executing from console."));
+                sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.RED + "You must specify a target player when executing from console."));
                 return;
             }
 
@@ -71,14 +71,14 @@ public class PanelSubCommand extends BaseCommand {
     public void onGivePanelItem(final CommandSender sender, final String panelId, @Optional final OnlinePlayer target) {
         final Panel panel = CommandPanels.getAPI().getPanel(panelId);
         if (panel == null) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
+            sender.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.nopanel")));
             return;
         }
 
         //Console
         if (!(sender instanceof Player player)) {
             if (target == null) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "You must specify a target player when executing from console."));
+                sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.RED + "You must specify a target player when executing from console."));
                 return;
             }
 

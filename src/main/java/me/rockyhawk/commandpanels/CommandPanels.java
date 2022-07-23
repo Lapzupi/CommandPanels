@@ -1,6 +1,7 @@
 package me.rockyhawk.commandpanels;
 
 import co.aikar.commands.PaperCommandManager;
+import com.github.sarhatabaot.kraken.core.config.ConfigFile;
 import com.google.common.collect.ImmutableMap;
 import io.lumine.mythic.lib.api.item.NBTItem;
 import me.rockyhawk.commandpanels.api.CommandPanelsAPI;
@@ -57,7 +58,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -83,11 +83,11 @@ import java.util.stream.Collectors;
 
 public class CommandPanels extends JavaPlugin {
 
-    public Economy econ = null;
-    public boolean openWithItem = false; //this will be true if there is a panel with open-with-item
+    private Economy econ = null;
+    private boolean openWithItem = false; //this will be true if there is a panel with open-with-item
 
     //initialise the tag
-    public String tag = "[CommandPanels]";
+    private String tag = "[CommandPanels]";
 
     public final List<Player> generateMode = new ArrayList<>(); //players that are currently in generate mode
     public final List<Panel> panelList = new ArrayList<>(); //contains all the panels that are included in the panels folder
@@ -203,26 +203,11 @@ public class CommandPanels extends JavaPlugin {
 
         //save the example_top.yml file and the template.yml file
         if (!this.panelsFolder.exists()) {
-            try {
-
-                //top
-                FileConfiguration exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_top.yml")));
-                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_top.yml"));
-                //middle one
-                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_one.yml")));
-                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_one.yml"));
-                //middle two
-                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_middle_two.yml")));
-                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_middle_two.yml"));
-                //bottom
-                exampleFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/example_bottom.yml")));
-                exampleFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/example_bottom.yml"));
-
-                FileConfiguration templateFileConfiguration = YamlConfiguration.loadConfiguration(getReaderFromStream(this.getResource("panels/template.yml")));
-                templateFileConfiguration.save(new File(this.panelsFolder + File.separator + "panels/template.yml"));
-            } catch (IOException var11) {
-                getLogger().warning("WARNING: Could not save the example file!");
-            }
+            new ConfigFile<>(this, "panels" + File.separator, "example_top.yml", "panels").saveDefaultConfig();
+            new ConfigFile<>(this, "panels" + File.separator, "example_middle_one.yml", "panels").saveDefaultConfig();
+            new ConfigFile<>(this, "panels" + File.separator, "example_middle_two.yml", "panels").saveDefaultConfig();
+            new ConfigFile<>(this, "panels" + File.separator, "example_bottom.yml", "panels").saveDefaultConfig();
+            new ConfigFile<>(this, "panels" + File.separator, "template.yml", "panels").saveDefaultConfig();
         }
 
         //load panelFiles
@@ -236,7 +221,7 @@ public class CommandPanels extends JavaPlugin {
         metrics.addCustomChart(new SingleLineChart("panels_amount", panelList::size));
 
         //get tag
-        tag = tex.colour(getDefaultConfig().getConfig().getString("config.format.tag"));
+        setTag(tex.colour(getDefaultConfig().getConfig().getString("config.format.tag")));
 
         getLogger().info("RockyHawk's CommandPanels v" + this.getDescription().getVersion() + " Plugin Loaded!");
     }
@@ -281,10 +266,7 @@ public class CommandPanels extends JavaPlugin {
                 renamedMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 renamedMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                 renamedMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                //HIDE_DYE was added into 1.17 api
-                if (legacy.LOCAL_VERSION.greaterThanOrEqualTo(MinecraftVersions.v1_17)) {
-                    renamedMeta.addItemFlags(ItemFlag.HIDE_DYE);
-                }
+                renamedMeta.addItemFlags(ItemFlag.HIDE_DYE);
             }
             if (customName != null) {
                 renamedMeta.setDisplayName(customName);
@@ -320,7 +302,7 @@ public class CommandPanels extends JavaPlugin {
             return;
         }
 
-        this.econ = rsp.getProvider();
+        this.setEcon(rsp.getProvider());
     }
 
     public boolean checkPanels(YamlConfiguration temp) {
@@ -345,7 +327,7 @@ public class CommandPanels extends JavaPlugin {
             ArrayList<String> opanelsTemp = new ArrayList<>();
             for (String tempName : apanels) {
                 if (opanelsTemp.contains(tempName)) {
-                    sender.sendMessage(tex.colour(tag) + ChatColor.RED + " Error duplicate panel name: " + tempName);
+                    sender.sendMessage(tex.colour(getTag()) + ChatColor.RED + " Error duplicate panel name: " + tempName);
                     return false;
                 }
                 opanelsTemp.add(tempName);
@@ -376,7 +358,7 @@ public class CommandPanels extends JavaPlugin {
             for (String tempName : Objects.requireNonNull(YamlConfiguration.loadConfiguration(file).getConfigurationSection("panels")).getKeys(false)) {
                 panelList.add(new Panel(file, tempName));
                 if (YamlConfiguration.loadConfiguration(file).contains("panels." + tempName + ".open-with-item")) {
-                    openWithItem = true;
+                    setOpenWithItem(true);
                 }
             }
         }
@@ -384,7 +366,7 @@ public class CommandPanels extends JavaPlugin {
 
     public void reloadPanelFiles() {
         panelList.clear();
-        openWithItem = false;
+        setOpenWithItem(false);
         //load panel files
         fileNamesFromDirectory(panelsFolder);
     }
@@ -397,7 +379,7 @@ public class CommandPanels extends JavaPlugin {
             }
         } else {
             if (debug.isEnabled(p)) {
-                p.sendMessage(tag + ChatColor.DARK_RED + "Check the console for a detailed error.");
+                p.sendMessage(getTag() + ChatColor.DARK_RED + "Check the console for a detailed error.");
                 getServer().getConsoleSender().sendMessage(ChatColor.DARK_RED + "[CommandPanels] The plugin has generated a debug error, find the error below");
                 e.printStackTrace();
             }
@@ -485,5 +467,29 @@ public class CommandPanels extends JavaPlugin {
 
     public void setBlockConfig(BlockConfig blockConfig) {
         this.blockConfig = blockConfig;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public boolean isOpenWithItem() {
+        return openWithItem;
+    }
+
+    public void setOpenWithItem(boolean openWithItem) {
+        this.openWithItem = openWithItem;
+    }
+
+    public Economy getEcon() {
+        return econ;
+    }
+
+    public void setEcon(Economy econ) {
+        this.econ = econ;
     }
 }

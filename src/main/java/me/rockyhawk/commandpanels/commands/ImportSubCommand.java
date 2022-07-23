@@ -14,12 +14,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Level;
 
 @CommandAlias(Alias.BASE_COMMAND_ALIAS)
@@ -38,10 +35,10 @@ public class ImportSubCommand extends BaseCommand {
             public void run() {
                 try {
                     downloadPanelAsync(url, fileName);
-                    sender.sendMessage(plugin.tag + ChatColor.GREEN + "Finished downloading.");
+                    sender.sendMessage(plugin.getTag() + ChatColor.GREEN + "Finished downloading.");
                     plugin.reloadPanelFiles();
                 } catch (IOException e) {
-                    sender.sendMessage(plugin.tag + ChatColor.RED + "Could not download panel.");
+                    sender.sendMessage(plugin.getTag() + ChatColor.RED + "Could not download panel.");
                     plugin.getLogger().log(Level.SEVERE,"",e);
                 }
             }

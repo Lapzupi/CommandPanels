@@ -26,9 +26,9 @@ public class BuyItemTags implements Listener {
             e.commandTagUsed();
             //if player uses buy= it will be eg. buy= <price> <item> <amount of item> <ID>
             try {
-                if (plugin.econ != null) {
-                    if (plugin.econ.getBalance(e.p) >= Double.parseDouble(e.args[0])) {
-                        plugin.econ.withdrawPlayer(e.p, Double.parseDouble(e.args[0]));
+                if (plugin.getEcon() != null) {
+                    if (plugin.getEcon().getBalance(e.p) >= Double.parseDouble(e.args[0])) {
+                        plugin.getEcon().withdrawPlayer(e.p, Double.parseDouble(e.args[0]));
                         plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.currency.success")).replaceAll("%cp-args%", e.args[0]));
                         giveItem(e.p, e.args);
                     } else {

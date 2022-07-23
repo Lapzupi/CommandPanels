@@ -10,8 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-
 @CommandAlias(Alias.BASE_COMMAND_ALIAS)
 public class DataSubCommand extends BaseCommand {
     protected CommandPanels plugin;
@@ -28,7 +26,7 @@ public class DataSubCommand extends BaseCommand {
         public void onClear(final CommandSender sender, final Player target, @Optional final SilentTag silentTag) {
             plugin.panelData.clearData(plugin.panelData.getOffline(target.getName()));
             if (silentTag == SilentTag.NONE) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag
+                sender.sendMessage(plugin.tex.colour(plugin.getTag()
                         + ChatColor.GREEN + "Cleared all data for "
                         + ChatColor.WHITE + target.getName()));
             }
@@ -38,7 +36,7 @@ public class DataSubCommand extends BaseCommand {
         public void onRemove(final CommandSender sender, final Player target, final String dataPoint, @Optional final SilentTag silentTag) {
             plugin.panelData.delUserData(plugin.panelData.getOffline(target.getName()), dataPoint);
             if (silentTag == SilentTag.NONE) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag
+                sender.sendMessage(plugin.tex.colour(plugin.getTag()
                         + ChatColor.GREEN + "Removed "
                         + ChatColor.WHITE + dataPoint
                         + ChatColor.GREEN + " from "
@@ -48,7 +46,7 @@ public class DataSubCommand extends BaseCommand {
 
         @Subcommand("get")
         public void onGet(final CommandSender sender, final Player target, final String dataPoint) {
-            sender.sendMessage(plugin.tex.colour(plugin.tag
+            sender.sendMessage(plugin.tex.colour(plugin.getTag()
                     + ChatColor.GREEN + "Value of data is "
                     + ChatColor.WHITE + plugin.panelData.getUserData(plugin.panelData.getOffline(target.getName()), dataPoint)));
         }
@@ -57,7 +55,7 @@ public class DataSubCommand extends BaseCommand {
         public void onSet(final CommandSender sender, final Player target, final String dataPoint, final String dataValue, @Optional final SilentTag silentTag){
             plugin.panelData.setUserData(plugin.panelData.getOffline(target.getName()), dataPoint, dataValue, true);
             if (silentTag == SilentTag.NONE) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag
+                sender.sendMessage(plugin.tex.colour(plugin.getTag()
                         + ChatColor.GREEN + "Set "
                         + ChatColor.WHITE + dataPoint
                         + ChatColor.GREEN + " to "
@@ -70,7 +68,7 @@ public class DataSubCommand extends BaseCommand {
             //for add command
             plugin.panelData.setUserData(plugin.panelData.getOffline(target.getName()), dataPoint, dataValue, false);
             if (silentTag == SilentTag.NONE) {
-                sender.sendMessage(plugin.tex.colour(plugin.tag
+                sender.sendMessage(plugin.tex.colour(plugin.getTag()
                         + ChatColor.GREEN + "Set "
                         + ChatColor.WHITE + dataPoint
                         + ChatColor.GREEN + " to "

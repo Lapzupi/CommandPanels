@@ -19,11 +19,11 @@ public class CommandPanelsEditorCommand implements CommandExecutor{
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!sender.hasPermission("commandpanel.edit")){
-            sender.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
+            sender.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.perms")));
             return true;
         }
         if(!(sender instanceof Player)) {
-            sender.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.RED + "Please execute command as a Player!"));
+            sender.sendMessage(plugin.tex.colour( plugin.getTag() + ChatColor.RED + "Please execute command as a Player!"));
             return true;
         }
         Player p = (Player)sender;
@@ -44,7 +44,7 @@ public class CommandPanelsEditorCommand implements CommandExecutor{
                 }
             }
         }
-        sender.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + "Usage: /cpe <panel>"));
+        sender.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.RED + "Usage: /cpe <panel>"));
         return true;
     }
 }

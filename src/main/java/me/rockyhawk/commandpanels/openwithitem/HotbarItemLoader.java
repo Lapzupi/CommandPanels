@@ -114,7 +114,7 @@ public class HotbarItemLoader {
         for this to take effect. I don't want to delete the item on the wrong world
         because then it might overwrite one of their actual slots upon rejoining the enabled world.
          */
-        if (!plugin.openWithItem) {
+        if (!plugin.isOpenWithItem()) {
             //if none of the panels have open-with-item
             return;
         }

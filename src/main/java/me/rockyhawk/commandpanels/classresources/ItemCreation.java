@@ -49,7 +49,7 @@ public class ItemCreation {
             }
         } catch (NullPointerException e) {
             plugin.debug(e, p);
-            p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: could not load material!"));
+            p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: could not load material!"));
             return null;
         }
         ItemStack s = null;
@@ -137,7 +137,7 @@ public class ItemCreation {
                                 assert meta != null;
                                 meta.setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(skullname)));
                             } catch (Exception var23) {
-                                p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: cps= self"));
+                                p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: cps= self"));
                                 plugin.debug(var23, p);
                             }
                         } else {
@@ -152,7 +152,7 @@ public class ItemCreation {
                         s = plugin.customHeads.getCustomHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
                     }
                 } catch (Exception var32) {
-                    p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " head material: Could not load skull"));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " head material: Could not load skull"));
                     plugin.debug(var32, p);
                 }
             }
@@ -170,11 +170,11 @@ public class ItemCreation {
                     try {
                         s = api.getItemHead(matraw.split("\\s")[1].trim());
                     } catch (Exception var22) {
-                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " hdb: could not load skull!"));
+                        p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " hdb: could not load skull!"));
                         plugin.debug(var22, p);
                     }
                 } else {
-                    p.sendMessage(plugin.tex.colour(plugin.tag + "Download HeadDatabaseHook from Spigot to use this feature!"));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + "Download HeadDatabaseHook from Spigot to use this feature!"));
                 }
             }
 
@@ -223,10 +223,10 @@ public class ItemCreation {
                         meta.setMapView(map);
                         s.setItemMeta(meta);
                     } else {
-                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " map: File not found."));
+                        p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " map: File not found."));
                     }
                 } catch (Exception map) {
-                    p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " map: " + itemSection.getString("map")));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " map: " + itemSection.getString("map")));
                     plugin.debug(map, p);
                 }
             }
@@ -256,7 +256,7 @@ public class ItemCreation {
                         s.setItemMeta(enchantMeta);
                     }
                 } catch (Exception ench) {
-                    p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " enchanted: " + itemSection.getString("enchanted")));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " enchanted: " + itemSection.getString("enchanted")));
                     plugin.debug(ench, p);
                 }
             }
@@ -308,7 +308,7 @@ public class ItemCreation {
                 } catch (Exception er) {
                     //don't colour the armor
                     plugin.debug(er, p);
-                    p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " leatherarmor: " + itemSection.getString("leatherarmor")));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " leatherarmor: " + itemSection.getString("leatherarmor")));
                 }
             }
 
@@ -339,7 +339,7 @@ public class ItemCreation {
                 } catch (Exception er) {
                     //don't add the effect
                     plugin.debug(er, p);
-                    p.sendMessage(plugin.tex.colour(plugin.tag + ChatColor.RED + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " potion: " + itemSection.getString("potion")));
+                    p.sendMessage(plugin.tex.colour(plugin.getTag() + ChatColor.RED + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " potion: " + itemSection.getString("potion")));
                 }
             }
             if (itemSection.contains("damage")) {
@@ -350,7 +350,7 @@ public class ItemCreation {
                         s.setDurability(Short.parseShort(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("damage")))));
                     } catch (Exception e) {
                         plugin.debug(e, p);
-                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
+                        p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
                     }
                 } else {
                     if (itemSection.getString("damage").equalsIgnoreCase("-1")) {
@@ -366,7 +366,7 @@ public class ItemCreation {
                         s.setItemMeta(itemDamage);
                     } catch (Exception e) {
                         plugin.debug(e, p);
-                        p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
+                        p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
                     }
                 }
             }
@@ -381,7 +381,7 @@ public class ItemCreation {
             }
         } catch (IllegalArgumentException | NullPointerException var33) {
             plugin.debug(var33, p);
-            p.sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: " + itemSection.getString("material")));
+            p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: " + itemSection.getString("material")));
             return null;
         }
         plugin.setName(panel, s, itemSection.getString("name"), itemSection.getStringList("lore"), p, placeholders, colours, hideAttributes);

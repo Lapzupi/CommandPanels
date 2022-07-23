@@ -36,10 +36,10 @@ public class UserInputUtils implements Listener {
 
             
             if((playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length") != null) && (Integer.parseInt(playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length")) != -1) && (e.getMessage().length() > Integer.parseInt(playerInput.get(e.getPlayer()).panel.getConfig().getString("max-input-length")))) {
-                e.getPlayer().sendMessage(plugin.tex.colour(plugin.tag + playerInput.get(e.getPlayer()).panel.getConfig().getString("custom-messages.input")));
+                e.getPlayer().sendMessage(plugin.tex.colour(plugin.getTag() + playerInput.get(e.getPlayer()).panel.getConfig().getString("custom-messages.input")));
                 return;
             }else if(e.getMessage().length() > Integer.parseInt(plugin.getDefaultConfig().getConfig().getString("input.max-input-length")) && (Integer.parseInt(plugin.getDefaultConfig().getConfig().getString("input.max-input-length")) != -1)) {
-                e.getPlayer().sendMessage(plugin.tex.colour(plugin.tag + plugin.getDefaultConfig().getConfig().getString("config.format.input")));
+                e.getPlayer().sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.input")));
                 return;
             }
             //get certain words from the input

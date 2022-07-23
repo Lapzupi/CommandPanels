@@ -24,13 +24,13 @@ public class BuyCommandTags implements Listener {
         event.commandTagUsed();
         //if player uses buycommand [price] [command]
         try {
-            if (plugin.econ == null) {
+            if (plugin.getEcon() == null) {
                 plugin.tex.sendMessage(event.p, ChatColor.RED + "Buying Requires Vault and an Economy to work!");
                 return;
             }
 
-            if (plugin.econ.getBalance(event.p) >= Double.parseDouble(event.args[0])) {
-                plugin.econ.withdrawPlayer(event.p, Double.parseDouble(event.args[0]));
+            if (plugin.getEcon().getBalance(event.p) >= Double.parseDouble(event.args[0])) {
+                plugin.getEcon().withdrawPlayer(event.p, Double.parseDouble(event.args[0]));
                 //execute command under here
                 String price = event.args[0];
                 String command = String.join(" ", Arrays.copyOfRange(event.raw, 1, event.raw.length));

@@ -28,12 +28,12 @@ public class SellItemTags implements Listener {
             e.commandTagUsed();
             //if player uses sell= it will be eg. sell= <cashback> <item> <amount of item> [enchanted:KNOCKBACK:1] [potion:JUMP]
             try {
-                if (plugin.econ != null) {
+                if (plugin.getEcon() != null) {
                     boolean sold = removeItem(e.p, e.args);
                     if (!sold) {
                         plugin.tex.sendMessage(e.p, plugin.getDefaultConfig().getConfig().getString("purchase.item.failure"));
                     } else {
-                        plugin.econ.depositPlayer(e.p, Double.parseDouble(e.args[0]));
+                        plugin.getEcon().depositPlayer(e.p, Double.parseDouble(e.args[0]));
                         plugin.tex.sendMessage(e.p, Objects.requireNonNull(plugin.getDefaultConfig().getConfig().getString("purchase.item.success")).replaceAll("%cp-args%", e.args[1]));
                     }
                 } else {
@@ -76,7 +76,7 @@ public class SellItemTags implements Listener {
                         PotionMeta potionMeta = (PotionMeta) itm.getItemMeta();
                         assert potionMeta != null;
                         if (!potionMeta.getBasePotionData().getType().name().equalsIgnoreCase(potion)) {
-                            p.sendMessage(plugin.tex.colour( plugin.tag + ChatColor.RED + "Your item has the wrong potion effect"));
+                            p.sendMessage(plugin.tex.colour( plugin.getTag() + ChatColor.RED + "Your item has the wrong potion effect"));
                             return false;
                         }
                     }
