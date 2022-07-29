@@ -41,7 +41,7 @@ public class ItemCreation {
         plugin = pl;
     }
 
-    private String convertMaterialToCpsFormat(final String material) {
+    private @NotNull String convertMaterialToCpsFormat(final @NotNull String material) {
         int start = material.indexOf("%cp-player-online-");
         int end = material.lastIndexOf("-find%");
         String playerLocation = material.substring(start, end).replace("%cp-player-online-", "");
@@ -52,9 +52,8 @@ public class ItemCreation {
 
         return material.replace(material.substring(start, end) + "-find%", "cpo= " + playerFind[Integer.parseInt(playerLocation) - 1].getName());
         //cpo is to get the skull of the player online. It is fine since the plugin knows the player is online
-
     }
-    
+
     public ItemStack makeItemFromConfig(Panel panel, PanelPosition position, ConfigurationSection itemSection, Player p, boolean placeholders, boolean colours, boolean addNBT) {
         String material = plugin.tex.placeholdersNoColour(panel, position, p, itemSection.getString("material"));
         try {
@@ -68,37 +67,36 @@ public class ItemCreation {
         }
         ItemStack itemStack = null;
         boolean hideAttributes = true;
-        String mat;
-        String matraw;
-        String skullname;
+
         //this will convert the %cp-player-online-1-find% into cps= NAME
         if (material.contains("%cp-player-online-")) {
             material = convertMaterialToCpsFormat(material);
         }
         try {
+            String mat;
+            String skullname;
             //can be changed
             mat = material.toUpperCase();
             //cannot be changed (raw)
-            matraw = material;
             //generate item stack normally
             boolean normalCreation = true;
             //name of head/skull if used
             skullname = "no skull";
 
-            if (matraw.split("\\s")[0].equalsIgnoreCase("cps=") || matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
+            if (material.split("\\s")[0].equalsIgnoreCase("cps=") || material.split("\\s")[0].equalsIgnoreCase("cpo=")) {
                 skullname = p.getUniqueId().toString();
                 mat = String.valueOf(Material.PLAYER_HEAD);
             }
 
-            if (matraw.split("\\s")[0].equalsIgnoreCase("hdb=")) {
+            if (material.split("\\s")[0].equalsIgnoreCase("hdb=")) {
                 skullname = "hdb";
                 mat = String.valueOf(Material.PLAYER_HEAD);
             }
 
             //creates custom MMOItems items
-            if (matraw.split("\\s")[0].equalsIgnoreCase("mmo=") && plugin.getServer().getPluginManager().isPluginEnabled("MMOItems")) {
-                String itemType = matraw.split("\\s")[1];
-                String itemID = matraw.split("\\s")[2];
+            if (material.split("\\s")[0].equalsIgnoreCase("mmo=") && plugin.getServer().getPluginManager().isPluginEnabled("MMOItems")) {
+                String itemType = material.split("\\s")[1];
+                String itemID = material.split("\\s")[2];
                 ItemManager itemManager = MMOItems.plugin.getItems();
                 MMOItem mmoitem = itemManager.getMMOItem(MMOItems.plugin.getTypes().get(itemType), itemID);
                 itemStack = mmoitem.newBuilder().build();
@@ -106,11 +104,11 @@ public class ItemCreation {
             }
 
             //creates a written book item
-            if (matraw.split("\\s")[0].equalsIgnoreCase("book=")) {
+            if (material.split("\\s")[0].equalsIgnoreCase("book=")) {
                 itemStack = new ItemStack(Material.WRITTEN_BOOK);
                 BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
-                bookMeta.setTitle(matraw.split("\\s")[1]);
-                bookMeta.setAuthor(matraw.split("\\s")[1]);
+                bookMeta.setTitle(material.split("\\s")[1]);
+                bookMeta.setAuthor(material.split("\\s")[1]);
                 List<String> bookLines = plugin.tex.placeholdersList(panel, position, p, itemSection.getStringList("write"), true);
                 String result = bookLines.stream().map(String::valueOf).collect(Collectors.joining("\n" + ChatColor.RESET, "", ""));
                 bookMeta.setPages(result);
@@ -119,8 +117,8 @@ public class ItemCreation {
             }
 
             //creates item from custom-items section of panel
-            if (matraw.split("\\s")[0].equalsIgnoreCase("cpi=")) {
-                itemStack = makeCustomItemFromConfig(panel, position, panel.getConfig().getConfigurationSection("custom-item." + matraw.split("\\s")[1]), p, true, true, true);
+            if (material.split("\\s")[0].equalsIgnoreCase("cpi=")) {
+                itemStack = makeCustomItemFromConfig(panel, position, panel.getConfig().getConfigurationSection("custom-item." + material.split("\\s")[1]), p, true, true, true);
                 normalCreation = false;
             }
 
@@ -128,10 +126,10 @@ public class ItemCreation {
                 itemStack = new ItemStack(Objects.requireNonNull(Material.matchMaterial(mat)), 1);
             }
 
-            if (!skullname.equals("no skull") && !skullname.equals("hdb") && !matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
+            if (!skullname.equals("no skull") && !skullname.equals("hdb") && !material.split("\\s")[0].equalsIgnoreCase("cpo=")) {
                 try {
                     SkullMeta meta;
-                    if (matraw.split("\\s")[1].equalsIgnoreCase("self")) {
+                    if (material.split("\\s")[1].equalsIgnoreCase("self")) {
                         //if cps= self
                         meta = (SkullMeta) itemStack.getItemMeta();
                         if (!plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
@@ -146,22 +144,22 @@ public class ItemCreation {
                             meta.setOwner(p.getName());
                         }
                         itemStack.setItemMeta(meta);
-                    } else if (plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]).length() <= 16) {
+                    } else if (plugin.tex.placeholdersNoColour(panel, position, p, material.split("\\s")[1]).length() <= 16) {
                         //if cps= username
-                        itemStack = plugin.customHeads.getPlayerHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
+                        itemStack = plugin.customHeads.getPlayerHead(plugin.tex.placeholdersNoColour(panel, position, p, material.split("\\s")[1]));
                     } else {
                         //custom data cps= base64
-                        itemStack = plugin.customHeads.getCustomHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
+                        itemStack = plugin.customHeads.getCustomHead(plugin.tex.placeholdersNoColour(panel, position, p, material.split("\\s")[1]));
                     }
                 } catch (Exception var32) {
                     p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " head material: Could not load skull"));
                     plugin.debug(var32, p);
                 }
             }
-            if (!skullname.equals("no skull") && matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
+            if (!skullname.equals("no skull") && material.split("\\s")[0].equalsIgnoreCase("cpo=")) {
                 SkullMeta cpoMeta = (SkullMeta) itemStack.getItemMeta();
                 assert cpoMeta != null;
-                cpoMeta.setOwningPlayer(Bukkit.getOfflinePlayer(Objects.requireNonNull(Bukkit.getPlayer(matraw.split("\\s")[1])).getUniqueId()));
+                cpoMeta.setOwningPlayer(Bukkit.getOfflinePlayer(Objects.requireNonNull(Bukkit.getPlayer(material.split("\\s")[1])).getUniqueId()));
                 itemStack.setItemMeta(cpoMeta);
             }
             if (skullname.equals("hdb")) {
@@ -170,7 +168,7 @@ public class ItemCreation {
                     api = new HeadDatabaseAPI();
 
                     try {
-                        itemStack = api.getItemHead(matraw.split("\\s")[1].trim());
+                        itemStack = api.getItemHead(material.split("\\s")[1].trim());
                     } catch (Exception var22) {
                         p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " hdb: could not load skull!"));
                         plugin.debug(var22, p);
