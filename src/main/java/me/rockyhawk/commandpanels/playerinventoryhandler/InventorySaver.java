@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InventorySaver implements Listener {
-    public YamlConfiguration inventoryConfig;
+    public YamlConfiguration inventoryConfig; //todo config
 
     final CommandPanels plugin;
     public InventorySaver(CommandPanels pl) {

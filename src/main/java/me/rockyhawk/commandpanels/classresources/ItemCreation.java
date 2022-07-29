@@ -41,6 +41,20 @@ public class ItemCreation {
         plugin = pl;
     }
 
+    private String convertMaterialToCpsFormat(final String material) {
+        int start = material.indexOf("%cp-player-online-");
+        int end = material.lastIndexOf("-find%");
+        String playerLocation = material.substring(start, end).replace("%cp-player-online-", "");
+        Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
+        if (Integer.parseInt(playerLocation) > playerFind.length) {
+            return material.replace(material.substring(start, end) + "-find%", "cps= " + plugin.getDefaultConfig().getConfig().getString("config.format.offlineHeadValue"));
+        }
+
+        return material.replace(material.substring(start, end) + "-find%", "cpo= " + playerFind[Integer.parseInt(playerLocation) - 1].getName());
+        //cpo is to get the skull of the player online. It is fine since the plugin knows the player is online
+
+    }
+    
     public ItemStack makeItemFromConfig(Panel panel, PanelPosition position, ConfigurationSection itemSection, Player p, boolean placeholders, boolean colours, boolean addNBT) {
         String material = plugin.tex.placeholdersNoColour(panel, position, p, itemSection.getString("material"));
         try {
@@ -52,23 +66,14 @@ public class ItemCreation {
             p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: could not load material!"));
             return null;
         }
-        ItemStack s = null;
+        ItemStack itemStack = null;
         boolean hideAttributes = true;
         String mat;
         String matraw;
         String skullname;
         //this will convert the %cp-player-online-1-find% into cps= NAME
         if (material.contains("%cp-player-online-")) {
-            int start = material.indexOf("%cp-player-online-");
-            int end = material.lastIndexOf("-find%");
-            String playerLocation = material.substring(start, end).replace("%cp-player-online-", "");
-            Player[] playerFind = Bukkit.getOnlinePlayers().toArray(new Player[0]);
-            if (Integer.parseInt(playerLocation) > playerFind.length) {
-                material = material.replace(material.substring(start, end) + "-find%", "cps= " + plugin.getDefaultConfig().getConfig().getString("config.format.offlineHeadValue"));
-            } else {
-                material = material.replace(material.substring(start, end) + "-find%", "cpo= " + playerFind[Integer.parseInt(playerLocation) - 1].getName());
-                //cpo is to get the skull of the player online. It is fine since the plugin knows the player is online
-            }
+            material = convertMaterialToCpsFormat(material);
         }
         try {
             //can be changed
@@ -79,10 +84,7 @@ public class ItemCreation {
             boolean normalCreation = true;
             //name of head/skull if used
             skullname = "no skull";
-            short id = 0;
-            if (itemSection.contains("ID")) {
-                id = Short.parseShort(itemSection.getString("ID"));
-            }
+
             if (matraw.split("\\s")[0].equalsIgnoreCase("cps=") || matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
                 skullname = p.getUniqueId().toString();
                 mat = String.valueOf(Material.PLAYER_HEAD);
@@ -99,31 +101,31 @@ public class ItemCreation {
                 String itemID = matraw.split("\\s")[2];
                 ItemManager itemManager = MMOItems.plugin.getItems();
                 MMOItem mmoitem = itemManager.getMMOItem(MMOItems.plugin.getTypes().get(itemType), itemID);
-                s = mmoitem.newBuilder().build();
+                itemStack = mmoitem.newBuilder().build();
                 normalCreation = false;
             }
 
             //creates a written book item
             if (matraw.split("\\s")[0].equalsIgnoreCase("book=")) {
-                s = new ItemStack(Material.WRITTEN_BOOK);
-                BookMeta bookMeta = (BookMeta) s.getItemMeta();
+                itemStack = new ItemStack(Material.WRITTEN_BOOK);
+                BookMeta bookMeta = (BookMeta) itemStack.getItemMeta();
                 bookMeta.setTitle(matraw.split("\\s")[1]);
                 bookMeta.setAuthor(matraw.split("\\s")[1]);
                 List<String> bookLines = plugin.tex.placeholdersList(panel, position, p, itemSection.getStringList("write"), true);
                 String result = bookLines.stream().map(String::valueOf).collect(Collectors.joining("\n" + ChatColor.RESET, "", ""));
                 bookMeta.setPages(result);
-                s.setItemMeta(bookMeta);
+                itemStack.setItemMeta(bookMeta);
                 normalCreation = false;
             }
 
             //creates item from custom-items section of panel
             if (matraw.split("\\s")[0].equalsIgnoreCase("cpi=")) {
-                s = makeCustomItemFromConfig(panel, position, panel.getConfig().getConfigurationSection("custom-item." + matraw.split("\\s")[1]), p, true, true, true);
+                itemStack = makeCustomItemFromConfig(panel, position, panel.getConfig().getConfigurationSection("custom-item." + matraw.split("\\s")[1]), p, true, true, true);
                 normalCreation = false;
             }
 
             if (normalCreation) {
-                s = new ItemStack(Objects.requireNonNull(Material.matchMaterial(mat)), 1, id);
+                itemStack = new ItemStack(Objects.requireNonNull(Material.matchMaterial(mat)), 1);
             }
 
             if (!skullname.equals("no skull") && !skullname.equals("hdb") && !matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
@@ -131,7 +133,7 @@ public class ItemCreation {
                     SkullMeta meta;
                     if (matraw.split("\\s")[1].equalsIgnoreCase("self")) {
                         //if cps= self
-                        meta = (SkullMeta) s.getItemMeta();
+                        meta = (SkullMeta) itemStack.getItemMeta();
                         if (!plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
                             try {
                                 assert meta != null;
@@ -143,13 +145,13 @@ public class ItemCreation {
                         } else {
                             meta.setOwner(p.getName());
                         }
-                        s.setItemMeta(meta);
+                        itemStack.setItemMeta(meta);
                     } else if (plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]).length() <= 16) {
                         //if cps= username
-                        s = plugin.customHeads.getPlayerHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
+                        itemStack = plugin.customHeads.getPlayerHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
                     } else {
                         //custom data cps= base64
-                        s = plugin.customHeads.getCustomHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
+                        itemStack = plugin.customHeads.getCustomHead(plugin.tex.placeholdersNoColour(panel, position, p, matraw.split("\\s")[1]));
                     }
                 } catch (Exception var32) {
                     p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " head material: Could not load skull"));
@@ -157,10 +159,10 @@ public class ItemCreation {
                 }
             }
             if (!skullname.equals("no skull") && matraw.split("\\s")[0].equalsIgnoreCase("cpo=")) {
-                SkullMeta cpoMeta = (SkullMeta) s.getItemMeta();
+                SkullMeta cpoMeta = (SkullMeta) itemStack.getItemMeta();
                 assert cpoMeta != null;
                 cpoMeta.setOwningPlayer(Bukkit.getOfflinePlayer(Objects.requireNonNull(Bukkit.getPlayer(matraw.split("\\s")[1])).getUniqueId()));
-                s.setItemMeta(cpoMeta);
+                itemStack.setItemMeta(cpoMeta);
             }
             if (skullname.equals("hdb")) {
                 if (plugin.getServer().getPluginManager().isPluginEnabled("HeadDatabase")) {
@@ -168,7 +170,7 @@ public class ItemCreation {
                     api = new HeadDatabaseAPI();
 
                     try {
-                        s = api.getItemHead(matraw.split("\\s")[1].trim());
+                        itemStack = api.getItemHead(matraw.split("\\s")[1].trim());
                     } catch (Exception var22) {
                         p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " hdb: could not load skull!"));
                         plugin.debug(var22, p);
@@ -193,7 +195,7 @@ public class ItemCreation {
             }
 
             if (addNBT) {
-                s = plugin.nbt.setNBT(s);
+                itemStack = plugin.nbt.setNBT(itemStack);
             }
 
             if (itemSection.contains("map")) {
@@ -219,9 +221,9 @@ public class ItemCreation {
                                 canvas.drawImage(0, 0, new ImageIcon(plugin.getDataFolder().getPath() + File.separator + "maps" + File.separator + itemSection.getString("map")).getImage());
                             }
                         });
-                        MapMeta meta = (MapMeta) s.getItemMeta();
+                        MapMeta meta = (MapMeta) itemStack.getItemMeta();
                         meta.setMapView(map);
-                        s.setItemMeta(meta);
+                        itemStack.setItemMeta(meta);
                     } else {
                         p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " map: File not found."));
                     }
@@ -235,25 +237,25 @@ public class ItemCreation {
                     ItemMeta enchantMeta;
                     if (itemSection.isList("enchanted")) {
                         //if there is a list of enchantments to add
-                        enchantMeta = s.getItemMeta();
+                        enchantMeta = itemStack.getItemMeta();
                         assert enchantMeta != null;
                         for (String enchantment : itemSection.getStringList("enchanted")) {
                             enchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(enchantment.split("\\s")[0].toLowerCase()))), Integer.parseInt(enchantment.split("\\s")[1]), true);
                         }
-                        s.setItemMeta(enchantMeta);
+                        itemStack.setItemMeta(enchantMeta);
                     } else if (Objects.requireNonNull(itemSection.getString("enchanted")).trim().equalsIgnoreCase("true")) {
                         //if used if enchanted is set to true
-                        enchantMeta = s.getItemMeta();
+                        enchantMeta = itemStack.getItemMeta();
                         assert enchantMeta != null;
                         enchantMeta.addEnchant(Enchantment.KNOCKBACK, 1, false);
                         enchantMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                        s.setItemMeta(enchantMeta);
+                        itemStack.setItemMeta(enchantMeta);
                     } else if (!Objects.requireNonNull(itemSection.getString("enchanted")).trim().equalsIgnoreCase("false")) {
                         //if used to ensure enchanted does not equal false but equals something else
-                        enchantMeta = s.getItemMeta();
+                        enchantMeta = itemStack.getItemMeta();
                         assert enchantMeta != null;
                         enchantMeta.addEnchant(Objects.requireNonNull(Enchantment.getByKey(NamespacedKey.minecraft(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[0].toLowerCase()))), Integer.parseInt(Objects.requireNonNull(itemSection.getString("enchanted")).split("\\s")[1]), true);
-                        s.setItemMeta(enchantMeta);
+                        itemStack.setItemMeta(enchantMeta);
                     }
                 } catch (Exception ench) {
                     p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " enchanted: " + itemSection.getString("enchanted")));
@@ -261,14 +263,14 @@ public class ItemCreation {
                 }
             }
             if (itemSection.contains("customdata")) {
-                ItemMeta customMeta = s.getItemMeta();
+                ItemMeta customMeta = itemStack.getItemMeta();
                 assert customMeta != null;
                 customMeta.setCustomModelData(Integer.parseInt(plugin.tex.placeholders(panel, position, p, itemSection.getString("customdata"))));
-                s.setItemMeta(customMeta);
+                itemStack.setItemMeta(customMeta);
             }
             try {
                 if (itemSection.contains("banner")) {
-                    BannerMeta bannerMeta = (BannerMeta) s.getItemMeta();
+                    BannerMeta bannerMeta = (BannerMeta) itemStack.getItemMeta();
                     List<Pattern> patterns = new ArrayList<>(); //Load patterns in order top to bottom
                     for (String temp : itemSection.getStringList("banner")) {
                         String[] dyePattern = temp.split(",");
@@ -276,7 +278,7 @@ public class ItemCreation {
                     }
                     bannerMeta.setPatterns(patterns);
                     bannerMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                    s.setItemMeta(bannerMeta);
+                    itemStack.setItemMeta(bannerMeta);
                 }
             } catch (Exception ignore) {
                 //not a banner or error
@@ -284,8 +286,8 @@ public class ItemCreation {
             if (itemSection.contains("leatherarmor")) {
                 //if the item is leather armor, change the colour to this
                 try {
-                    if (s.getType() == Material.LEATHER_BOOTS || s.getType() == Material.LEATHER_LEGGINGS || s.getType() == Material.LEATHER_CHESTPLATE || s.getType() == Material.LEATHER_HELMET) {
-                        LeatherArmorMeta leatherMeta = (LeatherArmorMeta) s.getItemMeta();
+                    if (itemStack.getType() == Material.LEATHER_BOOTS || itemStack.getType() == Material.LEATHER_LEGGINGS || itemStack.getType() == Material.LEATHER_CHESTPLATE || itemStack.getType() == Material.LEATHER_HELMET) {
+                        LeatherArmorMeta leatherMeta = (LeatherArmorMeta) itemStack.getItemMeta();
                         String colourCode = itemSection.getString("leatherarmor");
                         assert colourCode != null;
                         if (!colourCode.contains(",")) {
@@ -303,7 +305,7 @@ public class ItemCreation {
                             assert leatherMeta != null;
                             leatherMeta.setColor(Color.fromRGB(colorRGB[0], colorRGB[1], colorRGB[2]));
                         }
-                        s.setItemMeta(leatherMeta);
+                        itemStack.setItemMeta(leatherMeta);
                     }
                 } catch (Exception er) {
                     //don't colour the armor
@@ -315,7 +317,7 @@ public class ItemCreation {
             if (itemSection.contains("potion")) {
                 //if the item is a potion, give it an effect
                 try {
-                    PotionMeta potionMeta = (PotionMeta) s.getItemMeta();
+                    PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
                     String[] effectType = itemSection.getString("potion").split("\\s");
                     assert potionMeta != null;
                     boolean extended = false;
@@ -335,7 +337,7 @@ public class ItemCreation {
                     //set meta
                     potionMeta.setBasePotionData(newData);
                     potionMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-                    s.setItemMeta(potionMeta);
+                    itemStack.setItemMeta(potionMeta);
                 } catch (Exception er) {
                     //don't add the effect
                     plugin.debug(er, p);
@@ -347,7 +349,7 @@ public class ItemCreation {
                 //if the damage is not unbreakable and should be a value
                 if (plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
                     try {
-                        s.setDurability(Short.parseShort(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("damage")))));
+                        itemStack.setDurability(Short.parseShort(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("damage")))));
                     } catch (Exception e) {
                         plugin.debug(e, p);
                         p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
@@ -355,15 +357,15 @@ public class ItemCreation {
                 } else {
                     if (itemSection.getString("damage").equalsIgnoreCase("-1")) {
                         //if the player wants the item to be unbreakable. Only works in non legacy versions
-                        ItemMeta unbreak = s.getItemMeta();
+                        ItemMeta unbreak = itemStack.getItemMeta();
                         unbreak.setUnbreakable(true);
-                        s.setItemMeta(unbreak);
+                        itemStack.setItemMeta(unbreak);
                     }
 
                     try {
-                        Damageable itemDamage = (Damageable) s.getItemMeta();
+                        Damageable itemDamage = (Damageable) itemStack.getItemMeta();
                         itemDamage.setDamage(Integer.parseInt(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("damage")))));
-                        s.setItemMeta(itemDamage);
+                        itemStack.setItemMeta(itemDamage);
                     } catch (Exception e) {
                         plugin.debug(e, p);
                         p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " damage: " + itemSection.getString("damage")));
@@ -372,20 +374,20 @@ public class ItemCreation {
             }
             if (itemSection.contains("nbt")) {
                 for (String key : itemSection.getConfigurationSection("nbt").getKeys(false)) {
-                    s = plugin.nbt.setNBT(s, key, itemSection.getString("nbt." + key));
+                    itemStack = plugin.nbt.setNBT(itemStack, key, itemSection.getString("nbt." + key));
                 }
             }
             if (itemSection.contains("stack")) {
                 //change the stack amount (placeholders accepted)
-                s.setAmount((int) Double.parseDouble(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("stack")))));
+                itemStack.setAmount((int) Double.parseDouble(Objects.requireNonNull(plugin.tex.placeholders(panel, position, p, itemSection.getString("stack")))));
             }
         } catch (IllegalArgumentException | NullPointerException var33) {
             plugin.debug(var33, p);
             p.sendMessage(plugin.tex.colour(plugin.getTag() + plugin.getDefaultConfig().getConfig().getString("config.format.error") + " material: " + itemSection.getString("material")));
             return null;
         }
-        plugin.setName(panel, s, itemSection.getString("name"), itemSection.getStringList("lore"), p, placeholders, colours, hideAttributes);
-        return s;
+        plugin.setName(panel, itemStack, itemSection.getString("name"), itemSection.getStringList("lore"), p, placeholders, colours, hideAttributes);
+        return itemStack;
     }
 
     //do custom-item items, they have an additional hasSection requirement
@@ -421,7 +423,7 @@ public class ItemCreation {
                 }
                 if (file.contains("panels." + panelName + ".item." + i + ".material")) {
                     if (Objects.requireNonNull(file.getString("panels." + panelName + ".item." + i + ".material")).contains("%") || Objects.requireNonNull(file.getString("panels." + panelName + ".item." + i + ".material")).contains("=")) {
-                        if(cont.getType() != Material.PLAYER_HEAD) {
+                        if (cont.getType() != Material.PLAYER_HEAD) {
                             file.set("panels." + panelName + ".item." + i + ".material", cont.getType().toString());
                         }
                     } else {
@@ -430,7 +432,7 @@ public class ItemCreation {
                 } else {
                     file.set("panels." + panelName + ".item." + i + ".material", cont.getType().toString());
                 }
-                if (cont.getType() == Material.PLAYER_HEAD)  {
+                if (cont.getType() == Material.PLAYER_HEAD) {
                     if (!Objects.requireNonNull(file.getString("panels." + panelName + ".item." + i + ".material")).contains("%") && !Objects.requireNonNull(file.getString("panels." + panelName + ".item." + i + ".material")).contains("=")) {
                         SkullMeta meta = (SkullMeta) cont.getItemMeta();
                         if (plugin.customHeads.getHeadBase64(cont) != null && !plugin.legacy.LOCAL_VERSION.lessThanOrEqualTo(MinecraftVersions.v1_12)) {
